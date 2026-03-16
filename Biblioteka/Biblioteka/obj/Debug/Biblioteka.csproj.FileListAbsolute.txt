@@ -1,0 +1,17 @@
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\bin\Debug\Biblioteka.exe.config
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\bin\Debug\Biblioteka.exe
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\bin\Debug\Biblioteka.pdb
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.csproj.AssemblyReference.cache
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.Form1.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.Properties.Resources.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.csproj.GenerateResource.cache
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.csproj.CoreCompileInputs.cache
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.exe
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.pdb
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCAddUsers.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCShowUsers.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCEditData.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCShowUsersData.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCFindForgottenUsers.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCFindUsers.resources
+C:\Users\kacpe\Desktop\Projekt TO\Biblioteka\Biblioteka\obj\Debug\Biblioteka.UCForgetUsers.resources
