@@ -32,7 +32,7 @@ namespace Biblioteka
             }
         }
 
-        private void btn_add_user_Click(object sender, EventArgs e)
+        private void btn_save_Click(object sender, EventArgs e)
         {
             error_add_user_form.Clear();
 
@@ -157,6 +157,12 @@ namespace Biblioteka
 
             if (string.IsNullOrWhiteSpace(txt_property_number.Text))
             { SetError(txt_property_number, "Numer posesji jest wymagany."); ok = false; }
+
+            if (cb_gender.SelectedItem == null)
+            {
+                SetError(cb_gender, "Wybierz płeć.");
+                ok = false;
+            }
 
             return ok;
         }

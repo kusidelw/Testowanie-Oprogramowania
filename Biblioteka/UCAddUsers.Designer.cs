@@ -58,7 +58,7 @@
             this.txt_property_number = new System.Windows.Forms.TextBox();
             this.lbl_property_number = new System.Windows.Forms.Label();
             this.txt_town = new System.Windows.Forms.TextBox();
-            this.btn_add_user = new System.Windows.Forms.Button();
+            this.btn_save = new System.Windows.Forms.Button();
             this.txt_street = new System.Windows.Forms.TextBox();
             this.lbl_town = new System.Windows.Forms.Label();
             this.lbl_street = new System.Windows.Forms.Label();
@@ -382,20 +382,20 @@
             this.txt_town.Size = new System.Drawing.Size(296, 35);
             this.txt_town.TabIndex = 87;
             // 
-            // btn_add_user
+            // btn_save
             // 
-            this.btn_add_user.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_add_user.AutoSize = true;
-            this.btn_add_user.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.btn_add_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_add_user.Location = new System.Drawing.Point(1029, 653);
-            this.btn_add_user.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_add_user.Name = "btn_add_user";
-            this.btn_add_user.Size = new System.Drawing.Size(301, 89);
-            this.btn_add_user.TabIndex = 96;
-            this.btn_add_user.Text = "DODAJ UŻYTKOWNIKA";
-            this.btn_add_user.UseVisualStyleBackColor = false;
-            this.btn_add_user.Click += new System.EventHandler(this.btn_add_user_Click);
+            this.btn_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_save.AutoSize = true;
+            this.btn_save.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.btn_save.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_save.Location = new System.Drawing.Point(1029, 653);
+            this.btn_save.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_save.Name = "btn_save";
+            this.btn_save.Size = new System.Drawing.Size(301, 89);
+            this.btn_save.TabIndex = 96;
+            this.btn_save.Text = "Zapisz";
+            this.btn_save.UseVisualStyleBackColor = false;
+            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
             // 
             // txt_street
             // 
@@ -452,7 +452,7 @@
             this.Controls.Add(this.txt_login);
             this.Controls.Add(this.txt_birth_date);
             this.Controls.Add(this.txt_PESEL);
-            this.Controls.Add(this.btn_add_user);
+            this.Controls.Add(this.btn_save);
             this.Controls.Add(this.btn_anuluj);
             this.Controls.Add(this.cb_gender);
             this.Controls.Add(this.txtlbl_apartment_number);
@@ -516,7 +516,7 @@
         private System.Windows.Forms.TextBox txt_PESEL;
         private System.Windows.Forms.TextBox txt_login;
         private System.Windows.Forms.TextBox txt_birth_date;
-        private System.Windows.Forms.Button btn_add_user;
+        private System.Windows.Forms.Button btn_save;
         private System.Windows.Forms.TextBox txtlbl_apartment_number;
         private System.Windows.Forms.Label lbl_apartment_number;
         private System.Windows.Forms.TextBox txt_zip_code;
