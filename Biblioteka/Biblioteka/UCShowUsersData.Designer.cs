@@ -68,14 +68,14 @@
             // lbl_show_users_data
             // 
             this.lbl_show_users_data.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbl_show_users_data.AutoSize = true;
             this.lbl_show_users_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_show_users_data.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_show_users_data.Location = new System.Drawing.Point(374, 20);
+            this.lbl_show_users_data.Location = new System.Drawing.Point(0, 20);
             this.lbl_show_users_data.Name = "lbl_show_users_data";
-            this.lbl_show_users_data.Size = new System.Drawing.Size(290, 29);
+            this.lbl_show_users_data.Size = new System.Drawing.Size(1081, 29);
             this.lbl_show_users_data.TabIndex = 0;
             this.lbl_show_users_data.Text = "KARTA UŻYTKOWNIKA";
+            this.lbl_show_users_data.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panel1
             // 
@@ -409,9 +409,11 @@
             // 
             // btn_back_to_list
             // 
-            this.btn_back_to_list.BackColor = System.Drawing.Color.LightBlue;
+            this.btn_back_to_list.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btn_back_to_list.AutoSize = true;
+            this.btn_back_to_list.BackColor = System.Drawing.Color.LightCoral;
             this.btn_back_to_list.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_back_to_list.Location = new System.Drawing.Point(81, 575);
+            this.btn_back_to_list.Location = new System.Drawing.Point(88, 575);
             this.btn_back_to_list.Name = "btn_back_to_list";
             this.btn_back_to_list.Size = new System.Drawing.Size(223, 71);
             this.btn_back_to_list.TabIndex = 33;
@@ -420,8 +422,9 @@
             // 
             // btn_edit_data
             // 
-            this.btn_edit_data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_edit_data.BackColor = System.Drawing.Color.LightBlue;
+            this.btn_edit_data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_edit_data.AutoSize = true;
+            this.btn_edit_data.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.btn_edit_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_edit_data.Location = new System.Drawing.Point(791, 575);
             this.btn_edit_data.Name = "btn_edit_data";
@@ -432,15 +435,15 @@
             // 
             // lbl_anonymization_message
             // 
-            this.lbl_anonymization_message.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbl_anonymization_message.AutoSize = true;
+            this.lbl_anonymization_message.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbl_anonymization_message.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_anonymization_message.ForeColor = System.Drawing.Color.Red;
-            this.lbl_anonymization_message.Location = new System.Drawing.Point(307, 82);
+            this.lbl_anonymization_message.Location = new System.Drawing.Point(5, 82);
             this.lbl_anonymization_message.Name = "lbl_anonymization_message";
-            this.lbl_anonymization_message.Size = new System.Drawing.Size(448, 25);
+            this.lbl_anonymization_message.Size = new System.Drawing.Size(1073, 25);
             this.lbl_anonymization_message.TabIndex = 35;
             this.lbl_anonymization_message.Text = "UŻYTKOWNIK ZANONIMIZOWANY (RODO)";
+            this.lbl_anonymization_message.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // UCShowUsersData
             // 
@@ -484,7 +487,6 @@
             this.Name = "UCShowUsersData";
             this.Size = new System.Drawing.Size(1081, 690);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

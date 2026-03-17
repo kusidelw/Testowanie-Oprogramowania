@@ -54,25 +54,25 @@
             // lbl_find_users
             // 
             this.lbl_find_users.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbl_find_users.AutoSize = true;
             this.lbl_find_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_find_users.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_find_users.Location = new System.Drawing.Point(343, 12);
+            this.lbl_find_users.Location = new System.Drawing.Point(3, 12);
             this.lbl_find_users.Name = "lbl_find_users";
-            this.lbl_find_users.Size = new System.Drawing.Size(369, 58);
+            this.lbl_find_users.Size = new System.Drawing.Size(1052, 37);
             this.lbl_find_users.TabIndex = 1;
             this.lbl_find_users.Text = "WYSZUKAJ UŻYTKOWNIKÓW\r\n\r\n";
+            this.lbl_find_users.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lbl_search_criteria
             // 
-            this.lbl_search_criteria.AutoSize = true;
-            this.lbl_search_criteria.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lbl_search_criteria.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_search_criteria.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_search_criteria.Location = new System.Drawing.Point(68, 99);
+            this.lbl_search_criteria.Location = new System.Drawing.Point(69, 76);
             this.lbl_search_criteria.Name = "lbl_search_criteria";
-            this.lbl_search_criteria.Size = new System.Drawing.Size(614, 20);
+            this.lbl_search_criteria.Size = new System.Drawing.Size(908, 37);
             this.lbl_search_criteria.TabIndex = 3;
             this.lbl_search_criteria.Text = "Podaj kryteria wyszukiwania użytkownika: (login, imię i nazwisko, pesel)";
+            this.lbl_search_criteria.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txt_search_query
             // 
@@ -80,10 +80,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_search_query.BackColor = System.Drawing.SystemColors.Window;
             this.txt_search_query.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.txt_search_query.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_query.Location = new System.Drawing.Point(62, 122);
+            this.txt_search_query.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.txt_search_query.Location = new System.Drawing.Point(62, 120);
             this.txt_search_query.Name = "txt_search_query";
-            this.txt_search_query.Size = new System.Drawing.Size(685, 27);
+            this.txt_search_query.Size = new System.Drawing.Size(685, 30);
             this.txt_search_query.TabIndex = 4;
             // 
             // btn_search_user
@@ -91,7 +91,7 @@
             this.btn_search_user.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_search_user.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search_user.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btn_search_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_search_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.btn_search_user.Location = new System.Drawing.Point(753, 116);
             this.btn_search_user.Name = "btn_search_user";
             this.btn_search_user.Size = new System.Drawing.Size(224, 39);
@@ -158,7 +158,6 @@
             this.Name = "UCFindUsers";
             this.Size = new System.Drawing.Size(1055, 555);
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_user_results)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
