@@ -25,25 +25,12 @@ namespace Biblioteka
             InitializeComponent();
         }
 
-        public void PokazWidokZeStanem(UserControl widok)
+        private void PokazWidokZeStanem(UserControl widok)
         {
             MainPanel.Controls.Clear();
             widok.Dock = DockStyle.Fill;
             MainPanel.Controls.Add(widok);
-
-            MainPanel.Focus();
-
-        }
-
-        public void PrzejdzDoEdycji(int userId)
-        {
-            ucEditData.ZaladujDaneDoEdycji(userId); 
-            PokazWidokZeStanem(ucEditData);         
-        }
-
-        public void WrocDoWyszukiwarki()
-        {
-            PokazWidokZeStanem(ucFindUsers); 
+            
         }
 
         private void btn_add_user_Click(object sender, EventArgs e)

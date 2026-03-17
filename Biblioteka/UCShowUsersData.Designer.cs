@@ -419,7 +419,6 @@
             this.btn_back_to_list.TabIndex = 33;
             this.btn_back_to_list.Text = "WRÓĆ DO LISTY";
             this.btn_back_to_list.UseVisualStyleBackColor = false;
-            this.btn_back_to_list.Click += new System.EventHandler(this.btn_back_to_list_Click);
             // 
             // btn_edit_data
             // 
@@ -433,7 +432,6 @@
             this.btn_edit_data.TabIndex = 34;
             this.btn_edit_data.Text = "EDYTUJ DANE";
             this.btn_edit_data.UseVisualStyleBackColor = false;
-            this.btn_edit_data.Click += new System.EventHandler(this.btn_edit_data_Click);
             // 
             // lbl_anonymization_message
             // 
