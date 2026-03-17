@@ -1,20 +1,23 @@
+CREATE DATABASE BibliotekaDB;
+GO
+	
 USE BibliotekaDB;
 GO
 
--- modu³ u¿ytkowników i uprawnieñ
+-- moduÂ³ uÂ¿ytkownikÃ³w i uprawnieÃ±
 
--- Tabela ról/uprawnieñ
+-- Tabela rÃ³l/uprawnieÃ±
 CREATE TABLE Uprawnienia (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Nazwa NVARCHAR(50) NOT NULL UNIQUE
 );
 GO
 
--- G³ówna tabela u¿ytkowników (Czytelnicy, Bibliotekarze, Administratorzy, Managerzy)
+-- GÂ³Ã³wna tabela uÂ¿ytkownikÃ³w (Czytelnicy, Bibliotekarze, Administratorzy, Managerzy)
 CREATE TABLE Uzytkownicy (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Login NVARCHAR(50) NOT NULL UNIQUE,
-    HasloHash NVARCHAR(255) NOT NULL, -- Has³o musi byæ zahaszowane
+    HasloHash NVARCHAR(255) NOT NULL, -- HasÂ³o musi byÃ¦ zahaszowane
     Imie NVARCHAR(50) NOT NULL,
     Nazwisko NVARCHAR(50) NOT NULL,
     Miejscowosc NVARCHAR(100) NOT NULL,
@@ -33,7 +36,7 @@ CREATE TABLE Uzytkownicy (
     DataZapomnienia DATETIME NULL,
     ZapomnianyPrzezUzytkownikaID INT NULL,
     
-    -- Obs³uga logowania i blokad
+    -- ObsÂ³uga logowania i blokad
     CzyZablokowany BIT NOT NULL DEFAULT 0,
     LiczbaBlednychLogowan INT NOT NULL DEFAULT 0,
     CzasOdblokowania DATETIME NULL,
@@ -42,7 +45,7 @@ CREATE TABLE Uzytkownicy (
 );
 GO
 
--- sprawdzanie poprawnoœci emaila
+-- sprawdzanie poprawnoÅ“ci emaila
 ALTER TABLE Uzytkownicy
 ADD CONSTRAINT CHK_Email_Format CHECK (
     Email LIKE '%_@_%._%'  
@@ -51,13 +54,13 @@ ADD CONSTRAINT CHK_Email_Format CHECK (
 );
 GO
 
--- sprawdzanie poprawnoœci PESELu
+-- sprawdzanie poprawnoÅ“ci PESELu
 ALTER TABLE Uzytkownicy
 ADD CONSTRAINT CHK_Uzytkownicy_PESEL_Format CHECK (
-    -- PESEL musi mieæ dok³adnie 11 cyfr 
+    -- PESEL musi mieÃ¦ dokÂ³adnie 11 cyfr 
     PESEL LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
     
-    -- Walidacja p³ci: nieparzyste - M, parzyste/0 - K 
+    -- Walidacja pÂ³ci: nieparzyste - M, parzyste/0 - K 
     AND (
         (Plec = 'M' AND CAST(SUBSTRING(PESEL, 10, 1) AS INT) % 2 <> 0) OR
         (Plec = 'K' AND CAST(SUBSTRING(PESEL, 10, 1) AS INT) % 2 = 0)
@@ -66,14 +69,14 @@ ADD CONSTRAINT CHK_Uzytkownicy_PESEL_Format CHECK (
     -- Walidacja daty urodzenia (pierwsze 6 cyfr RRMMDD) 
     AND SUBSTRING(PESEL, 1, 2) = RIGHT(CAST(YEAR(DataUrodzenia) AS VARCHAR), 2)
     AND (
-        -- Obs³uga osób urodzonych po roku 2000 (miesi¹c + 20)
+        -- ObsÂ³uga osÃ³b urodzonych po roku 2000 (miesiÂ¹c + 20)
         (YEAR(DataUrodzenia) >= 2000 AND CAST(SUBSTRING(PESEL, 3, 2) AS INT) = MONTH(DataUrodzenia) + 20) OR
         (YEAR(DataUrodzenia) < 2000 AND CAST(SUBSTRING(PESEL, 3, 2) AS INT) = MONTH(DataUrodzenia))
     )
     AND CAST(SUBSTRING(PESEL, 5, 2) AS INT) = DAY(DataUrodzenia)
 );
 GO
--- Relacja N:M pomiêdzy U¿ytkownikami a Uprawnieniami
+-- Relacja N:M pomiÃªdzy UÂ¿ytkownikami a Uprawnieniami
 CREATE TABLE Uzytkownicy_Uprawnienia (
     UzytkownikID INT NOT NULL,
     UprawnienieID INT NOT NULL,
@@ -83,7 +86,7 @@ CREATE TABLE Uzytkownicy_Uprawnienia (
 );
 GO
 
--- Tabela przechowuj¹ca historiê hase³ (wymóg pamiêtania 3 ostatnich hase³)
+-- Tabela przechowujÂ¹ca historiÃª haseÂ³ (wymÃ³g pamiÃªtania 3 ostatnich haseÂ³)
 CREATE TABLE HistoriaHasel (
     ID INT PRIMARY KEY IDENTITY(1,1),
     UzytkownikID INT NOT NULL,
@@ -93,16 +96,16 @@ CREATE TABLE HistoriaHasel (
 );
 GO
 
--- modu³ ksi¹¿ek (katalog i egzemplarze)
+-- moduÂ³ ksiÂ¹Â¿ek (katalog i egzemplarze)
 
--- S³ownik gatunków literackich
+-- SÂ³ownik gatunkÃ³w literackich
 CREATE TABLE Gatunki (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Nazwa NVARCHAR(100) NOT NULL UNIQUE
 );
 GO
 
--- Tabela g³ówna katalogu ksi¹¿ek (metadane)
+-- Tabela gÂ³Ã³wna katalogu ksiÂ¹Â¿ek (metadane)
 CREATE TABLE KatalogKsiazek (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Tytul NVARCHAR(255) NOT NULL,
@@ -124,7 +127,7 @@ CREATE TABLE Autorzy (
 );
 GO
 
--- Relacja N:M pomiêdzy Katalogiem a Autorami (ksi¹¿ka mo¿e mieæ wielu autorów)
+-- Relacja N:M pomiÃªdzy Katalogiem a Autorami (ksiÂ¹Â¿ka moÂ¿e mieÃ¦ wielu autorÃ³w)
 CREATE TABLE KsiazkKatalog_Autorzy (
     KsiazkaID INT NOT NULL,
     AutorID INT NOT NULL,
@@ -138,16 +141,16 @@ GO
 CREATE TABLE Egzemplarze (
     ID INT PRIMARY KEY IDENTITY(1,1),
     KsiazkaID INT NOT NULL,
-    Status NVARCHAR(50) NOT NULL DEFAULT 'Dostêpna' CHECK (Status IN ('Dostêpna', 'Wypo¿yczona', 'Zniszczona', 'Zagubiona')),
+    Status NVARCHAR(50) NOT NULL DEFAULT 'DostÃªpna' CHECK (Status IN ('DostÃªpna', 'WypoÂ¿yczona', 'Zniszczona', 'Zagubiona')),
     DataRejestracji DATETIME NOT NULL DEFAULT GETDATE(),
-    ZarejestrowanePrzezID INT NOT NULL, -- Zapisujemy, który bibliotekarz doda³ egzemplarz
+    ZarejestrowanePrzezID INT NOT NULL, -- Zapisujemy, ktÃ³ry bibliotekarz dodaÂ³ egzemplarz
     FOREIGN KEY (KsiazkaID) REFERENCES KatalogKsiazek(ID),
     FOREIGN KEY (ZarejestrowanePrzezID) REFERENCES Uzytkownicy(ID)
 );
 GO
 
--- modu³ wypo¿yczeñ
--- Nag³ówek wypo¿yczenia (Kto, od kogo i kiedy)
+-- moduÂ³ wypoÂ¿yczeÃ±
+-- NagÂ³Ã³wek wypoÂ¿yczenia (Kto, od kogo i kiedy)
 CREATE TABLE Wypozyczenia (
     ID INT PRIMARY KEY IDENTITY(1,1),
     CzytelnikID INT NOT NULL,
@@ -156,13 +159,13 @@ CREATE TABLE Wypozyczenia (
     OkresWypozyczeniaDni INT NOT NULL DEFAULT 14,
     OczekiwanaDataZwrotu DATETIME NOT NULL,
     DataZwrotu DATETIME NULL,
-    Status NVARCHAR(50) NOT NULL DEFAULT 'Nowe' CHECK (Status IN ('Nowe', 'Przed³u¿one', 'Zakoñczone')),
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Nowe' CHECK (Status IN ('Nowe', 'PrzedÂ³uÂ¿one', 'ZakoÃ±czone')),
     FOREIGN KEY (CzytelnikID) REFERENCES Uzytkownicy(ID),
     FOREIGN KEY (BibliotekarzID) REFERENCES Uzytkownicy(ID)
 );
 GO
 
--- Pozycje wypo¿yczenia (jakie konkretnie egzemplarze wypo¿yczono)
+-- Pozycje wypoÂ¿yczenia (jakie konkretnie egzemplarze wypoÂ¿yczono)
 CREATE TABLE PozycjeWypozyczenia (
     WypozyczenieID INT NOT NULL,
     EgzemplarzID INT NOT NULL,
