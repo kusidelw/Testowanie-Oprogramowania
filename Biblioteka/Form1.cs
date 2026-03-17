@@ -32,6 +32,10 @@ namespace Biblioteka
             MainPanel.Controls.Add(widok);
             
         }
+        public void PowrotDoMenuGlownego()
+        {
+            MainPanel.Controls.Clear();
+        }
 
         private void btn_add_user_Click(object sender, EventArgs e)
         {
@@ -67,5 +71,6 @@ namespace Biblioteka
         {
             PokazWidokZeStanem(ucFindForgottenUsers);
         }
+
     }
 }

@@ -16,5 +16,10 @@ namespace Biblioteka
         {
             InitializeComponent();
         }
+
+        private void btn_cancel_changing_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
