@@ -31,39 +31,40 @@
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_add_users = new System.Windows.Forms.Label();
-            this.error_add_user_form = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btn_anuluj = new System.Windows.Forms.Button();
-            this.cb_gender = new System.Windows.Forms.ComboBox();
-            this.lbl_contact_data = new System.Windows.Forms.Label();
-            this.lbl_birth_date = new System.Windows.Forms.Label();
-            this.lbl_gender = new System.Windows.Forms.Label();
-            this.txt_phone_number = new System.Windows.Forms.TextBox();
-            this.lbl_phone_number = new System.Windows.Forms.Label();
-            this.lbl_personal_data = new System.Windows.Forms.Label();
-            this.txt_mail = new System.Windows.Forms.TextBox();
-            this.txt_surname = new System.Windows.Forms.TextBox();
-            this.txt_name = new System.Windows.Forms.TextBox();
-            this.lbl_mail = new System.Windows.Forms.Label();
-            this.lbl_PESEL = new System.Windows.Forms.Label();
-            this.lbl_surname = new System.Windows.Forms.Label();
-            this.lbl_name = new System.Windows.Forms.Label();
-            this.lbl_login = new System.Windows.Forms.Label();
-            this.txt_PESEL = new System.Windows.Forms.TextBox();
-            this.txt_birth_date = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.btnAU_create_user = new System.Windows.Forms.Button();
+            this.btnAU_clear_data = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.txt_login = new System.Windows.Forms.TextBox();
-            this.txt_zip_code = new System.Windows.Forms.TextBox();
-            this.lbl_apartment_number = new System.Windows.Forms.Label();
-            this.lbl_zip_code = new System.Windows.Forms.Label();
-            this.txtlbl_apartment_number = new System.Windows.Forms.TextBox();
-            this.txt_property_number = new System.Windows.Forms.TextBox();
-            this.lbl_property_number = new System.Windows.Forms.Label();
-            this.txt_town = new System.Windows.Forms.TextBox();
-            this.btn_save = new System.Windows.Forms.Button();
+            this.txt_name = new System.Windows.Forms.TextBox();
+            this.txt_surname = new System.Windows.Forms.TextBox();
+            this.txt_city = new System.Windows.Forms.TextBox();
+            this.txt_postcode = new System.Windows.Forms.TextBox();
+            this.txt_house_number = new System.Windows.Forms.TextBox();
+            this.txt_pesel = new System.Windows.Forms.TextBox();
+            this.txt_birth_date = new System.Windows.Forms.TextBox();
+            this.txt_email = new System.Windows.Forms.TextBox();
+            this.txt_phone_number = new System.Windows.Forms.TextBox();
             this.txt_street = new System.Windows.Forms.TextBox();
-            this.lbl_town = new System.Windows.Forms.Label();
-            this.lbl_street = new System.Windows.Forms.Label();
-            this.lbl_address_data = new System.Windows.Forms.Label();
+            this.txt_local_number = new System.Windows.Forms.TextBox();
+            this.btn_female = new System.Windows.Forms.RadioButton();
+            this.btn_male = new System.Windows.Forms.RadioButton();
+            this.error_add_user_form = new System.Windows.Forms.ErrorProvider(this.components);
+            this.ucFindForgottenUsers1 = new Biblioteka.UCFindForgottenUsers();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.error_add_user_form)).BeginInit();
             this.SuspendLayout();
             // 
@@ -75,402 +76,345 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1306, 62);
+            this.panel1.Size = new System.Drawing.Size(1306, 32);
             this.panel1.TabIndex = 0;
             // 
             // lbl_add_users
             // 
             this.lbl_add_users.AutoSize = true;
-            this.lbl_add_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 22F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_add_users.Location = new System.Drawing.Point(487, 7);
+            this.lbl_add_users.Location = new System.Drawing.Point(11, 8);
             this.lbl_add_users.Name = "lbl_add_users";
-            this.lbl_add_users.Size = new System.Drawing.Size(331, 42);
+            this.lbl_add_users.Size = new System.Drawing.Size(119, 16);
             this.lbl_add_users.TabIndex = 0;
             this.lbl_add_users.Text = "Dodaj użytkownika";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.DarkKhaki;
+            this.panel2.Controls.Add(this.btnAU_create_user);
+            this.panel2.Controls.Add(this.btnAU_clear_data);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel2.Location = new System.Drawing.Point(0, 553);
+            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1306, 116);
+            this.panel2.TabIndex = 1;
+            // 
+            // btnAU_create_user
+            // 
+            this.btnAU_create_user.Location = new System.Drawing.Point(723, 22);
+            this.btnAU_create_user.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnAU_create_user.Name = "btnAU_create_user";
+            this.btnAU_create_user.Size = new System.Drawing.Size(171, 70);
+            this.btnAU_create_user.TabIndex = 4;
+            this.btnAU_create_user.Text = "Utwórz użytkownika";
+            this.btnAU_create_user.UseVisualStyleBackColor = true;
+            this.btnAU_create_user.Click += new System.EventHandler(this.btnAU_create_user_Click);
+            // 
+            // btnAU_clear_data
+            // 
+            this.btnAU_clear_data.Location = new System.Drawing.Point(459, 22);
+            this.btnAU_clear_data.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnAU_clear_data.Name = "btnAU_clear_data";
+            this.btnAU_clear_data.Size = new System.Drawing.Size(171, 70);
+            this.btnAU_clear_data.TabIndex = 3;
+            this.btnAU_clear_data.Text = "Wyczyść dane";
+            this.btnAU_clear_data.UseVisualStyleBackColor = true;
+            this.btnAU_clear_data.Click += new System.EventHandler(this.btnAU_clear_data_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(452, 64);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(40, 16);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Login";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(455, 105);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 16);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Imie";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(452, 141);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 16);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Nazwisko";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(455, 176);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 16);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Miejscowość";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(455, 212);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(90, 16);
+            this.label5.TabIndex = 7;
+            this.label5.Text = "Kod pocztowy";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(455, 248);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(94, 16);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Numer posesji";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(455, 278);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(50, 16);
+            this.label7.TabIndex = 9;
+            this.label7.Text = "PESEL";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(455, 302);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(98, 16);
+            this.label8.TabIndex = 10;
+            this.label8.Text = "Data urodzenia";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(455, 332);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(37, 16);
+            this.label9.TabIndex = 11;
+            this.label9.Text = "Płeć";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(452, 362);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(79, 16);
+            this.label10.TabIndex = 12;
+            this.label10.Text = "Adres email";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(452, 390);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(97, 16);
+            this.label11.TabIndex = 13;
+            this.label11.Text = "Numer telefonu";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(455, 415);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(38, 16);
+            this.label12.TabIndex = 14;
+            this.label12.Text = "Ulica";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(455, 440);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(86, 16);
+            this.label13.TabIndex = 15;
+            this.label13.Text = "Numer lokalu";
+            // 
+            // txt_login
+            // 
+            this.txt_login.Location = new System.Drawing.Point(565, 64);
+            this.txt_login.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_login.Name = "txt_login";
+            this.txt_login.Size = new System.Drawing.Size(224, 22);
+            this.txt_login.TabIndex = 16;
+            // 
+            // txt_name
+            // 
+            this.txt_name.Location = new System.Drawing.Point(565, 102);
+            this.txt_name.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_name.Name = "txt_name";
+            this.txt_name.Size = new System.Drawing.Size(224, 22);
+            this.txt_name.TabIndex = 17;
+            // 
+            // txt_surname
+            // 
+            this.txt_surname.Location = new System.Drawing.Point(565, 136);
+            this.txt_surname.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_surname.Name = "txt_surname";
+            this.txt_surname.Size = new System.Drawing.Size(224, 22);
+            this.txt_surname.TabIndex = 18;
+            // 
+            // txt_city
+            // 
+            this.txt_city.Location = new System.Drawing.Point(565, 171);
+            this.txt_city.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_city.Name = "txt_city";
+            this.txt_city.Size = new System.Drawing.Size(224, 22);
+            this.txt_city.TabIndex = 19;
+            // 
+            // txt_postcode
+            // 
+            this.txt_postcode.Location = new System.Drawing.Point(565, 210);
+            this.txt_postcode.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_postcode.Name = "txt_postcode";
+            this.txt_postcode.Size = new System.Drawing.Size(224, 22);
+            this.txt_postcode.TabIndex = 20;
+            // 
+            // txt_house_number
+            // 
+            this.txt_house_number.Location = new System.Drawing.Point(565, 243);
+            this.txt_house_number.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_house_number.Name = "txt_house_number";
+            this.txt_house_number.Size = new System.Drawing.Size(224, 22);
+            this.txt_house_number.TabIndex = 21;
+            // 
+            // txt_pesel
+            // 
+            this.txt_pesel.Location = new System.Drawing.Point(565, 273);
+            this.txt_pesel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_pesel.MaxLength = 11;
+            this.txt_pesel.Name = "txt_pesel";
+            this.txt_pesel.Size = new System.Drawing.Size(224, 22);
+            this.txt_pesel.TabIndex = 22;
+            // 
+            // txt_birth_date
+            // 
+            this.txt_birth_date.Location = new System.Drawing.Point(565, 303);
+            this.txt_birth_date.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_birth_date.Name = "txt_birth_date";
+            this.txt_birth_date.Size = new System.Drawing.Size(224, 22);
+            this.txt_birth_date.TabIndex = 23;
+            // 
+            // txt_email
+            // 
+            this.txt_email.Location = new System.Drawing.Point(565, 362);
+            this.txt_email.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_email.Name = "txt_email";
+            this.txt_email.Size = new System.Drawing.Size(224, 22);
+            this.txt_email.TabIndex = 25;
+            // 
+            // txt_phone_number
+            // 
+            this.txt_phone_number.Location = new System.Drawing.Point(565, 390);
+            this.txt_phone_number.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_phone_number.MaxLength = 9;
+            this.txt_phone_number.Name = "txt_phone_number";
+            this.txt_phone_number.Size = new System.Drawing.Size(224, 22);
+            this.txt_phone_number.TabIndex = 26;
+            // 
+            // txt_street
+            // 
+            this.txt_street.Location = new System.Drawing.Point(565, 415);
+            this.txt_street.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_street.Name = "txt_street";
+            this.txt_street.Size = new System.Drawing.Size(224, 22);
+            this.txt_street.TabIndex = 27;
+            // 
+            // txt_local_number
+            // 
+            this.txt_local_number.Location = new System.Drawing.Point(565, 441);
+            this.txt_local_number.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_local_number.Name = "txt_local_number";
+            this.txt_local_number.Size = new System.Drawing.Size(224, 22);
+            this.txt_local_number.TabIndex = 28;
+            // 
+            // btn_female
+            // 
+            this.btn_female.AutoSize = true;
+            this.btn_female.Location = new System.Drawing.Point(565, 332);
+            this.btn_female.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_female.Name = "btn_female";
+            this.btn_female.Size = new System.Drawing.Size(74, 20);
+            this.btn_female.TabIndex = 29;
+            this.btn_female.TabStop = true;
+            this.btn_female.Text = "Kobieta";
+            this.btn_female.UseVisualStyleBackColor = true;
+            // 
+            // btn_male
+            // 
+            this.btn_male.AutoSize = true;
+            this.btn_male.Location = new System.Drawing.Point(698, 332);
+            this.btn_male.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_male.Name = "btn_male";
+            this.btn_male.Size = new System.Drawing.Size(94, 20);
+            this.btn_male.TabIndex = 30;
+            this.btn_male.TabStop = true;
+            this.btn_male.Text = "Mężczyzna";
+            this.btn_male.UseVisualStyleBackColor = true;
             // 
             // error_add_user_form
             // 
             this.error_add_user_form.ContainerControl = this;
             // 
-            // btn_anuluj
+            // ucFindForgottenUsers1
             // 
-            this.btn_anuluj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btn_anuluj.AutoSize = true;
-            this.btn_anuluj.BackColor = System.Drawing.Color.LightCoral;
-            this.btn_anuluj.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_anuluj.Location = new System.Drawing.Point(130, 522);
-            this.btn_anuluj.Name = "btn_anuluj";
-            this.btn_anuluj.Size = new System.Drawing.Size(223, 71);
-            this.btn_anuluj.TabIndex = 95;
-            this.btn_anuluj.Text = "ANULUJ I WRÓĆ";
-            this.btn_anuluj.UseVisualStyleBackColor = false;
-            this.btn_anuluj.Click += new System.EventHandler(this.btn_anuluj_Click);
-            // 
-            // cb_gender
-            // 
-            this.cb_gender.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.cb_gender.FormattingEnabled = true;
-            this.cb_gender.Items.AddRange(new object[] {
-            "Mężczyzna",
-            "Kobieta"});
-            this.cb_gender.Location = new System.Drawing.Point(353, 296);
-            this.cb_gender.Name = "cb_gender";
-            this.cb_gender.Size = new System.Drawing.Size(264, 33);
-            this.cb_gender.TabIndex = 94;
-            // 
-            // lbl_contact_data
-            // 
-            this.lbl_contact_data.AutoSize = true;
-            this.lbl_contact_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_contact_data.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_contact_data.Location = new System.Drawing.Point(124, 356);
-            this.lbl_contact_data.Name = "lbl_contact_data";
-            this.lbl_contact_data.Size = new System.Drawing.Size(253, 32);
-            this.lbl_contact_data.TabIndex = 82;
-            this.lbl_contact_data.Text = "Dane Kontaktowe";
-            // 
-            // lbl_birth_date
-            // 
-            this.lbl_birth_date.AutoSize = true;
-            this.lbl_birth_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_birth_date.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_birth_date.Location = new System.Drawing.Point(171, 260);
-            this.lbl_birth_date.Name = "lbl_birth_date";
-            this.lbl_birth_date.Size = new System.Drawing.Size(153, 25);
-            this.lbl_birth_date.TabIndex = 80;
-            this.lbl_birth_date.Text = "Data Urodzenia:";
-            // 
-            // lbl_gender
-            // 
-            this.lbl_gender.AutoSize = true;
-            this.lbl_gender.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_gender.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_gender.Location = new System.Drawing.Point(171, 296);
-            this.lbl_gender.Name = "lbl_gender";
-            this.lbl_gender.Size = new System.Drawing.Size(56, 25);
-            this.lbl_gender.TabIndex = 79;
-            this.lbl_gender.Text = "Płeć:";
-            // 
-            // txt_phone_number
-            // 
-            this.txt_phone_number.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_phone_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_phone_number.Location = new System.Drawing.Point(353, 437);
-            this.txt_phone_number.Name = "txt_phone_number";
-            this.txt_phone_number.Size = new System.Drawing.Size(264, 30);
-            this.txt_phone_number.TabIndex = 78;
-            // 
-            // lbl_phone_number
-            // 
-            this.lbl_phone_number.AutoSize = true;
-            this.lbl_phone_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_phone_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_phone_number.Location = new System.Drawing.Point(171, 437);
-            this.lbl_phone_number.Name = "lbl_phone_number";
-            this.lbl_phone_number.Size = new System.Drawing.Size(150, 25);
-            this.lbl_phone_number.TabIndex = 77;
-            this.lbl_phone_number.Text = "Numer telefonu:";
-            // 
-            // lbl_personal_data
-            // 
-            this.lbl_personal_data.AutoSize = true;
-            this.lbl_personal_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_personal_data.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_personal_data.Location = new System.Drawing.Point(124, 75);
-            this.lbl_personal_data.Name = "lbl_personal_data";
-            this.lbl_personal_data.Size = new System.Drawing.Size(221, 32);
-            this.lbl_personal_data.TabIndex = 66;
-            this.lbl_personal_data.Text = "Dane Osobowe";
-            // 
-            // txt_mail
-            // 
-            this.txt_mail.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_mail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_mail.Location = new System.Drawing.Point(353, 401);
-            this.txt_mail.Name = "txt_mail";
-            this.txt_mail.Size = new System.Drawing.Size(264, 30);
-            this.txt_mail.TabIndex = 75;
-            // 
-            // txt_surname
-            // 
-            this.txt_surname.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_surname.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_surname.Location = new System.Drawing.Point(353, 188);
-            this.txt_surname.Name = "txt_surname";
-            this.txt_surname.Size = new System.Drawing.Size(264, 30);
-            this.txt_surname.TabIndex = 74;
-            // 
-            // txt_name
-            // 
-            this.txt_name.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_name.Location = new System.Drawing.Point(353, 152);
-            this.txt_name.Name = "txt_name";
-            this.txt_name.Size = new System.Drawing.Size(264, 30);
-            this.txt_name.TabIndex = 73;
-            // 
-            // lbl_mail
-            // 
-            this.lbl_mail.AutoSize = true;
-            this.lbl_mail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_mail.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_mail.Location = new System.Drawing.Point(171, 401);
-            this.lbl_mail.Name = "lbl_mail";
-            this.lbl_mail.Size = new System.Drawing.Size(121, 25);
-            this.lbl_mail.TabIndex = 71;
-            this.lbl_mail.Text = "Adres email:";
-            // 
-            // lbl_PESEL
-            // 
-            this.lbl_PESEL.AutoSize = true;
-            this.lbl_PESEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_PESEL.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_PESEL.Location = new System.Drawing.Point(171, 224);
-            this.lbl_PESEL.Name = "lbl_PESEL";
-            this.lbl_PESEL.Size = new System.Drawing.Size(82, 25);
-            this.lbl_PESEL.TabIndex = 70;
-            this.lbl_PESEL.Text = "PESEL:";
-            // 
-            // lbl_surname
-            // 
-            this.lbl_surname.AutoSize = true;
-            this.lbl_surname.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_surname.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_surname.Location = new System.Drawing.Point(171, 188);
-            this.lbl_surname.Name = "lbl_surname";
-            this.lbl_surname.Size = new System.Drawing.Size(102, 25);
-            this.lbl_surname.TabIndex = 69;
-            this.lbl_surname.Text = "Nazwisko:";
-            // 
-            // lbl_name
-            // 
-            this.lbl_name.AutoSize = true;
-            this.lbl_name.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_name.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_name.Location = new System.Drawing.Point(171, 152);
-            this.lbl_name.Name = "lbl_name";
-            this.lbl_name.Size = new System.Drawing.Size(54, 25);
-            this.lbl_name.TabIndex = 68;
-            this.lbl_name.Text = "Imię:";
-            // 
-            // lbl_login
-            // 
-            this.lbl_login.AutoSize = true;
-            this.lbl_login.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_login.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_login.Location = new System.Drawing.Point(171, 116);
-            this.lbl_login.Name = "lbl_login";
-            this.lbl_login.Size = new System.Drawing.Size(66, 25);
-            this.lbl_login.TabIndex = 67;
-            this.lbl_login.Text = "Login:";
-            // 
-            // txt_PESEL
-            // 
-            this.txt_PESEL.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_PESEL.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_PESEL.Location = new System.Drawing.Point(353, 226);
-            this.txt_PESEL.MaxLength = 11;
-            this.txt_PESEL.Name = "txt_PESEL";
-            this.txt_PESEL.Size = new System.Drawing.Size(264, 30);
-            this.txt_PESEL.TabIndex = 97;
-            // 
-            // txt_birth_date
-            // 
-            this.txt_birth_date.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_birth_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_birth_date.Location = new System.Drawing.Point(353, 262);
-            this.txt_birth_date.Name = "txt_birth_date";
-            this.txt_birth_date.Size = new System.Drawing.Size(264, 30);
-            this.txt_birth_date.TabIndex = 98;
-            // 
-            // txt_login
-            // 
-            this.txt_login.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_login.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_login.Location = new System.Drawing.Point(353, 114);
-            this.txt_login.Name = "txt_login";
-            this.txt_login.Size = new System.Drawing.Size(264, 30);
-            this.txt_login.TabIndex = 99;
-            // 
-            // txt_zip_code
-            // 
-            this.txt_zip_code.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_zip_code.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_zip_code.Location = new System.Drawing.Point(886, 149);
-            this.txt_zip_code.Name = "txt_zip_code";
-            this.txt_zip_code.Size = new System.Drawing.Size(264, 30);
-            this.txt_zip_code.TabIndex = 91;
-            // 
-            // lbl_apartment_number
-            // 
-            this.lbl_apartment_number.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_apartment_number.AutoSize = true;
-            this.lbl_apartment_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_apartment_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_apartment_number.Location = new System.Drawing.Point(694, 257);
-            this.lbl_apartment_number.Name = "lbl_apartment_number";
-            this.lbl_apartment_number.Size = new System.Drawing.Size(137, 25);
-            this.lbl_apartment_number.TabIndex = 92;
-            this.lbl_apartment_number.Text = "Numer  lokalu:";
-            // 
-            // lbl_zip_code
-            // 
-            this.lbl_zip_code.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_zip_code.AutoSize = true;
-            this.lbl_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_zip_code.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_zip_code.Location = new System.Drawing.Point(694, 149);
-            this.lbl_zip_code.Name = "lbl_zip_code";
-            this.lbl_zip_code.Size = new System.Drawing.Size(141, 25);
-            this.lbl_zip_code.TabIndex = 90;
-            this.lbl_zip_code.Text = "Kod pocztowy:";
-            // 
-            // txtlbl_apartment_number
-            // 
-            this.txtlbl_apartment_number.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtlbl_apartment_number.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txtlbl_apartment_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txtlbl_apartment_number.Location = new System.Drawing.Point(886, 257);
-            this.txtlbl_apartment_number.Name = "txtlbl_apartment_number";
-            this.txtlbl_apartment_number.Size = new System.Drawing.Size(264, 30);
-            this.txtlbl_apartment_number.TabIndex = 93;
-            // 
-            // txt_property_number
-            // 
-            this.txt_property_number.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_property_number.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_property_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_property_number.Location = new System.Drawing.Point(886, 221);
-            this.txt_property_number.Name = "txt_property_number";
-            this.txt_property_number.Size = new System.Drawing.Size(264, 30);
-            this.txt_property_number.TabIndex = 89;
-            // 
-            // lbl_property_number
-            // 
-            this.lbl_property_number.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_property_number.AutoSize = true;
-            this.lbl_property_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_property_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_property_number.Location = new System.Drawing.Point(694, 221);
-            this.lbl_property_number.Name = "lbl_property_number";
-            this.lbl_property_number.Size = new System.Drawing.Size(142, 25);
-            this.lbl_property_number.TabIndex = 88;
-            this.lbl_property_number.Text = "Numer posesji:";
-            // 
-            // txt_town
-            // 
-            this.txt_town.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_town.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_town.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_town.Location = new System.Drawing.Point(886, 185);
-            this.txt_town.MaxLength = 11;
-            this.txt_town.Name = "txt_town";
-            this.txt_town.Size = new System.Drawing.Size(264, 30);
-            this.txt_town.TabIndex = 87;
-            // 
-            // btn_save
-            // 
-            this.btn_save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_save.AutoSize = true;
-            this.btn_save.BackColor = System.Drawing.Color.DarkSeaGreen;
-            this.btn_save.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_save.Location = new System.Drawing.Point(915, 522);
-            this.btn_save.Name = "btn_save";
-            this.btn_save.Size = new System.Drawing.Size(268, 71);
-            this.btn_save.TabIndex = 96;
-            this.btn_save.Text = "Zapisz";
-            this.btn_save.UseVisualStyleBackColor = false;
-            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
-            // 
-            // txt_street
-            // 
-            this.txt_street.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_street.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_street.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_street.Location = new System.Drawing.Point(886, 113);
-            this.txt_street.Name = "txt_street";
-            this.txt_street.Size = new System.Drawing.Size(264, 30);
-            this.txt_street.TabIndex = 86;
-            // 
-            // lbl_town
-            // 
-            this.lbl_town.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_town.AutoSize = true;
-            this.lbl_town.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_town.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_town.Location = new System.Drawing.Point(694, 185);
-            this.lbl_town.Name = "lbl_town";
-            this.lbl_town.Size = new System.Drawing.Size(130, 25);
-            this.lbl_town.TabIndex = 85;
-            this.lbl_town.Text = "Miejscowość:";
-            // 
-            // lbl_street
-            // 
-            this.lbl_street.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_street.AutoSize = true;
-            this.lbl_street.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_street.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_street.Location = new System.Drawing.Point(694, 113);
-            this.lbl_street.Name = "lbl_street";
-            this.lbl_street.Size = new System.Drawing.Size(61, 25);
-            this.lbl_street.TabIndex = 84;
-            this.lbl_street.Text = "Ulica:";
-            // 
-            // lbl_address_data
-            // 
-            this.lbl_address_data.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbl_address_data.AutoSize = true;
-            this.lbl_address_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_address_data.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_address_data.Location = new System.Drawing.Point(690, 75);
-            this.lbl_address_data.Name = "lbl_address_data";
-            this.lbl_address_data.Size = new System.Drawing.Size(286, 32);
-            this.lbl_address_data.TabIndex = 83;
-            this.lbl_address_data.Text = "Adres zamieszkania";
+            this.ucFindForgottenUsers1.BackColor = System.Drawing.Color.Plum;
+            this.ucFindForgottenUsers1.Location = new System.Drawing.Point(488, 186);
+            this.ucFindForgottenUsers1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.ucFindForgottenUsers1.Name = "ucFindForgottenUsers1";
+            this.ucFindForgottenUsers1.Size = new System.Drawing.Size(7, 6);
+            this.ucFindForgottenUsers1.TabIndex = 5;
             // 
             // UCAddUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.Controls.Add(this.txt_login);
-            this.Controls.Add(this.txt_birth_date);
-            this.Controls.Add(this.txt_PESEL);
-            this.Controls.Add(this.btn_save);
-            this.Controls.Add(this.btn_anuluj);
-            this.Controls.Add(this.cb_gender);
-            this.Controls.Add(this.txtlbl_apartment_number);
-            this.Controls.Add(this.lbl_apartment_number);
-            this.Controls.Add(this.txt_zip_code);
-            this.Controls.Add(this.lbl_zip_code);
-            this.Controls.Add(this.txt_property_number);
-            this.Controls.Add(this.lbl_property_number);
-            this.Controls.Add(this.txt_town);
+            this.BackColor = System.Drawing.Color.LightGray;
+            this.Controls.Add(this.btn_male);
+            this.Controls.Add(this.btn_female);
+            this.Controls.Add(this.txt_local_number);
             this.Controls.Add(this.txt_street);
-            this.Controls.Add(this.lbl_town);
-            this.Controls.Add(this.lbl_street);
-            this.Controls.Add(this.lbl_address_data);
-            this.Controls.Add(this.lbl_contact_data);
-            this.Controls.Add(this.lbl_birth_date);
-            this.Controls.Add(this.lbl_gender);
             this.Controls.Add(this.txt_phone_number);
-            this.Controls.Add(this.lbl_phone_number);
-            this.Controls.Add(this.lbl_personal_data);
-            this.Controls.Add(this.txt_mail);
+            this.Controls.Add(this.txt_email);
+            this.Controls.Add(this.txt_birth_date);
+            this.Controls.Add(this.txt_pesel);
+            this.Controls.Add(this.txt_house_number);
+            this.Controls.Add(this.txt_postcode);
+            this.Controls.Add(this.txt_city);
             this.Controls.Add(this.txt_surname);
             this.Controls.Add(this.txt_name);
-            this.Controls.Add(this.lbl_mail);
-            this.Controls.Add(this.lbl_PESEL);
-            this.Controls.Add(this.lbl_surname);
-            this.Controls.Add(this.lbl_name);
-            this.Controls.Add(this.lbl_login);
+            this.Controls.Add(this.txt_login);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.label10);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.ucFindForgottenUsers1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UCAddUsers";
             this.Size = new System.Drawing.Size(1306, 669);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.error_add_user_form)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -481,37 +425,37 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lbl_add_users;
-        private System.Windows.Forms.ErrorProvider error_add_user_form;
-        private System.Windows.Forms.Button btn_anuluj;
-        private System.Windows.Forms.ComboBox cb_gender;
-        private System.Windows.Forms.Label lbl_contact_data;
-        private System.Windows.Forms.Label lbl_birth_date;
-        private System.Windows.Forms.Label lbl_gender;
-        private System.Windows.Forms.TextBox txt_phone_number;
-        private System.Windows.Forms.Label lbl_phone_number;
-        private System.Windows.Forms.Label lbl_personal_data;
-        private System.Windows.Forms.TextBox txt_mail;
-        private System.Windows.Forms.TextBox txt_surname;
-        private System.Windows.Forms.TextBox txt_name;
-        private System.Windows.Forms.Label lbl_mail;
-        private System.Windows.Forms.Label lbl_PESEL;
-        private System.Windows.Forms.Label lbl_surname;
-        private System.Windows.Forms.Label lbl_name;
-        private System.Windows.Forms.Label lbl_login;
-        private System.Windows.Forms.TextBox txt_PESEL;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button btnAU_create_user;
+        private System.Windows.Forms.Button btnAU_clear_data;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private UCFindForgottenUsers ucFindForgottenUsers1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txt_login;
+        private System.Windows.Forms.TextBox txt_name;
+        private System.Windows.Forms.TextBox txt_surname;
+        private System.Windows.Forms.TextBox txt_city;
+        private System.Windows.Forms.TextBox txt_postcode;
+        private System.Windows.Forms.TextBox txt_house_number;
+        private System.Windows.Forms.TextBox txt_pesel;
         private System.Windows.Forms.TextBox txt_birth_date;
-        private System.Windows.Forms.Button btn_save;
-        private System.Windows.Forms.TextBox txtlbl_apartment_number;
-        private System.Windows.Forms.Label lbl_apartment_number;
-        private System.Windows.Forms.TextBox txt_zip_code;
-        private System.Windows.Forms.Label lbl_zip_code;
-        private System.Windows.Forms.TextBox txt_property_number;
-        private System.Windows.Forms.Label lbl_property_number;
-        private System.Windows.Forms.TextBox txt_town;
+        private System.Windows.Forms.TextBox txt_email;
+        private System.Windows.Forms.TextBox txt_phone_number;
         private System.Windows.Forms.TextBox txt_street;
-        private System.Windows.Forms.Label lbl_town;
-        private System.Windows.Forms.Label lbl_street;
-        private System.Windows.Forms.Label lbl_address_data;
+        private System.Windows.Forms.TextBox txt_local_number;
+        private System.Windows.Forms.RadioButton btn_female;
+        private System.Windows.Forms.RadioButton btn_male;
+        private System.Windows.Forms.ErrorProvider error_add_user_form;
     }
 }

@@ -98,6 +98,7 @@
             this.btn_search_user.TabIndex = 5;
             this.btn_search_user.Text = "Szukaj";
             this.btn_search_user.UseVisualStyleBackColor = false;
+            this.btn_search_user.Click += new System.EventHandler(this.btn_search_user_Click);
             // 
             // lbl_search_results
             // 
@@ -128,6 +129,7 @@
             this.dgv_user_results.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_user_results.Size = new System.Drawing.Size(914, 248);
             this.dgv_user_results.TabIndex = 7;
+            this.dgv_user_results.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_user_results_CellDoubleClick);
             // 
             // lbl_results_message
             // 

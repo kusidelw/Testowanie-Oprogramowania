@@ -7,17 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace Biblioteka
 {
     public partial class UCEditData : UserControl
     {
+        private string connectionString = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
+
+
         public UCEditData()
         {
             InitializeComponent();
         }
 
-        private void btn_cancel_changing_Click(object sender, EventArgs e)
+        //funkcja, która ładuje dane do pól tekstowych
+        public void ZaladujDaneDoEdycji(int userId)
         {
 
         }

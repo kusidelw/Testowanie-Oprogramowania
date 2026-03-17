@@ -90,7 +90,7 @@
             this.txtlbl_apartment_number.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txtlbl_apartment_number.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txtlbl_apartment_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txtlbl_apartment_number.Location = new System.Drawing.Point(828, 267);
+            this.txtlbl_apartment_number.Location = new System.Drawing.Point(859, 266);
             this.txtlbl_apartment_number.Name = "txtlbl_apartment_number";
             this.txtlbl_apartment_number.Size = new System.Drawing.Size(264, 30);
             this.txtlbl_apartment_number.TabIndex = 61;
@@ -101,7 +101,7 @@
             this.lbl_apartment_number.AutoSize = true;
             this.lbl_apartment_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_apartment_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_apartment_number.Location = new System.Drawing.Point(636, 267);
+            this.lbl_apartment_number.Location = new System.Drawing.Point(667, 266);
             this.lbl_apartment_number.Name = "lbl_apartment_number";
             this.lbl_apartment_number.Size = new System.Drawing.Size(137, 25);
             this.lbl_apartment_number.TabIndex = 60;
@@ -112,7 +112,7 @@
             this.txt_zip_code.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_zip_code.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_zip_code.Location = new System.Drawing.Point(828, 159);
+            this.txt_zip_code.Location = new System.Drawing.Point(859, 158);
             this.txt_zip_code.Name = "txt_zip_code";
             this.txt_zip_code.Size = new System.Drawing.Size(264, 30);
             this.txt_zip_code.TabIndex = 59;
@@ -123,7 +123,7 @@
             this.lbl_zip_code.AutoSize = true;
             this.lbl_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_zip_code.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_zip_code.Location = new System.Drawing.Point(636, 159);
+            this.lbl_zip_code.Location = new System.Drawing.Point(667, 158);
             this.lbl_zip_code.Name = "lbl_zip_code";
             this.lbl_zip_code.Size = new System.Drawing.Size(141, 25);
             this.lbl_zip_code.TabIndex = 58;
@@ -134,7 +134,7 @@
             this.txt_property_number.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_property_number.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_property_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_property_number.Location = new System.Drawing.Point(828, 231);
+            this.txt_property_number.Location = new System.Drawing.Point(859, 230);
             this.txt_property_number.Name = "txt_property_number";
             this.txt_property_number.Size = new System.Drawing.Size(264, 30);
             this.txt_property_number.TabIndex = 57;
@@ -145,7 +145,7 @@
             this.lbl_property_number.AutoSize = true;
             this.lbl_property_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_property_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_property_number.Location = new System.Drawing.Point(636, 231);
+            this.lbl_property_number.Location = new System.Drawing.Point(667, 230);
             this.lbl_property_number.Name = "lbl_property_number";
             this.lbl_property_number.Size = new System.Drawing.Size(142, 25);
             this.lbl_property_number.TabIndex = 56;
@@ -156,7 +156,7 @@
             this.txt_town.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_town.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_town.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_town.Location = new System.Drawing.Point(828, 195);
+            this.txt_town.Location = new System.Drawing.Point(859, 194);
             this.txt_town.MaxLength = 11;
             this.txt_town.Name = "txt_town";
             this.txt_town.Size = new System.Drawing.Size(264, 30);
@@ -167,7 +167,7 @@
             this.txt_street.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_street.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_street.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_street.Location = new System.Drawing.Point(828, 123);
+            this.txt_street.Location = new System.Drawing.Point(859, 122);
             this.txt_street.Name = "txt_street";
             this.txt_street.Size = new System.Drawing.Size(264, 30);
             this.txt_street.TabIndex = 54;
@@ -178,7 +178,7 @@
             this.lbl_town.AutoSize = true;
             this.lbl_town.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_town.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_town.Location = new System.Drawing.Point(636, 195);
+            this.lbl_town.Location = new System.Drawing.Point(667, 194);
             this.lbl_town.Name = "lbl_town";
             this.lbl_town.Size = new System.Drawing.Size(130, 25);
             this.lbl_town.TabIndex = 53;
@@ -190,7 +190,7 @@
             this.lbl_street.AutoSize = true;
             this.lbl_street.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_street.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_street.Location = new System.Drawing.Point(636, 123);
+            this.lbl_street.Location = new System.Drawing.Point(667, 122);
             this.lbl_street.Name = "lbl_street";
             this.lbl_street.Size = new System.Drawing.Size(61, 25);
             this.lbl_street.TabIndex = 52;
@@ -419,7 +419,6 @@
             this.btn_cancel_changing.TabIndex = 64;
             this.btn_cancel_changing.Text = "ANULUJ I WRÓĆ";
             this.btn_cancel_changing.UseVisualStyleBackColor = false;
-            this.btn_cancel_changing.Click += new System.EventHandler(this.btn_cancel_changing_Click);
             // 
             // UCEditData
             // 
