@@ -122,6 +122,11 @@ namespace Biblioteka
             {
                 if (string.IsNullOrWhiteSpace(tb.Text)) { OznaczBlad(tb, "Pole wymagane"); isValid = false; }
             }
+            if (cb_gender.SelectedIndex == -1)
+            {
+                error_add_user_form.SetError(cb_gender, "Wybierz płeć");
+                isValid = false;
+            }
 
             if (!isValid) return false;
 
@@ -144,7 +149,7 @@ namespace Biblioteka
                 // Walidacja ścisła 1 i E2: PESEL (Suma kontrolna, płeć, data)
                 if (!WalidujScislyPESEL(txt_PESEL.Text.Trim(), cb_gender.SelectedItem.ToString(), dataUr))
                 {
-                    OznaczBlad(txt_PESEL, "E2: PESEL niezgodny z datą urodzenia, płcią lub błędna cyfra kontrolna");
+                    OznaczBlad(txt_PESEL, "PESEL niezgodny z datą urodzenia, płcią lub błędna cyfra kontrolna");
                     isValid = false;
                 }
             }
@@ -152,14 +157,14 @@ namespace Biblioteka
             // Email
             if (txt_mail.Text.Length > 255 || !Regex.IsMatch(txt_mail.Text.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                OznaczBlad(txt_mail, "E2: Błędny format e-mail");
+                OznaczBlad(txt_mail, "Błędny format e-mail");
                 isValid = false;
             }
 
             // Telefon (9 cyfr)
             if (!Regex.IsMatch(txt_phone_number.Text.Trim(), @"^\d{9}$"))
             {
-                OznaczBlad(txt_phone_number, "E2: Telefon musi mieć dokładnie 9 cyfr");
+                OznaczBlad(txt_phone_number, "Telefon musi mieć dokładnie 9 cyfr");
                 isValid = false;
             }
 
@@ -229,7 +234,7 @@ namespace Biblioteka
 
         private void OznaczBlad(Control ctrl, string msg)
         {
-            ctrl.BackColor = Color.MistyRose; // E2: system podświetla pole na czerwono
+            ctrl.BackColor = Color.MistyRose; // system podświetla pole na czerwono
             error_add_user_form.SetError(ctrl, msg);
         }
 

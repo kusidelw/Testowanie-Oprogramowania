@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btn_find_forgotten_users = new System.Windows.Forms.Button();
+            this.btn_forget_users = new System.Windows.Forms.Button();
+            this.btn_find_users = new System.Windows.Forms.Button();
+            this.btn_show_users_data = new System.Windows.Forms.Button();
+            this.btn_show_users = new System.Windows.Forms.Button();
             this.btn_add_user = new System.Windows.Forms.Button();
             this.MainPanel = new System.Windows.Forms.Panel();
-            this.btn_show_users = new System.Windows.Forms.Button();
-            this.btn_edit_data = new System.Windows.Forms.Button();
-            this.btn_show_users_data = new System.Windows.Forms.Button();
-            this.btn_find_users = new System.Windows.Forms.Button();
-            this.btn_forget_users = new System.Windows.Forms.Button();
-            this.btn_find_forgotten_users = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +46,6 @@
             this.panel1.Controls.Add(this.btn_forget_users);
             this.panel1.Controls.Add(this.btn_find_users);
             this.panel1.Controls.Add(this.btn_show_users_data);
-            this.panel1.Controls.Add(this.btn_edit_data);
             this.panel1.Controls.Add(this.btn_show_users);
             this.panel1.Controls.Add(this.btn_add_user);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -55,6 +53,61 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(338, 854);
             this.panel1.TabIndex = 0;
+            // 
+            // btn_find_forgotten_users
+            // 
+            this.btn_find_forgotten_users.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_find_forgotten_users.Location = new System.Drawing.Point(0, 446);
+            this.btn_find_forgotten_users.Name = "btn_find_forgotten_users";
+            this.btn_find_forgotten_users.Size = new System.Drawing.Size(338, 89);
+            this.btn_find_forgotten_users.TabIndex = 7;
+            this.btn_find_forgotten_users.Text = "Wyszukaj zapomnianego użytkownika";
+            this.btn_find_forgotten_users.UseVisualStyleBackColor = true;
+            this.btn_find_forgotten_users.Click += new System.EventHandler(this.btn_find_forgotten_users_Click);
+            // 
+            // btn_forget_users
+            // 
+            this.btn_forget_users.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_forget_users.Location = new System.Drawing.Point(0, 357);
+            this.btn_forget_users.Name = "btn_forget_users";
+            this.btn_forget_users.Size = new System.Drawing.Size(338, 89);
+            this.btn_forget_users.TabIndex = 6;
+            this.btn_forget_users.Text = "Zapomnij użytkownika";
+            this.btn_forget_users.UseVisualStyleBackColor = true;
+            this.btn_forget_users.Click += new System.EventHandler(this.btn_forget_users_Click);
+            // 
+            // btn_find_users
+            // 
+            this.btn_find_users.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_find_users.Location = new System.Drawing.Point(0, 268);
+            this.btn_find_users.Name = "btn_find_users";
+            this.btn_find_users.Size = new System.Drawing.Size(338, 89);
+            this.btn_find_users.TabIndex = 5;
+            this.btn_find_users.Text = "Wyszukaj użytkownika";
+            this.btn_find_users.UseVisualStyleBackColor = true;
+            this.btn_find_users.Click += new System.EventHandler(this.btn_find_users_Click);
+            // 
+            // btn_show_users_data
+            // 
+            this.btn_show_users_data.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_show_users_data.Location = new System.Drawing.Point(0, 179);
+            this.btn_show_users_data.Name = "btn_show_users_data";
+            this.btn_show_users_data.Size = new System.Drawing.Size(338, 89);
+            this.btn_show_users_data.TabIndex = 4;
+            this.btn_show_users_data.Text = "Pokaż dane użytkowników";
+            this.btn_show_users_data.UseVisualStyleBackColor = true;
+            this.btn_show_users_data.Click += new System.EventHandler(this.btn_show_users_data_Click);
+            // 
+            // btn_show_users
+            // 
+            this.btn_show_users.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_show_users.Location = new System.Drawing.Point(0, 92);
+            this.btn_show_users.Name = "btn_show_users";
+            this.btn_show_users.Size = new System.Drawing.Size(338, 87);
+            this.btn_show_users.TabIndex = 2;
+            this.btn_show_users.Text = "Wyświetl listę użytkowników";
+            this.btn_show_users.UseVisualStyleBackColor = true;
+            this.btn_show_users.Click += new System.EventHandler(this.btn_show_users_Click);
             // 
             // btn_add_user
             // 
@@ -76,72 +129,6 @@
             this.MainPanel.Size = new System.Drawing.Size(1302, 854);
             this.MainPanel.TabIndex = 1;
             // 
-            // btn_show_users
-            // 
-            this.btn_show_users.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_show_users.Location = new System.Drawing.Point(0, 92);
-            this.btn_show_users.Name = "btn_show_users";
-            this.btn_show_users.Size = new System.Drawing.Size(338, 87);
-            this.btn_show_users.TabIndex = 2;
-            this.btn_show_users.Text = "Wyświetl listę użytkowników";
-            this.btn_show_users.UseVisualStyleBackColor = true;
-            this.btn_show_users.Click += new System.EventHandler(this.btn_show_users_Click);
-            // 
-            // btn_edit_data
-            // 
-            this.btn_edit_data.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_edit_data.Location = new System.Drawing.Point(0, 179);
-            this.btn_edit_data.Name = "btn_edit_data";
-            this.btn_edit_data.Size = new System.Drawing.Size(338, 89);
-            this.btn_edit_data.TabIndex = 3;
-            this.btn_edit_data.Text = "Edytuj dane";
-            this.btn_edit_data.UseVisualStyleBackColor = true;
-            this.btn_edit_data.Click += new System.EventHandler(this.btn_edit_data_Click);
-            // 
-            // btn_show_users_data
-            // 
-            this.btn_show_users_data.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_show_users_data.Location = new System.Drawing.Point(0, 268);
-            this.btn_show_users_data.Name = "btn_show_users_data";
-            this.btn_show_users_data.Size = new System.Drawing.Size(338, 89);
-            this.btn_show_users_data.TabIndex = 4;
-            this.btn_show_users_data.Text = "Pokaż dane użytkowników";
-            this.btn_show_users_data.UseVisualStyleBackColor = true;
-            this.btn_show_users_data.Click += new System.EventHandler(this.btn_show_users_data_Click);
-            // 
-            // btn_find_users
-            // 
-            this.btn_find_users.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_find_users.Location = new System.Drawing.Point(0, 357);
-            this.btn_find_users.Name = "btn_find_users";
-            this.btn_find_users.Size = new System.Drawing.Size(338, 89);
-            this.btn_find_users.TabIndex = 5;
-            this.btn_find_users.Text = "Wyszukaj użytkownika";
-            this.btn_find_users.UseVisualStyleBackColor = true;
-            this.btn_find_users.Click += new System.EventHandler(this.btn_find_users_Click);
-            // 
-            // btn_forget_users
-            // 
-            this.btn_forget_users.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_forget_users.Location = new System.Drawing.Point(0, 446);
-            this.btn_forget_users.Name = "btn_forget_users";
-            this.btn_forget_users.Size = new System.Drawing.Size(338, 89);
-            this.btn_forget_users.TabIndex = 6;
-            this.btn_forget_users.Text = "Zapomnij użytkownika";
-            this.btn_forget_users.UseVisualStyleBackColor = true;
-            this.btn_forget_users.Click += new System.EventHandler(this.btn_forget_users_Click);
-            // 
-            // btn_find_forgotten_users
-            // 
-            this.btn_find_forgotten_users.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_find_forgotten_users.Location = new System.Drawing.Point(0, 535);
-            this.btn_find_forgotten_users.Name = "btn_find_forgotten_users";
-            this.btn_find_forgotten_users.Size = new System.Drawing.Size(338, 89);
-            this.btn_find_forgotten_users.TabIndex = 7;
-            this.btn_find_forgotten_users.Text = "Wyszukaj zapomnianego użytkownika";
-            this.btn_find_forgotten_users.UseVisualStyleBackColor = true;
-            this.btn_find_forgotten_users.Click += new System.EventHandler(this.btn_find_forgotten_users_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -162,7 +149,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btn_add_user;
         private System.Windows.Forms.Panel MainPanel;
-        private System.Windows.Forms.Button btn_edit_data;
         private System.Windows.Forms.Button btn_show_users;
         private System.Windows.Forms.Button btn_find_forgotten_users;
         private System.Windows.Forms.Button btn_forget_users;
