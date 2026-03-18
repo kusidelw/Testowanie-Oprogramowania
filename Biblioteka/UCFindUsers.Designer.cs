@@ -129,7 +129,7 @@
             this.dgv_user_results.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv_user_results.Size = new System.Drawing.Size(914, 248);
             this.dgv_user_results.TabIndex = 7;
-            this.dgv_user_results.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_user_results_CellDoubleClick);
+            this.dgv_user_results.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_user_results_CellDoubleClick);
             // 
             // lbl_results_message
             // 

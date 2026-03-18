@@ -116,7 +116,7 @@ namespace Biblioteka
             error_add_user_form.Clear();
             ResetFieldColors();
 
-            // Pola tekstowe wymagane (używamy Twoich NOWYCH nazw z Designera)
+            // Pola tekstowe wymagane 
             TextBox[] required = { txt_login, txt_name, txt_surname, txt_town, txt_zip_code, txt_property_number, txt_birth_date, txt_PESEL, txt_mail, txt_phone_number };
             foreach (var tb in required)
             {

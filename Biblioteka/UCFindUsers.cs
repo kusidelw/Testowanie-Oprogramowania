@@ -63,6 +63,7 @@ namespace Biblioteka
                         // Wrzucamy dane do tabelki na ekranie
                         dgv_user_results.DataSource = dt;
 
+                        lbl_results_message.Visible = true;
                         lbl_results_message.Text = $"Wyświetlono {dt.Rows.Count} wyników. Kliknij dwukrotnie wiersz, aby zobaczyć szczegóły.";
 
                         if (dt.Rows.Count == 0)
