@@ -116,7 +116,7 @@
             this.btn_anuluj.Name = "btn_anuluj";
             this.btn_anuluj.Size = new System.Drawing.Size(282, 89);
             this.btn_anuluj.TabIndex = 95;
-            this.btn_anuluj.Text = "WYCZYŚĆ DANE";
+            this.btn_anuluj.Text = "AULUJ DODAWANIE";
             this.btn_anuluj.UseVisualStyleBackColor = false;
             this.btn_anuluj.Click += new System.EventHandler(this.btn_anuluj_Click_1);
             // 

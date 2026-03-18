@@ -32,6 +32,12 @@ namespace Biblioteka
         private void btn_anuluj_Click_1(object sender, EventArgs e)
         {
             WyczyscFormularz();
+
+            Form parentForm = this.FindForm();
+            if (parentForm is Form1 mainForm)
+            {
+                mainForm.PowrotDoMenuGlownego(); // Powrót do menu
+            }
         }
 
         private void btnAU_create_user_Click(object sender, EventArgs e)
@@ -53,12 +59,17 @@ namespace Biblioteka
                     conn.Open();
 
                     // Sprawdzanie unikalności
-                    if (ValueExists(conn, "Login", txt_login.Text.Trim())) { OznaczBlad(txt_login, "Login zajęty"); return; }
-                    if (ValueExists(conn, "PESEL", txt_PESEL.Text.Trim())) { OznaczBlad(txt_PESEL, "PESEL już istnieje"); return; }
-                    if (ValueExists(conn, "Email", txt_mail.Text.Trim())) { OznaczBlad(txt_mail, "Email już istnieje"); return; }
-
+                    if (ValueExists(conn, "Login", txt_login.Text.Trim()) ||
+                        ValueExists(conn, "PESEL", txt_PESEL.Text.Trim()) ||
+                        ValueExists(conn, "Email", txt_mail.Text.Trim()))
+                    {
+                        MessageBox.Show("Użytkownik już istnieje", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return; 
+                    }
                     string hasloHash = HashSHA256(txt_PESEL.Text.Trim());
                     string plec = cb_gender.SelectedItem.ToString() == "Mężczyzna" ? "M" : "K";
+
+                    string nrKarty = "LIB-" + Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
 
                     const string sql = @"
                         INSERT INTO Uzytkownicy 
@@ -86,7 +97,8 @@ namespace Biblioteka
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show("Użytkownik został pomyślnie dodany!", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Użytkownik został pomyślnie dodany!\nNr karty bibliotecznej: {nrKarty}", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                     WyczyscFormularz();
                 }
             }
@@ -105,7 +117,7 @@ namespace Biblioteka
             ResetFieldColors();
 
             // Pola tekstowe wymagane (używamy Twoich NOWYCH nazw z Designera)
-            TextBox[] required = { txt_login, txt_name, txt_surname, txt_town, txt_zip_code, txt_property_number, txt_birth_date };
+            TextBox[] required = { txt_login, txt_name, txt_surname, txt_town, txt_zip_code, txt_property_number, txt_birth_date, txt_PESEL, txt_mail, txt_phone_number };
             foreach (var tb in required)
             {
                 if (string.IsNullOrWhiteSpace(tb.Text)) { OznaczBlad(tb, "Pole wymagane"); isValid = false; }
@@ -121,23 +133,33 @@ namespace Biblioteka
             }
 
             // Data urodzenia (Czy to jest prawdziwa data wg kalendarza?)
-            if (!DateTime.TryParse(txt_birth_date.Text.Trim(), out _))
+            DateTime dataUr;
+            if (!DateTime.TryParse(txt_birth_date.Text.Trim(), out dataUr))
             {
-                OznaczBlad(txt_birth_date, "Podaj poprawną datę (np. 1990-05-20)");
+                OznaczBlad(txt_birth_date, "Niepoprawny format daty");
                 isValid = false;
+            }
+            else
+            {
+                // Walidacja ścisła 1 i E2: PESEL (Suma kontrolna, płeć, data)
+                if (!WalidujScislyPESEL(txt_PESEL.Text.Trim(), cb_gender.SelectedItem.ToString(), dataUr))
+                {
+                    OznaczBlad(txt_PESEL, "E2: PESEL niezgodny z datą urodzenia, płcią lub błędna cyfra kontrolna");
+                    isValid = false;
+                }
             }
 
             // Email
-            if (!Regex.IsMatch(txt_mail.Text.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (txt_mail.Text.Length > 255 || !Regex.IsMatch(txt_mail.Text.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                OznaczBlad(txt_mail, "Błędny format email");
+                OznaczBlad(txt_mail, "E2: Błędny format e-mail");
                 isValid = false;
             }
 
             // Telefon (9 cyfr)
             if (!Regex.IsMatch(txt_phone_number.Text.Trim(), @"^\d{9}$"))
             {
-                OznaczBlad(txt_phone_number, "Wymagane 9 cyfr");
+                OznaczBlad(txt_phone_number, "E2: Telefon musi mieć dokładnie 9 cyfr");
                 isValid = false;
             }
 
@@ -157,11 +179,43 @@ namespace Biblioteka
 
             return isValid;
 
-
         }
 
-        // --- POMOCNICZE ---
+        // SPECJALNA WALIDACJA PESEL
+        private bool WalidujScislyPESEL(string pesel, string plecFormularz, DateTime dataUr)
+        {
+            if (pesel.Length != 11 || !Regex.IsMatch(pesel, @"^\d{11}$")) return false;
 
+            // 1. Suma kontrolna PESEL (oficjalny algorytm MSWiA)
+            int[] wagi = { 1, 3, 7, 9, 1, 3, 7, 9, 1, 3 };
+            int suma = 0;
+            for (int i = 0; i < 10; i++) suma += int.Parse(pesel[i].ToString()) * wagi[i];
+            int cyfraKontrolna = (10 - (suma % 10)) % 10;
+            if (cyfraKontrolna != int.Parse(pesel[10].ToString())) return false;
+
+            // 2. Płeć (Przedostatnia cyfra: nieparzyste=M, parzyste=K)
+            int cyfraPlci = int.Parse(pesel[9].ToString());
+            bool toKobieta = (cyfraPlci % 2 == 0);
+            if ((plecFormularz == "Kobieta" && !toKobieta) || (plecFormularz == "Mężczyzna" && toKobieta)) return false;
+
+            // 3. Zgodność z datą urodzenia
+            int rok = dataUr.Year;
+            int miesiac = dataUr.Month;
+            int dzien = dataUr.Day;
+
+            // Kodowanie stulecia w miesiącu PESEL
+            if (rok >= 2000 && rok < 2100) miesiac += 20;
+            else if (rok >= 1800 && rok < 1900) miesiac += 80;
+            else if (rok >= 2100 && rok < 2200) miesiac += 40;
+            else if (rok >= 2200 && rok < 2300) miesiac += 60;
+
+            string peselData = $"{rok % 100:D2}{miesiac:D2}{dzien:D2}";
+            if (pesel.Substring(0, 6) != peselData) return false;
+
+            return true;
+        }
+
+        // POMOCNICZE
         private void WyczyscFormularz()
         {
             foreach (Control ctrl in this.Controls)
@@ -175,7 +229,7 @@ namespace Biblioteka
 
         private void OznaczBlad(Control ctrl, string msg)
         {
-            ctrl.BackColor = Color.MistyRose;
+            ctrl.BackColor = Color.MistyRose; // E2: system podświetla pole na czerwono
             error_add_user_form.SetError(ctrl, msg);
         }
 
