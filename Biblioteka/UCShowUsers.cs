@@ -16,5 +16,15 @@ namespace Biblioteka
         {
             InitializeComponent();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbl_page_info_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

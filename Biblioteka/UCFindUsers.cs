@@ -68,6 +68,7 @@ namespace Biblioteka
 
                         if (dt.Rows.Count == 0)
                         {
+                            lbl_results_message.Visible = false;
                             MessageBox.Show("Nie znaleziono użytkowników o podanych kryteriach.", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                     }

@@ -43,7 +43,7 @@
             this.lbl_find_forgotten_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold);
             this.lbl_find_forgotten_users.Location = new System.Drawing.Point(-29, 8);
             this.lbl_find_forgotten_users.Name = "lbl_find_forgotten_users";
-            this.lbl_find_forgotten_users.Size = new System.Drawing.Size(1191, 41);
+            this.lbl_find_forgotten_users.Size = new System.Drawing.Size(1191, 34);
             this.lbl_find_forgotten_users.TabIndex = 0;
             this.lbl_find_forgotten_users.Text = "ZAPOMNIANI UŻYTKOWNICY";
             this.lbl_find_forgotten_users.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -82,9 +82,9 @@
             this.lbl_info_message.Location = new System.Drawing.Point(97, 542);
             this.lbl_info_message.Name = "lbl_info_message";
             this.lbl_info_message.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.lbl_info_message.Size = new System.Drawing.Size(213, 30);
+            this.lbl_info_message.Size = new System.Drawing.Size(809, 38);
             this.lbl_info_message.TabIndex = 9;
-            this.lbl_info_message.Text = "Wyświetlono X wyników!";
+            this.lbl_info_message.Text = "Wyświetlono X wyników! Kliknij dwukrotnie wiersz, aby zobaczyć szczegóły.";
             // 
             // btn_search_users
             // 
