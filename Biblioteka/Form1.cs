@@ -35,6 +35,12 @@ namespace Biblioteka
 
         }
 
+        public void PowrotDoMenuGlownego()
+        {
+            MainPanel.Controls.Clear();
+        }
+
+
         public void PrzejdzDoEdycji(int userId)
         {
             ucEditData.ZaladujDaneDoEdycji(userId); 
