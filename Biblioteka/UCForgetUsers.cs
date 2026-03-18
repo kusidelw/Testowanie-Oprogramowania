@@ -16,5 +16,20 @@ namespace Biblioteka
         {
             InitializeComponent();
         }
+
+        private void btn_search_user_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbl_search_criteria_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btn_forget_user_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
