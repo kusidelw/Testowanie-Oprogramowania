@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace Biblioteka
 {
@@ -24,7 +25,14 @@ namespace Biblioteka
 
         public void ZaladujDaneDoEdycji(int userId)
         {
+            //blokowanie pól, które nie powinny być edytowane według analizy wymagań
+            txt_login.Enabled = false;
+            txt_PESEL.Enabled = false;
+            txt_birth_date.Enabled = false;
+            txt_gender.Enabled = false;
+
             currentUserId = userId;
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -68,44 +76,50 @@ namespace Biblioteka
 
         private void btn_save_changes_Click(object sender, EventArgs e)
         {
+            if (!WalidujFormularzEdycji())
+            {
+                MessageBox.Show("Formularz zawiera błędy. Popraw podświetlone pola.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
+
+                    if (CzyEmailZajety(conn, txt_mail.Text.Trim(), currentUserId))
+                    {
+                        MessageBox.Show("Podany adres e-mail jest już przypisany do innego użytkownika.", "Błąd unikalności", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     string sql = @"UPDATE Uzytkownicy SET 
-                                    Login = @Login, Imie = @Imie, Nazwisko = @Nazwisko, 
-                                    PESEL = @PESEL, DataUrodzenia = @DataUrodzenia, 
+                                    Imie = @Imie, Nazwisko = @Nazwisko, 
                                     Email = @Email, Telefon = @Telefon, Miejscowosc = @Miejscowosc, 
                                     KodPocztowy = @KodPocztowy, Ulica = @Ulica, 
-                                    NumerPosesji = @NumerPosesji, NumerLokalu = @NumerLokalu, Plec = @Plec
+                                    NumerPosesji = @NumerPosesji, NumerLokalu = @NumerLokalu
                                    WHERE ID = @Id";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Login", txt_login.Text);
-                        cmd.Parameters.AddWithValue("@Imie", txt_name.Text);
-                        cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text);
-                        cmd.Parameters.AddWithValue("@PESEL", txt_PESEL.Text);
-                        cmd.Parameters.AddWithValue("@DataUrodzenia", DateTime.Parse(txt_birth_date.Text));
-                        cmd.Parameters.AddWithValue("@Email", txt_mail.Text);
-                        cmd.Parameters.AddWithValue("@Telefon", txt_phone_number.Text);
-                        cmd.Parameters.AddWithValue("@Miejscowosc", txt_town.Text);
-                        cmd.Parameters.AddWithValue("@KodPocztowy", txt_zip_code.Text);
-                        cmd.Parameters.AddWithValue("@Ulica", txt_street.Text);
-                        cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text);
-                        cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrEmpty(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text);
-                        cmd.Parameters.AddWithValue("@Plec", txt_gender.Text.ToLower().StartsWith("m") ? "M" : "K");
+                        cmd.Parameters.AddWithValue("@Imie", txt_name.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Email", txt_mail.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Telefon", txt_phone_number.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Miejscowosc", txt_town.Text.Trim());
+                        cmd.Parameters.AddWithValue("@KodPocztowy", txt_zip_code.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Ulica", string.IsNullOrWhiteSpace(txt_street.Text) ? (object)DBNull.Value : txt_street.Text.Trim());
+                        cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text.Trim());
+                        cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text.Trim());
                         cmd.Parameters.AddWithValue("@Id", currentUserId);
 
                         cmd.ExecuteNonQuery();
 
                         MessageBox.Show("Dane zostały zaktualizowane pomyślnie!", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                        // 1. Czyścimy formularz
+                        
                         WyczyscFormularz();
-
-                        // 2. Wracamy do widoku ShowUsers
                         WrocDoWidokuShowUsers();
                     }
                 }
@@ -113,6 +127,56 @@ namespace Biblioteka
             catch (Exception ex)
             {
                 MessageBox.Show("Błąd podczas zapisywania: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // WALIDACJA 
+        private bool WalidujFormularzEdycji()
+        {
+            bool isValid = true;
+            ResetFieldColors();
+
+            // 1. Sprawdzanie pustych pól podstawowych (Imię, Nazwisko, Miejscowość)
+            TextBox[] required = { txt_name, txt_surname, txt_town };
+            foreach (var tb in required)
+            {
+                if (string.IsNullOrWhiteSpace(tb.Text)) { OznaczBlad(tb); isValid = false; }
+            }
+
+            // 2. Dane kontaktowe
+            if (!Walidator.SprawdzEmail(txt_mail.Text)) { OznaczBlad(txt_mail); isValid = false; }
+            if (!Walidator.SprawdzTelefon(txt_phone_number.Text)) { OznaczBlad(txt_phone_number); isValid = false; }
+            if (!Walidator.SprawdzKodPocztowy(txt_zip_code.Text)) { OznaczBlad(txt_zip_code); isValid = false; }
+
+            // 3. Posesja (wymagana - false) i Lokal (opcjonalny - true)
+            if (!Walidator.SprawdzNumer(txt_property_number.Text, false)) { OznaczBlad(txt_property_number); isValid = false; }
+            if (!Walidator.SprawdzNumer(txtlbl_apartment_number.Text, true)) { OznaczBlad(txtlbl_apartment_number); isValid = false; }
+
+            return isValid;
+        }
+
+        //POMOCNICZE 
+
+        private void OznaczBlad(Control ctrl)
+        {
+            // polegamy na podświetleniu kolorem
+            ctrl.BackColor = Color.MistyRose;
+        }
+
+        private void ResetFieldColors()
+        {
+            foreach (Control ctrl in this.Controls)
+                if (ctrl is TextBox && ctrl.Enabled) ctrl.BackColor = SystemColors.Window;
+        }
+
+        private bool CzyEmailZajety(SqlConnection conn, string email, int currentUserId)
+        {
+            string query = "SELECT COUNT(1) FROM Uzytkownicy WHERE Email = @Email AND ID != @UserId";
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.Parameters.AddWithValue("@UserId", currentUserId);
+                return (int)cmd.ExecuteScalar() > 0;
             }
         }
 
@@ -127,11 +191,8 @@ namespace Biblioteka
             var form1 = this.ParentForm as Form1;
             if (form1 != null)
             {
-                // Wywołujemy metodę, która w Form1 odpowiada za pokazanie listy (ucShowUsers)
-                // Zakładając, że w Form1 masz taką metodę lub dostęp do przycisku
-                form1.PokazWidokZeStanem(new UCShowUsers());
-                // LUB jeśli masz instancję w Form1:
-                // form1.btn_show_users_Click(null, null);
+                //wracamy do użytkownika, którego właśnie edytowaliśmy
+                form1.PokazKarteUzytkownika(currentUserId);
             }
         }
 

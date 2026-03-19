@@ -73,12 +73,6 @@
     <Compile Include="UCFindForgottenUsers.Designer.cs">
       <DependentUpon>UCFindForgottenUsers.cs</DependentUpon>
     </Compile>
-    <Compile Include="UCFindUsers.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UCFindUsers.Designer.cs">
-      <DependentUpon>UCFindUsers.cs</DependentUpon>
-    </Compile>
     <Compile Include="UCForgetUsers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -97,6 +91,7 @@
     <Compile Include="UCShowUsersData.Designer.cs">
       <DependentUpon>UCShowUsersData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Walidator.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -117,9 +112,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCFindForgottenUsers.resx">
       <DependentUpon>UCFindForgottenUsers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UCFindUsers.resx">
-      <DependentUpon>UCFindUsers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCForgetUsers.resx">
       <DependentUpon>UCForgetUsers.cs</DependentUpon>

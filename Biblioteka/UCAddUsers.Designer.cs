@@ -37,7 +37,6 @@
             this.cb_gender = new System.Windows.Forms.ComboBox();
             this.txtlbl_apartment_number = new System.Windows.Forms.TextBox();
             this.lbl_apartment_number = new System.Windows.Forms.Label();
-            this.txt_zip_code = new System.Windows.Forms.TextBox();
             this.lbl_zip_code = new System.Windows.Forms.Label();
             this.txt_property_number = new System.Windows.Forms.TextBox();
             this.lbl_property_number = new System.Windows.Forms.Label();
@@ -47,7 +46,6 @@
             this.lbl_street = new System.Windows.Forms.Label();
             this.lbl_address_data = new System.Windows.Forms.Label();
             this.lbl_contact_data = new System.Windows.Forms.Label();
-            this.txt_birth_date = new System.Windows.Forms.TextBox();
             this.lbl_birth_date = new System.Windows.Forms.Label();
             this.lbl_gender = new System.Windows.Forms.Label();
             this.txt_phone_number = new System.Windows.Forms.TextBox();
@@ -63,6 +61,8 @@
             this.lbl_surname = new System.Windows.Forms.Label();
             this.lbl_name = new System.Windows.Forms.Label();
             this.lbl_login = new System.Windows.Forms.Label();
+            this.txt_zip_code = new System.Windows.Forms.MaskedTextBox();
+            this.txt_birth_date = new System.Windows.Forms.MaskedTextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.error_add_user_form)).BeginInit();
             this.SuspendLayout();
@@ -75,7 +75,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1182, 61);
+            this.panel1.Size = new System.Drawing.Size(1184, 58);
             this.panel1.TabIndex = 0;
             // 
             // lbl_add_users
@@ -98,7 +98,7 @@
             this.btnAU_create_user.AutoSize = true;
             this.btnAU_create_user.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.btnAU_create_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btnAU_create_user.Location = new System.Drawing.Point(848, 526);
+            this.btnAU_create_user.Location = new System.Drawing.Point(850, 528);
             this.btnAU_create_user.Name = "btnAU_create_user";
             this.btnAU_create_user.Size = new System.Drawing.Size(282, 89);
             this.btnAU_create_user.TabIndex = 96;
@@ -112,11 +112,11 @@
             this.btn_anuluj.AutoSize = true;
             this.btn_anuluj.BackColor = System.Drawing.Color.LightCoral;
             this.btn_anuluj.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_anuluj.Location = new System.Drawing.Point(97, 526);
+            this.btn_anuluj.Location = new System.Drawing.Point(97, 528);
             this.btn_anuluj.Name = "btn_anuluj";
             this.btn_anuluj.Size = new System.Drawing.Size(282, 89);
             this.btn_anuluj.TabIndex = 95;
-            this.btn_anuluj.Text = "AULUJ DODAWANIE";
+            this.btn_anuluj.Text = "ANULUJ DODAWANIE";
             this.btn_anuluj.UseVisualStyleBackColor = false;
             this.btn_anuluj.Click += new System.EventHandler(this.btn_anuluj_Click_1);
             // 
@@ -137,7 +137,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtlbl_apartment_number.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txtlbl_apartment_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txtlbl_apartment_number.Location = new System.Drawing.Point(866, 266);
+            this.txtlbl_apartment_number.Location = new System.Drawing.Point(868, 266);
             this.txtlbl_apartment_number.Name = "txtlbl_apartment_number";
             this.txtlbl_apartment_number.Size = new System.Drawing.Size(264, 30);
             this.txtlbl_apartment_number.TabIndex = 93;
@@ -149,22 +149,11 @@
             this.lbl_apartment_number.AutoSize = true;
             this.lbl_apartment_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_apartment_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_apartment_number.Location = new System.Drawing.Point(674, 266);
+            this.lbl_apartment_number.Location = new System.Drawing.Point(676, 266);
             this.lbl_apartment_number.Name = "lbl_apartment_number";
             this.lbl_apartment_number.Size = new System.Drawing.Size(137, 25);
             this.lbl_apartment_number.TabIndex = 92;
             this.lbl_apartment_number.Text = "Numer  lokalu:";
-            // 
-            // txt_zip_code
-            // 
-            this.txt_zip_code.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_zip_code.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_zip_code.Location = new System.Drawing.Point(866, 158);
-            this.txt_zip_code.Name = "txt_zip_code";
-            this.txt_zip_code.Size = new System.Drawing.Size(264, 30);
-            this.txt_zip_code.TabIndex = 91;
             // 
             // lbl_zip_code
             // 
@@ -173,7 +162,7 @@
             this.lbl_zip_code.AutoSize = true;
             this.lbl_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_zip_code.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_zip_code.Location = new System.Drawing.Point(674, 158);
+            this.lbl_zip_code.Location = new System.Drawing.Point(676, 158);
             this.lbl_zip_code.Name = "lbl_zip_code";
             this.lbl_zip_code.Size = new System.Drawing.Size(141, 25);
             this.lbl_zip_code.TabIndex = 90;
@@ -185,7 +174,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_property_number.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_property_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_property_number.Location = new System.Drawing.Point(866, 230);
+            this.txt_property_number.Location = new System.Drawing.Point(868, 230);
             this.txt_property_number.Name = "txt_property_number";
             this.txt_property_number.Size = new System.Drawing.Size(264, 30);
             this.txt_property_number.TabIndex = 89;
@@ -197,7 +186,7 @@
             this.lbl_property_number.AutoSize = true;
             this.lbl_property_number.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_property_number.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_property_number.Location = new System.Drawing.Point(674, 230);
+            this.lbl_property_number.Location = new System.Drawing.Point(676, 230);
             this.lbl_property_number.Name = "lbl_property_number";
             this.lbl_property_number.Size = new System.Drawing.Size(142, 25);
             this.lbl_property_number.TabIndex = 88;
@@ -209,7 +198,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_town.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_town.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_town.Location = new System.Drawing.Point(866, 194);
+            this.txt_town.Location = new System.Drawing.Point(868, 194);
             this.txt_town.MaxLength = 11;
             this.txt_town.Name = "txt_town";
             this.txt_town.Size = new System.Drawing.Size(264, 30);
@@ -221,7 +210,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_street.BackColor = System.Drawing.SystemColors.HighlightText;
             this.txt_street.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_street.Location = new System.Drawing.Point(866, 122);
+            this.txt_street.Location = new System.Drawing.Point(868, 122);
             this.txt_street.Name = "txt_street";
             this.txt_street.Size = new System.Drawing.Size(264, 30);
             this.txt_street.TabIndex = 86;
@@ -233,7 +222,7 @@
             this.lbl_town.AutoSize = true;
             this.lbl_town.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_town.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_town.Location = new System.Drawing.Point(674, 194);
+            this.lbl_town.Location = new System.Drawing.Point(676, 194);
             this.lbl_town.Name = "lbl_town";
             this.lbl_town.Size = new System.Drawing.Size(130, 25);
             this.lbl_town.TabIndex = 85;
@@ -246,7 +235,7 @@
             this.lbl_street.AutoSize = true;
             this.lbl_street.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_street.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_street.Location = new System.Drawing.Point(674, 122);
+            this.lbl_street.Location = new System.Drawing.Point(676, 122);
             this.lbl_street.Name = "lbl_street";
             this.lbl_street.Size = new System.Drawing.Size(61, 25);
             this.lbl_street.TabIndex = 84;
@@ -259,7 +248,7 @@
             this.lbl_address_data.AutoSize = true;
             this.lbl_address_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_address_data.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_address_data.Location = new System.Drawing.Point(637, 87);
+            this.lbl_address_data.Location = new System.Drawing.Point(639, 87);
             this.lbl_address_data.Name = "lbl_address_data";
             this.lbl_address_data.Size = new System.Drawing.Size(286, 32);
             this.lbl_address_data.TabIndex = 83;
@@ -277,17 +266,6 @@
             this.lbl_contact_data.Size = new System.Drawing.Size(253, 32);
             this.lbl_contact_data.TabIndex = 82;
             this.lbl_contact_data.Text = "Dane Kontaktowe";
-            // 
-            // txt_birth_date
-            // 
-            this.txt_birth_date.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.txt_birth_date.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.txt_birth_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_birth_date.Location = new System.Drawing.Point(274, 271);
-            this.txt_birth_date.Name = "txt_birth_date";
-            this.txt_birth_date.Size = new System.Drawing.Size(264, 30);
-            this.txt_birth_date.TabIndex = 81;
             // 
             // lbl_birth_date
             // 
@@ -473,17 +451,40 @@
             this.lbl_login.TabIndex = 67;
             this.lbl_login.Text = "Login:";
             // 
+            // txt_zip_code
+            // 
+            this.txt_zip_code.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_zip_code.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.txt_zip_code.Location = new System.Drawing.Point(868, 158);
+            this.txt_zip_code.Mask = "00-000";
+            this.txt_zip_code.Name = "txt_zip_code";
+            this.txt_zip_code.Size = new System.Drawing.Size(264, 30);
+            this.txt_zip_code.TabIndex = 97;
+            // 
+            // txt_birth_date
+            // 
+            this.txt_birth_date.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.txt_birth_date.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.txt_birth_date.Location = new System.Drawing.Point(274, 271);
+            this.txt_birth_date.Mask = "0000-00-00";
+            this.txt_birth_date.Name = "txt_birth_date";
+            this.txt_birth_date.Size = new System.Drawing.Size(264, 30);
+            this.txt_birth_date.TabIndex = 100;
+            // 
             // UCAddUsers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Controls.Add(this.txt_birth_date);
+            this.Controls.Add(this.txt_zip_code);
             this.Controls.Add(this.btnAU_create_user);
             this.Controls.Add(this.btn_anuluj);
             this.Controls.Add(this.cb_gender);
             this.Controls.Add(this.txtlbl_apartment_number);
             this.Controls.Add(this.lbl_apartment_number);
-            this.Controls.Add(this.txt_zip_code);
             this.Controls.Add(this.lbl_zip_code);
             this.Controls.Add(this.txt_property_number);
             this.Controls.Add(this.lbl_property_number);
@@ -493,7 +494,6 @@
             this.Controls.Add(this.lbl_street);
             this.Controls.Add(this.lbl_address_data);
             this.Controls.Add(this.lbl_contact_data);
-            this.Controls.Add(this.txt_birth_date);
             this.Controls.Add(this.lbl_birth_date);
             this.Controls.Add(this.lbl_gender);
             this.Controls.Add(this.txt_phone_number);
@@ -512,7 +512,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UCAddUsers";
-            this.Size = new System.Drawing.Size(1182, 682);
+            this.Size = new System.Drawing.Size(1184, 684);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.error_add_user_form)).EndInit();
             this.ResumeLayout(false);
@@ -530,7 +530,6 @@
         private System.Windows.Forms.ComboBox cb_gender;
         private System.Windows.Forms.TextBox txtlbl_apartment_number;
         private System.Windows.Forms.Label lbl_apartment_number;
-        private System.Windows.Forms.TextBox txt_zip_code;
         private System.Windows.Forms.Label lbl_zip_code;
         private System.Windows.Forms.TextBox txt_property_number;
         private System.Windows.Forms.Label lbl_property_number;
@@ -540,7 +539,6 @@
         private System.Windows.Forms.Label lbl_street;
         private System.Windows.Forms.Label lbl_address_data;
         private System.Windows.Forms.Label lbl_contact_data;
-        private System.Windows.Forms.TextBox txt_birth_date;
         private System.Windows.Forms.Label lbl_birth_date;
         private System.Windows.Forms.Label lbl_gender;
         private System.Windows.Forms.TextBox txt_phone_number;
@@ -556,5 +554,7 @@
         private System.Windows.Forms.Label lbl_surname;
         private System.Windows.Forms.Label lbl_name;
         private System.Windows.Forms.Label lbl_login;
+        private System.Windows.Forms.MaskedTextBox txt_zip_code;
+        private System.Windows.Forms.MaskedTextBox txt_birth_date;
     }
 }

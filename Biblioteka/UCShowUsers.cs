@@ -16,7 +16,7 @@ namespace Biblioteka
     {
         private string ConnStr = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
         private int currentPage = 1;
-        private int pageSize = 10;
+        private int pageSize = 20;
         private int totalPages = 1;
         private string searchQuery = "";
 
@@ -25,6 +25,15 @@ namespace Biblioteka
             InitializeComponent();
             KonfigurujDGV();
             WczytajUzytkownikow();
+            this.VisibleChanged += UCShowUsers_VisibleChanged; //automatyczne odświeżanie
+        }
+
+        private void UCShowUsers_VisibleChanged(object sender, EventArgs e) 
+        {
+            if (this.Visible)
+            {
+                WczytajUzytkownikow();
+            }
         }
 
         private void KonfigurujDGV()
@@ -45,13 +54,13 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // 1. Liczenie rekordów
+                    // 1. Liczenie rekordów - Wyszukiwanie PESEL wymaga pełnego ciągu znaków , Login, Imię i Nazwisko pozwalają na wyszukiwanie po częściowych frazach
                     string sqlCount = @"
                 SELECT COUNT(*) FROM Uzytkownicy
                 WHERE CzyZapomniany = 0
                 AND (@Query = '' OR Login LIKE @QueryLike 
                      OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
-                     OR PESEL LIKE @QueryLike)";
+                     OR PESEL = @Query)";
 
                     int totalRecords;
                     using (SqlCommand cmd = new SqlCommand(sqlCount, conn))
@@ -61,14 +70,19 @@ namespace Biblioteka
                         totalRecords = (int)cmd.ExecuteScalar();
                     }
 
-                    // --- REAKCJA NA BRAK WYNIKÓW (Scenariusz E1) ---
+                    //REAKCJA NA BRAK WYNIKÓW (Scenariusz E1) 
                     if (totalRecords == 0 && !string.IsNullOrEmpty(searchQuery))
                     {
-                        MessageBox.Show("Nie znaleziono użytkownika o podanych kryteriach", "Brak wyników", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        // Opcjonalnie: czyścimy stary widok w DGV
-                        dgv_users_list.DataSource = null;
-                        lbl_page_info.Text = "Strona: 0 / 0";
-                        return; // Przerywamy dalsze ładowanie
+                        MessageBox.Show("Nie znaleziono użytkownika o podanych kryteriach.", "Brak wyników", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        if (dgv_users_list.DataSource is DataTable dt) 
+                        {
+                            dt.Clear(); //zostawiamy nagłówki, ale czyścimy dane
+                        }
+
+                        lbl_page_info.Text = "Strona: 1 / 1"; 
+
+                        return; 
                     }
 
                     // 2. Obliczanie stron
@@ -78,22 +92,18 @@ namespace Biblioteka
 
                     // 3. Pobieranie danych
                     string sqlData = @"
-                SELECT 
-                    ID AS [ID],
-                    Login AS [Login],
-                    Imie AS [Imię],
-                    Nazwisko AS [Nazwisko],
-                    PESEL AS [PESEL],
-                    Email AS [Email],
-                    Telefon AS [Telefon],
-                    Miejscowosc AS [Miejscowość]
-                FROM Uzytkownicy
-                WHERE CzyZapomniany = 0
-                AND (@Query = '' OR Login LIKE @QueryLike 
-                     OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
-                     OR PESEL LIKE @QueryLike)
-                ORDER BY Nazwisko, Imie
-                OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+                            SELECT 
+                                ID AS [ID],
+                                Login AS [Login],
+                                (Imie + ' ' + Nazwisko) AS [Imię i nazwisko],
+                                Email AS [Adres e-mail]
+                            FROM Uzytkownicy
+                            WHERE CzyZapomniany = 0
+                            AND (@Query = '' OR Login LIKE @QueryLike 
+                                 OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
+                                 OR PESEL LIKE @QueryLike)
+                            ORDER BY Nazwisko, Imie
+                            OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
                     using (SqlCommand cmd = new SqlCommand(sqlData, conn))
                     {
@@ -149,26 +159,18 @@ namespace Biblioteka
             }
         }
 
-        private void btn_edit_data_Click(object sender, EventArgs e)
+        private void dgv_users_list_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgv_users_list.SelectedRows.Count == 0)
+            if (e.RowIndex >= 0) 
             {
-                MessageBox.Show("Wybierz użytkownika z listy.", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
+                int userId = (int)dgv_users_list.Rows[e.RowIndex].Cells["ID"].Value;
+
+                Form parentForm = this.FindForm();
+                if (parentForm is Form1 mainForm)
+                {
+                    mainForm.PokazKarteUzytkownika(userId); 
+                }
             }
-
-            int userId = (int)dgv_users_list.SelectedRows[0].Cells["ID"].Value;
-
-            Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
-            {
-                mainForm.PrzejdzDoEdycji(userId);
-            }
-        }
-
-        private void btn_show_data_Click(object sender, EventArgs e)
-        {
-            
         }
     }
 }

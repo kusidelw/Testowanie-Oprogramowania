@@ -37,8 +37,6 @@
             this.btn_prev_page = new System.Windows.Forms.Button();
             this.btn_next_page = new System.Windows.Forms.Button();
             this.lbl_page_info = new System.Windows.Forms.Label();
-            this.btn_edit_data = new System.Windows.Forms.Button();
-            this.btn_show_data = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users_list)).BeginInit();
             this.SuspendLayout();
@@ -48,9 +46,9 @@
             this.lbl_show_users.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_show_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold);
-            this.lbl_show_users.Location = new System.Drawing.Point(0, 10);
+            this.lbl_show_users.Location = new System.Drawing.Point(0, 8);
             this.lbl_show_users.Name = "lbl_show_users";
-            this.lbl_show_users.Size = new System.Drawing.Size(1448, 40);
+            this.lbl_show_users.Size = new System.Drawing.Size(1287, 32);
             this.lbl_show_users.TabIndex = 0;
             this.lbl_show_users.Text = "LISTA UŻYTKOWNIKÓW";
             this.lbl_show_users.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -63,7 +61,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1448, 70);
+            this.panel1.Size = new System.Drawing.Size(1287, 56);
             this.panel1.TabIndex = 2;
             // 
             // lbl_search_criteria
@@ -72,9 +70,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_search_criteria.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_search_criteria.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_search_criteria.Location = new System.Drawing.Point(274, 102);
+            this.lbl_search_criteria.Location = new System.Drawing.Point(244, 82);
             this.lbl_search_criteria.Name = "lbl_search_criteria";
-            this.lbl_search_criteria.Size = new System.Drawing.Size(929, 51);
+            this.lbl_search_criteria.Size = new System.Drawing.Size(826, 41);
             this.lbl_search_criteria.TabIndex = 12;
             this.lbl_search_criteria.Text = "Podaj  kryteria wyszukiwania:  Login, Imię i nazwisko, PESEL:";
             this.lbl_search_criteria.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -85,10 +83,9 @@
             this.btn_search_user.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search_user.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btn_search_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search_user.Location = new System.Drawing.Point(928, 158);
-            this.btn_search_user.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_search_user.Location = new System.Drawing.Point(825, 126);
             this.btn_search_user.Name = "btn_search_user";
-            this.btn_search_user.Size = new System.Drawing.Size(267, 55);
+            this.btn_search_user.Size = new System.Drawing.Size(237, 44);
             this.btn_search_user.TabIndex = 11;
             this.btn_search_user.Text = "Szukaj";
             this.btn_search_user.UseVisualStyleBackColor = false;
@@ -98,10 +95,9 @@
             // 
             this.txt_search_user.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txt_search_user.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_user.Location = new System.Drawing.Point(284, 166);
-            this.txt_search_user.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txt_search_user.Location = new System.Drawing.Point(252, 133);
             this.txt_search_user.Name = "txt_search_user";
-            this.txt_search_user.Size = new System.Drawing.Size(637, 35);
+            this.txt_search_user.Size = new System.Drawing.Size(567, 30);
             this.txt_search_user.TabIndex = 10;
             // 
             // dgv_users_list
@@ -112,16 +108,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_users_list.BackgroundColor = System.Drawing.Color.Gainsboro;
             this.dgv_users_list.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_users_list.Location = new System.Drawing.Point(233, 220);
-            this.dgv_users_list.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dgv_users_list.Location = new System.Drawing.Point(207, 176);
             this.dgv_users_list.Name = "dgv_users_list";
             this.dgv_users_list.ReadOnly = true;
             this.dgv_users_list.RowHeadersVisible = false;
             this.dgv_users_list.RowHeadersWidth = 51;
             this.dgv_users_list.RowTemplate.Height = 24;
             this.dgv_users_list.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_users_list.Size = new System.Drawing.Size(1009, 451);
+            this.dgv_users_list.Size = new System.Drawing.Size(897, 361);
             this.dgv_users_list.TabIndex = 13;
+            this.dgv_users_list.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_users_list_CellDoubleClick);
             // 
             // btn_prev_page
             // 
@@ -129,10 +125,9 @@
             this.btn_prev_page.BackColor = System.Drawing.Color.LightBlue;
             this.btn_prev_page.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btn_prev_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_prev_page.Location = new System.Drawing.Point(490, 692);
-            this.btn_prev_page.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_prev_page.Location = new System.Drawing.Point(436, 554);
             this.btn_prev_page.Name = "btn_prev_page";
-            this.btn_prev_page.Size = new System.Drawing.Size(154, 39);
+            this.btn_prev_page.Size = new System.Drawing.Size(137, 31);
             this.btn_prev_page.TabIndex = 14;
             this.btn_prev_page.Text = "Poprzednia";
             this.btn_prev_page.UseVisualStyleBackColor = false;
@@ -144,10 +139,9 @@
             this.btn_next_page.BackColor = System.Drawing.Color.LightBlue;
             this.btn_next_page.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btn_next_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_next_page.Location = new System.Drawing.Point(838, 692);
-            this.btn_next_page.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_next_page.Location = new System.Drawing.Point(745, 554);
             this.btn_next_page.Name = "btn_next_page";
-            this.btn_next_page.Size = new System.Drawing.Size(153, 39);
+            this.btn_next_page.Size = new System.Drawing.Size(136, 31);
             this.btn_next_page.TabIndex = 15;
             this.btn_next_page.Text = "Następna";
             this.btn_next_page.UseVisualStyleBackColor = false;
@@ -158,50 +152,18 @@
             this.lbl_page_info.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lbl_page_info.AutoSize = true;
             this.lbl_page_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_page_info.Location = new System.Drawing.Point(675, 699);
+            this.lbl_page_info.Location = new System.Drawing.Point(614, 559);
             this.lbl_page_info.Name = "lbl_page_info";
-            this.lbl_page_info.Size = new System.Drawing.Size(108, 25);
+            this.lbl_page_info.Size = new System.Drawing.Size(86, 20);
             this.lbl_page_info.TabIndex = 16;
             this.lbl_page_info.Text = "Strona: 1";
             this.lbl_page_info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // btn_edit_data
-            // 
-            this.btn_edit_data.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_edit_data.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.btn_edit_data.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btn_edit_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_edit_data.Location = new System.Drawing.Point(426, 749);
-            this.btn_edit_data.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_edit_data.Name = "btn_edit_data";
-            this.btn_edit_data.Size = new System.Drawing.Size(221, 39);
-            this.btn_edit_data.TabIndex = 17;
-            this.btn_edit_data.Text = "Edytuj dane";
-            this.btn_edit_data.UseVisualStyleBackColor = false;
-            this.btn_edit_data.Click += new System.EventHandler(this.btn_edit_data_Click);
-            // 
-            // btn_show_data
-            // 
-            this.btn_show_data.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_show_data.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.btn_show_data.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btn_show_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_show_data.Location = new System.Drawing.Point(838, 749);
-            this.btn_show_data.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btn_show_data.Name = "btn_show_data";
-            this.btn_show_data.Size = new System.Drawing.Size(221, 39);
-            this.btn_show_data.TabIndex = 18;
-            this.btn_show_data.Text = "Pokaż dane";
-            this.btn_show_data.UseVisualStyleBackColor = false;
-            this.btn_show_data.Click += new System.EventHandler(this.btn_show_data_Click);
-            // 
             // UCShowUsers
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.Controls.Add(this.btn_show_data);
-            this.Controls.Add(this.btn_edit_data);
             this.Controls.Add(this.lbl_page_info);
             this.Controls.Add(this.btn_next_page);
             this.Controls.Add(this.btn_prev_page);
@@ -212,7 +174,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UCShowUsers";
-            this.Size = new System.Drawing.Size(1448, 820);
+            this.Size = new System.Drawing.Size(1287, 656);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users_list)).EndInit();
             this.ResumeLayout(false);
@@ -231,7 +193,5 @@
         private System.Windows.Forms.Button btn_prev_page;
         private System.Windows.Forms.Button btn_next_page;
         private System.Windows.Forms.Label lbl_page_info;
-        private System.Windows.Forms.Button btn_edit_data;
-        private System.Windows.Forms.Button btn_show_data;
     }
 }

@@ -41,39 +41,51 @@ namespace Biblioteka
                     {
                         if (reader.Read())
                         {
-                            //DANE OSOBOWE
-                            txt_login.Text = reader["Login"].ToString();
-                            txt_name.Text = reader["Imie"].ToString();
-                            txt_surname.Text = reader["Nazwisko"].ToString();
-                            txt_PESEL.Text = reader["PESEL"].ToString();
-                            txt_birth_date.Text = Convert.ToDateTime(reader["DataUrodzenia"]).ToShortDateString();
-                            txt_gender.Text = reader["Plec"].ToString() == "K" ? "Kobieta" : "Mężczyzna";
-
-                            //DANE KONTAKTOWE
-                            txt_mail.Text = reader["Email"].ToString();
-                            txt_phone_number.Text = reader["Telefon"].ToString();
-
-                            //ADRES
-                            txt_street.Text = reader["Ulica"].ToString();
-                            txt_zip_code.Text = reader["KodPocztowy"].ToString();
-                            txt_town.Text = reader["Miejscowosc"].ToString();
-                            txt_property_number.Text = reader["NumerPosesji"].ToString();
-                            txtlbl_apartment_number.Text = reader["NumerLokalu"].ToString();
-
-                            // OBSŁUGA RODO
                             bool czyZapomniany = Convert.ToBoolean(reader["CzyZapomniany"]);
 
                             if (czyZapomniany)
                             {
+                                //WIDOK RODO DLA ZAPOMNIANEGO UŻYTKOWNIKA
                                 lbl_anonymization_message.Visible = true;
-                                btn_edit_data.Enabled = false; 
+                                btn_edit_data.Enabled = false;
                                 btn_edit_data.BackColor = Color.Gray;
+
+                                string rodoMsg = "*** ZANONIMIZOWANE ***";
+
+                                txt_login.Text = reader["Login"].ToString(); 
+                                txt_name.Text = rodoMsg;
+                                txt_surname.Text = rodoMsg;
+                                txt_PESEL.Text = rodoMsg;
+                                txt_birth_date.Text = rodoMsg;
+                                txt_gender.Text = rodoMsg;
+                                txt_mail.Text = rodoMsg;
+                                txt_phone_number.Text = rodoMsg;
+                                txt_street.Text = rodoMsg;
+                                txt_zip_code.Text = rodoMsg;
+                                txt_town.Text = rodoMsg;
+                                txt_property_number.Text = rodoMsg;
+                                txtlbl_apartment_number.Text = rodoMsg;
                             }
                             else
                             {
+                                //NORMALNY WIDOK
                                 lbl_anonymization_message.Visible = false;
                                 btn_edit_data.Enabled = true;
                                 btn_edit_data.BackColor = Color.DarkSeaGreen;
+
+                                txt_login.Text = reader["Login"].ToString();
+                                txt_name.Text = reader["Imie"].ToString();
+                                txt_surname.Text = reader["Nazwisko"].ToString();
+                                txt_PESEL.Text = reader["PESEL"].ToString();
+                                txt_birth_date.Text = Convert.ToDateTime(reader["DataUrodzenia"]).ToShortDateString();
+                                txt_gender.Text = reader["Plec"].ToString() == "K" ? "Kobieta" : "Mężczyzna";
+                                txt_mail.Text = reader["Email"].ToString();
+                                txt_phone_number.Text = reader["Telefon"].ToString();
+                                txt_street.Text = reader["Ulica"].ToString();
+                                txt_zip_code.Text = reader["KodPocztowy"].ToString();
+                                txt_town.Text = reader["Miejscowosc"].ToString();
+                                txt_property_number.Text = reader["NumerPosesji"].ToString();
+                                txtlbl_apartment_number.Text = reader["NumerLokalu"].ToString();
                             }
                         }
                     }

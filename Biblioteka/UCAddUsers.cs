@@ -108,7 +108,7 @@ namespace Biblioteka
             }
         }
 
-        // --- WALIDACJA ---
+        //WALIDACJA 
 
         private bool WalidujFormularz()
         {
@@ -116,108 +116,53 @@ namespace Biblioteka
             error_add_user_form.Clear();
             ResetFieldColors();
 
-            // Pola tekstowe wymagane 
-            TextBox[] required = { txt_login, txt_name, txt_surname, txt_town, txt_zip_code, txt_property_number, txt_birth_date, txt_PESEL, txt_mail, txt_phone_number };
+            // 1. Sprawdzanie pustych pól podstawowych (bez daty, peselu i numerów - to robi walidator)
+            TextBox[] required = { txt_login, txt_name, txt_surname, txt_town };
             foreach (var tb in required)
             {
                 if (string.IsNullOrWhiteSpace(tb.Text)) { OznaczBlad(tb, "Pole wymagane"); isValid = false; }
             }
+
             if (cb_gender.SelectedIndex == -1)
             {
                 error_add_user_form.SetError(cb_gender, "Wybierz płeć");
                 isValid = false;
             }
 
-            if (!isValid) return false;
-
-            // PESEL (11 cyfr)
-            if (!Regex.IsMatch(txt_PESEL.Text.Trim(), @"^\d{11}$"))
-            {
-                OznaczBlad(txt_PESEL, "PESEL musi mieć 11 cyfr");
-                isValid = false;
-            }
-
-            // Data urodzenia (Czy to jest prawdziwa data wg kalendarza?)
+            // 2. Data Urodzenia i PESEL (Najpierw data, potem PESEL w oparciu o datę)
             DateTime dataUr;
-            if (!DateTime.TryParse(txt_birth_date.Text.Trim(), out dataUr))
+            if (!Walidator.SprawdzDateUrodzenia(txt_birth_date.Text, out dataUr))
             {
-                OznaczBlad(txt_birth_date, "Niepoprawny format daty");
+                OznaczBlad(txt_birth_date, "Niepoprawna data (zły format lub data z przyszłości)");
                 isValid = false;
             }
-            else
+            else if (cb_gender.SelectedIndex != -1) // Jeśli data i płeć są OK, sprawdzamy PESEL
             {
-                // Walidacja ścisła 1 i E2: PESEL (Suma kontrolna, płeć, data)
-                if (!WalidujScislyPESEL(txt_PESEL.Text.Trim(), cb_gender.SelectedItem.ToString(), dataUr))
+                if (!Walidator.WalidujScislyPESEL(txt_PESEL.Text.Trim(), cb_gender.SelectedItem.ToString(), dataUr))
                 {
-                    OznaczBlad(txt_PESEL, "PESEL niezgodny z datą urodzenia, płcią lub błędna cyfra kontrolna");
+                    OznaczBlad(txt_PESEL, "PESEL niezgodny z datą, płcią lub błędna cyfra kontrolna");
                     isValid = false;
                 }
             }
 
-            // Email
-            if (txt_mail.Text.Length > 255 || !Regex.IsMatch(txt_mail.Text.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-            {
-                OznaczBlad(txt_mail, "Błędny format e-mail");
-                isValid = false;
-            }
+            // 3. Dane kontaktowe i adresowe
+            if (!Walidator.SprawdzEmail(txt_mail.Text))
+            { OznaczBlad(txt_mail, "Błędny format e-mail"); isValid = false; }
 
-            // Telefon (9 cyfr)
-            if (!Regex.IsMatch(txt_phone_number.Text.Trim(), @"^\d{9}$"))
-            {
-                OznaczBlad(txt_phone_number, "Telefon musi mieć dokładnie 9 cyfr");
-                isValid = false;
-            }
+            if (!Walidator.SprawdzTelefon(txt_phone_number.Text))
+            { OznaczBlad(txt_phone_number, "Telefon musi mieć dokładnie 9 cyfr"); isValid = false; }
 
-            //Kod pocztowy (format XX-XXX)
-            if (!Regex.IsMatch(txt_zip_code.Text.Trim(), @"^\d{2}-\d{3}$"))
-            {
-                OznaczBlad(txt_zip_code, "Kod pocztowy musi być w formacie XX-XXX (np. 00-123)");
-                isValid = false;
-            }
+            if (!Walidator.SprawdzKodPocztowy(txt_zip_code.Text))
+            { OznaczBlad(txt_zip_code, "Format XX-XXX"); isValid = false; }
 
-            // Płeć
-            if (cb_gender.SelectedIndex == -1)
-            {
-                error_add_user_form.SetError(cb_gender, "Wybierz płeć");
-                isValid = false;
-            }
+            // 4. Numery domów (Posesja = wymagana (false), Lokal = opcjonalny (true))
+            if (!Walidator.SprawdzNumer(txt_property_number.Text, false))
+            { OznaczBlad(txt_property_number, "Błędny numer posesji (max 10 znaków)"); isValid = false; }
+
+            if (!Walidator.SprawdzNumer(txtlbl_apartment_number.Text, true))
+            { OznaczBlad(txtlbl_apartment_number, "Błędny format numeru lokalu"); isValid = false; }
 
             return isValid;
-
-        }
-
-        // SPECJALNA WALIDACJA PESEL
-        private bool WalidujScislyPESEL(string pesel, string plecFormularz, DateTime dataUr)
-        {
-            if (pesel.Length != 11 || !Regex.IsMatch(pesel, @"^\d{11}$")) return false;
-
-            // 1. Suma kontrolna PESEL (oficjalny algorytm MSWiA)
-            int[] wagi = { 1, 3, 7, 9, 1, 3, 7, 9, 1, 3 };
-            int suma = 0;
-            for (int i = 0; i < 10; i++) suma += int.Parse(pesel[i].ToString()) * wagi[i];
-            int cyfraKontrolna = (10 - (suma % 10)) % 10;
-            if (cyfraKontrolna != int.Parse(pesel[10].ToString())) return false;
-
-            // 2. Płeć (Przedostatnia cyfra: nieparzyste=M, parzyste=K)
-            int cyfraPlci = int.Parse(pesel[9].ToString());
-            bool toKobieta = (cyfraPlci % 2 == 0);
-            if ((plecFormularz == "Kobieta" && !toKobieta) || (plecFormularz == "Mężczyzna" && toKobieta)) return false;
-
-            // 3. Zgodność z datą urodzenia
-            int rok = dataUr.Year;
-            int miesiac = dataUr.Month;
-            int dzien = dataUr.Day;
-
-            // Kodowanie stulecia w miesiącu PESEL
-            if (rok >= 2000 && rok < 2100) miesiac += 20;
-            else if (rok >= 1800 && rok < 1900) miesiac += 80;
-            else if (rok >= 2100 && rok < 2200) miesiac += 40;
-            else if (rok >= 2200 && rok < 2300) miesiac += 60;
-
-            string peselData = $"{rok % 100:D2}{miesiac:D2}{dzien:D2}";
-            if (pesel.Substring(0, 6) != peselData) return false;
-
-            return true;
         }
 
         // POMOCNICZE
