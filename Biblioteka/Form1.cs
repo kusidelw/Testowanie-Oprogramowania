@@ -41,18 +41,21 @@ namespace Biblioteka
 
         public void PrzejdzDoEdycji(int userId)
         {
-            ucEditData.ZaladujDaneDoEdycji(userId); 
-            PokazWidokZeStanem(ucEditData);         
+            PokazWidokZeStanem(ucEditData);
+
+            ucEditData.ZaladujDaneDoEdycji(userId);
         }
 
         public void PokazKarteUzytkownika(int userId)
         {
-            ucShowUsersData.ZaladujDaneUzytkownika(userId);
             PokazWidokZeStanem(ucShowUsersData);
+
+            ucShowUsersData.ZaladujDaneUzytkownika(userId);
         }
         public void WrocDoWyszukiwarki()
         {
-            PokazWidokZeStanem(ucShowUsers);
+            UCShowUsers nowaLista = new UCShowUsers();
+            PokazWidokZeStanem(nowaLista);
         }
 
         private void btn_add_user_Click(object sender, EventArgs e)

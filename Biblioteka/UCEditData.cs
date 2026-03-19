@@ -119,7 +119,6 @@ namespace Biblioteka
                         MessageBox.Show("Dane zostały zaktualizowane pomyślnie!", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         
-                        WyczyscFormularz();
                         WrocDoWidokuShowUsers();
                     }
                 }
@@ -182,7 +181,6 @@ namespace Biblioteka
 
         private void btn_cancel_changing_Click(object sender, EventArgs e)
         {
-            WyczyscFormularz();
             WrocDoWidokuShowUsers();
         }
 
@@ -196,6 +194,7 @@ namespace Biblioteka
             }
         }
 
+        /* chyba nie potrzebna żeby nie znikały dane jak user znów kliknie "Edytuj" z poziomu karty użytkownika, ale zostawiam na wszelki wypadek
         private void WyczyscFormularz()
         {
             currentUserId = 0;
@@ -220,5 +219,6 @@ namespace Biblioteka
             txtlbl_apartment_number.Text = "";
             txt_gender.Text = "";
         }
+        */
     }
 }
