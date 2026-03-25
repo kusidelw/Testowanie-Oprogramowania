@@ -18,6 +18,11 @@ namespace Biblioteka
         UCShowUsersData ucShowUsersData = new UCShowUsersData();
         UCForgetUsers ucForgetUsers = new UCForgetUsers();
         UCFindForgottenUsers ucFindForgottenUsers = new UCFindForgottenUsers();
+        UCLogin ucLogin = new UCLogin();
+        UCPasswordRecovery ucPasswordRecovery = new UCPasswordRecovery();
+        UCChangePassword ucChangePassword = new UCChangePassword();
+        UCSetNewPassword ucSetNewPassword = new UCSetNewPassword();
+        UCLogout ucLogout = new UCLogout();
 
         public Form1()
         {
@@ -78,5 +83,29 @@ namespace Biblioteka
             PokazWidokZeStanem(ucFindForgottenUsers);
         }
 
+        private void btn_login_Click(object sender, EventArgs e)
+        {
+            PokazWidokZeStanem(ucLogin);
+        }
+
+        private void btn_change_password_Click(object sender, EventArgs e)
+        {
+            PokazWidokZeStanem(ucChangePassword);
+        }
+
+        private void btn_password_recovery_Click(object sender, EventArgs e)
+        {
+            PokazWidokZeStanem(ucPasswordRecovery);
+        }
+
+        private void btn_set_new_password_Click(object sender, EventArgs e)
+        {
+            PokazWidokZeStanem(ucSetNewPassword);
+        }
+
+        private void btn_logout_Click(object sender, EventArgs e)
+        {
+            PokazWidokZeStanem(ucLogout);
+        }
     }
 }

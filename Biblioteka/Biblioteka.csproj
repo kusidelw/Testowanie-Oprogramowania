@@ -61,6 +61,12 @@
     <Compile Include="UCAddUsers.Designer.cs">
       <DependentUpon>UCAddUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="UCChangePassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCChangePassword.Designer.cs">
+      <DependentUpon>UCChangePassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCEditData.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -78,6 +84,30 @@
     </Compile>
     <Compile Include="UCForgetUsers.Designer.cs">
       <DependentUpon>UCForgetUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCLogin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCLogin.Designer.cs">
+      <DependentUpon>UCLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCLogout.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCLogout.Designer.cs">
+      <DependentUpon>UCLogout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCPasswordRecovery.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCPasswordRecovery.Designer.cs">
+      <DependentUpon>UCPasswordRecovery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCSetNewPassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCSetNewPassword.Designer.cs">
+      <DependentUpon>UCSetNewPassword.cs</DependentUpon>
     </Compile>
     <Compile Include="UCShowUsers.cs">
       <SubType>UserControl</SubType>
@@ -107,6 +137,9 @@
     <EmbeddedResource Include="UCAddUsers.resx">
       <DependentUpon>UCAddUsers.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UCChangePassword.resx">
+      <DependentUpon>UCChangePassword.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UCEditData.resx">
       <DependentUpon>UCEditData.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,6 +148,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCForgetUsers.resx">
       <DependentUpon>UCForgetUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCLogin.resx">
+      <DependentUpon>UCLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCLogout.resx">
+      <DependentUpon>UCLogout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCPasswordRecovery.resx">
+      <DependentUpon>UCPasswordRecovery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCSetNewPassword.resx">
+      <DependentUpon>UCSetNewPassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCShowUsers.resx">
       <DependentUpon>UCShowUsers.cs</DependentUpon>
