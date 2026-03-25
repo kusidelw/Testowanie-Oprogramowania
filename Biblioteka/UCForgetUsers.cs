@@ -187,40 +187,18 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    string sql = @"
-                        UPDATE Uzytkownicy SET
-                            CzyZapomniany   = 1,
-                            DataZapomnienia = @DataZapomnienia,
-                            Imie            = @LosoweImie,
-                            Nazwisko        = @LosoweNazwisko,
-                            PESEL           = @LosowePesel,
-                            Email           = @LosoweEmail,
-                            Telefon         = @LosoweTelefon,
-                            Miejscowosc     = @LosoweMiejscowosc,
-                            KodPocztowy     = @LosoweKodPocztowy,
-                            Ulica           = @LosoweUlica,
-                            NumerPosesji    = @LosoweNumerPosesji,
-                            NumerLokalu     = @LosoweNumerLokalu,
-                            DataUrodzenia   = @LosowaDataUrodzenia,
-                            Plec            = @LosowaPlec
-                        WHERE ID = @UserId";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    using (SqlCommand cmd = new SqlCommand("sp_ZanonimizujUzytkownika", conn))
                     {
-                        cmd.Parameters.AddWithValue("@DataZapomnienia", DateTime.Now);
+                        cmd.CommandType = CommandType.StoredProcedure;
+
+                        cmd.Parameters.AddWithValue("@TargetUzytkownikID", userId);
+                        cmd.Parameters.AddWithValue("@AdminID", 4); // Zakładamy domyślnego admina dla testów
                         cmd.Parameters.AddWithValue("@LosoweImie", GenerujLosowyString(8));
                         cmd.Parameters.AddWithValue("@LosoweNazwisko", GenerujLosowyString(10));
-                        cmd.Parameters.AddWithValue("@LosowePesel", losowePesel);
-                        cmd.Parameters.AddWithValue("@LosoweEmail", GenerujLosowyString(6) + "@anon.invalid");
-                        cmd.Parameters.AddWithValue("@LosoweTelefon", GenerujLosowyTelefon());
-                        cmd.Parameters.AddWithValue("@LosoweMiejscowosc", GenerujLosowyString(8));
-                        cmd.Parameters.AddWithValue("@LosoweKodPocztowy", rnd.Next(10, 99) + "-" + rnd.Next(100, 999));
-                        cmd.Parameters.AddWithValue("@LosoweUlica", GenerujLosowyString(10));
-                        cmd.Parameters.AddWithValue("@LosoweNumerPosesji", rnd.Next(1, 999).ToString());
-                        cmd.Parameters.AddWithValue("@LosoweNumerLokalu", rnd.Next(1, 99).ToString());
-                        cmd.Parameters.AddWithValue("@LosowaDataUrodzenia", losowaData);
+                        cmd.Parameters.AddWithValue("@LosowyPESEL", losowePesel);
+                        cmd.Parameters.AddWithValue("@LosowaDataUr", losowaData);
                         cmd.Parameters.AddWithValue("@LosowaPlec", losowaPlec);
-                        cmd.Parameters.AddWithValue("@UserId", userId);
+
                         cmd.ExecuteNonQuery();
                     }
                 }

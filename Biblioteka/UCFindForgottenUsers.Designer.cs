@@ -41,9 +41,9 @@
             // 
             this.lbl_find_forgotten_users.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbl_find_forgotten_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold);
-            this.lbl_find_forgotten_users.Location = new System.Drawing.Point(-33, 10);
+            this.lbl_find_forgotten_users.Location = new System.Drawing.Point(-29, 8);
             this.lbl_find_forgotten_users.Name = "lbl_find_forgotten_users";
-            this.lbl_find_forgotten_users.Size = new System.Drawing.Size(1340, 42);
+            this.lbl_find_forgotten_users.Size = new System.Drawing.Size(1191, 34);
             this.lbl_find_forgotten_users.TabIndex = 0;
             this.lbl_find_forgotten_users.Text = "ZAPOMNIANI UŻYTKOWNICY";
             this.lbl_find_forgotten_users.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -56,7 +56,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1275, 79);
+            this.panel1.Size = new System.Drawing.Size(1133, 63);
             this.panel1.TabIndex = 2;
             // 
             // dgv_forgotten_users
@@ -66,12 +66,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_forgotten_users.BackgroundColor = System.Drawing.Color.Gainsboro;
             this.dgv_forgotten_users.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_forgotten_users.Location = new System.Drawing.Point(114, 155);
-            this.dgv_forgotten_users.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.dgv_forgotten_users.Location = new System.Drawing.Point(101, 124);
             this.dgv_forgotten_users.Name = "dgv_forgotten_users";
             this.dgv_forgotten_users.RowHeadersWidth = 51;
             this.dgv_forgotten_users.RowTemplate.Height = 24;
-            this.dgv_forgotten_users.Size = new System.Drawing.Size(1073, 519);
+            this.dgv_forgotten_users.Size = new System.Drawing.Size(954, 415);
             this.dgv_forgotten_users.TabIndex = 3;
             this.dgv_forgotten_users.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_forgotten_users_CellDoubleClick);
             // 
@@ -81,10 +80,10 @@
             this.lbl_info_message.AutoSize = true;
             this.lbl_info_message.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_info_message.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.lbl_info_message.Location = new System.Drawing.Point(109, 678);
+            this.lbl_info_message.Location = new System.Drawing.Point(97, 542);
             this.lbl_info_message.Name = "lbl_info_message";
-            this.lbl_info_message.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
-            this.lbl_info_message.Size = new System.Drawing.Size(811, 37);
+            this.lbl_info_message.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.lbl_info_message.Size = new System.Drawing.Size(647, 30);
             this.lbl_info_message.TabIndex = 9;
             this.lbl_info_message.Text = "Wyświetlono X wyników! Kliknij dwukrotnie wiersz, aby zobaczyć szczegóły.";
             // 
@@ -95,10 +94,9 @@
             this.btn_search_users.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search_users.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btn_search_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search_users.Location = new System.Drawing.Point(114, 99);
-            this.btn_search_users.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.btn_search_users.Location = new System.Drawing.Point(101, 79);
             this.btn_search_users.Name = "btn_search_users";
-            this.btn_search_users.Size = new System.Drawing.Size(1073, 49);
+            this.btn_search_users.Size = new System.Drawing.Size(954, 39);
             this.btn_search_users.TabIndex = 10;
             this.btn_search_users.Text = "WYŚWIETL LISTĘ ZAPOMNIANYCH UŻYTKOWNIKÓW";
             this.btn_search_users.UseVisualStyleBackColor = false;
@@ -106,7 +104,7 @@
             // 
             // UCFindForgottenUsers
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.btn_search_users);
@@ -115,7 +113,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UCFindForgottenUsers";
-            this.Size = new System.Drawing.Size(1275, 782);
+            this.Size = new System.Drawing.Size(1133, 626);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_forgotten_users)).EndInit();
             this.ResumeLayout(false);

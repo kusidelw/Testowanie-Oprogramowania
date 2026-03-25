@@ -27,7 +27,11 @@ namespace Biblioteka
         public void ZaladujDaneUzytkownika(int userId)
         {
             currentUserId = userId;
-            string query = "SELECT * FROM Uzytkownicy WHERE ID = @id";
+            string query = @"
+                SELECT u.*, k.KodPocztowy, k.Miejscowosc 
+                FROM Uzytkownicy u
+                LEFT JOIN KodyPocztowe_Miejscowosci k ON u.MiejscowoscKodID = k.ID
+                WHERE u.ID = @id";
 
             try
             {

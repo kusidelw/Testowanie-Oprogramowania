@@ -38,7 +38,11 @@ namespace Biblioteka
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM Uzytkownicy WHERE ID = @Id";
+                    string sql = @"
+                        SELECT u.*, k.KodPocztowy, k.Miejscowosc 
+                        FROM Uzytkownicy u
+                        LEFT JOIN KodyPocztowe_Miejscowosci k ON u.MiejscowoscKodID = k.ID
+                        WHERE u.ID = @Id";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
@@ -94,11 +98,12 @@ namespace Biblioteka
                         return;
                     }
 
+                    int miejscowoscKodId = PobierzLubDodajKodIMiejscowosc(conn, txt_zip_code.Text.Trim(), txt_town.Text.Trim());
+
                     string sql = @"UPDATE Uzytkownicy SET 
                                     Imie = @Imie, Nazwisko = @Nazwisko, 
-                                    Email = @Email, Telefon = @Telefon, Miejscowosc = @Miejscowosc, 
-                                    KodPocztowy = @KodPocztowy, Ulica = @Ulica, 
-                                    NumerPosesji = @NumerPosesji, NumerLokalu = @NumerLokalu
+                                    Email = @Email, Telefon = @Telefon, MiejscowoscKodID = @MiejscowoscKodID, 
+                                    Ulica = @Ulica, NumerPosesji = @NumerPosesji, NumerLokalu = @NumerLokalu
                                    WHERE ID = @Id";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -107,8 +112,7 @@ namespace Biblioteka
                         cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text.Trim());
                         cmd.Parameters.AddWithValue("@Email", txt_mail.Text.Trim());
                         cmd.Parameters.AddWithValue("@Telefon", txt_phone_number.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Miejscowosc", txt_town.Text.Trim());
-                        cmd.Parameters.AddWithValue("@KodPocztowy", txt_zip_code.Text.Trim());
+                        cmd.Parameters.AddWithValue("@MiejscowoscKodID", miejscowoscKodId);
                         cmd.Parameters.AddWithValue("@Ulica", string.IsNullOrWhiteSpace(txt_street.Text) ? (object)DBNull.Value : txt_street.Text.Trim());
                         cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text.Trim());
                         cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text.Trim());
@@ -191,6 +195,26 @@ namespace Biblioteka
             {
                 //wracamy do użytkownika, którego właśnie edytowaliśmy
                 form1.PokazKarteUzytkownika(currentUserId);
+            }
+        }
+
+        private int PobierzLubDodajKodIMiejscowosc(SqlConnection conn, string kodPocztowy, string miejscowosc)
+        {
+            string checkSql = "SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy = @Kod AND Miejscowosc = @Miasto";
+            using (SqlCommand cmd = new SqlCommand(checkSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Kod", kodPocztowy);
+                cmd.Parameters.AddWithValue("@Miasto", miejscowosc);
+                object result = cmd.ExecuteScalar();
+                if (result != null) return Convert.ToInt32(result);
+            }
+
+            string insertSql = "INSERT INTO KodyPocztowe_Miejscowosci (KodPocztowy, Miejscowosc) OUTPUT INSERTED.ID VALUES (@Kod, @Miasto)";
+            using (SqlCommand cmd = new SqlCommand(insertSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Kod", kodPocztowy);
+                cmd.Parameters.AddWithValue("@Miasto", miejscowosc);
+                return (int)cmd.ExecuteScalar();
             }
         }
 

@@ -70,12 +70,13 @@ namespace Biblioteka
                     string plec = cb_gender.SelectedItem.ToString() == "Mężczyzna" ? "M" : "K";
 
                     string nrKarty = "LIB-" + Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
+                    int miejscowoscKodId = PobierzLubDodajKodIMiejscowosc(conn, txt_zip_code.Text.Trim(), txt_town.Text.Trim());
 
                     const string sql = @"
                         INSERT INTO Uzytkownicy 
-                        (Login, HasloHash, Imie, Nazwisko, Miejscowosc, KodPocztowy, Ulica, NumerPosesji, NumerLokalu, PESEL, DataUrodzenia, Plec, Email, Telefon, CzyZapomniany)
+                        (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, Ulica, NumerPosesji, NumerLokalu, PESEL, DataUrodzenia, Plec, Email, Telefon, CzyZapomniany)
                         VALUES 
-                        (@Login, @Haslo, @Imie, @Nazwisko, @Miejscowosc, @KodPocztowy, @Ulica, @NumerPosesji, @NumerLokalu, @PESEL, @DataUrodzenia, @Plec, @Email, @Telefon, 0);";
+                        (@Login, @Haslo, @Imie, @Nazwisko, @MiejscowoscKodID, @Ulica, @NumerPosesji, @NumerLokalu, @PESEL, @DataUrodzenia, @Plec, @Email, @Telefon, 0);";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
@@ -83,8 +84,7 @@ namespace Biblioteka
                         cmd.Parameters.AddWithValue("@Haslo", hasloHash);
                         cmd.Parameters.AddWithValue("@Imie", txt_name.Text.Trim());
                         cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Miejscowosc", txt_town.Text.Trim());
-                        cmd.Parameters.AddWithValue("@KodPocztowy", txt_zip_code.Text.Trim());
+                        cmd.Parameters.AddWithValue("@MiejscowoscKodID", miejscowoscKodId); 
                         cmd.Parameters.AddWithValue("@Ulica", string.IsNullOrWhiteSpace(txt_street.Text) ? (object)DBNull.Value : txt_street.Text.Trim());
                         cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text.Trim());
                         cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text.Trim());
@@ -170,7 +170,14 @@ namespace Biblioteka
         {
             foreach (Control ctrl in this.Controls)
             {
-                if (ctrl is TextBox tb) tb.Clear();
+                if (ctrl is TextBox tb)
+                {
+                    tb.Clear();
+                }
+                else if (ctrl is MaskedTextBox mtb)
+                {
+                    mtb.Clear();
+                }
             }
             cb_gender.SelectedIndex = -1;
             ResetFieldColors();
@@ -195,6 +202,27 @@ namespace Biblioteka
             {
                 cmd.Parameters.AddWithValue("@Val", value);
                 return (int)cmd.ExecuteScalar() > 0;
+            }
+        }
+
+        private int PobierzLubDodajKodIMiejscowosc(SqlConnection conn, string kodPocztowy, string miejscowosc)
+        {
+            string checkSql = "SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy = @Kod AND Miejscowosc = @Miasto";
+            using (SqlCommand cmd = new SqlCommand(checkSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Kod", kodPocztowy);
+                cmd.Parameters.AddWithValue("@Miasto", miejscowosc);
+                object result = cmd.ExecuteScalar();
+                if (result != null) return Convert.ToInt32(result); // Zwraca ID, jeśli adres już istnieje w słowniku
+            }
+
+            // Jeśli nie istnieje, dodajemy go i zwracamy nowe ID
+            string insertSql = "INSERT INTO KodyPocztowe_Miejscowosci (KodPocztowy, Miejscowosc) OUTPUT INSERTED.ID VALUES (@Kod, @Miasto)";
+            using (SqlCommand cmd = new SqlCommand(insertSql, conn))
+            {
+                cmd.Parameters.AddWithValue("@Kod", kodPocztowy);
+                cmd.Parameters.AddWithValue("@Miasto", miejscowosc);
+                return (int)cmd.ExecuteScalar();
             }
         }
 

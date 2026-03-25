@@ -49,14 +49,15 @@ namespace Biblioteka
 
                     string sql = @"
                         SELECT
-                            ID                           AS [ID],
-                            Login                        AS [Login],
-                            (Imie + ' ' + Nazwisko)      AS [Imię i nazwisko],
-                            DataZapomnienia              AS [Data zapomnienia],
-                            ZapomnianyPrzezUzytkownikaID AS [ID administratora]
-                        FROM Uzytkownicy
-                        WHERE CzyZapomniany = 1
-                        ORDER BY DataZapomnienia DESC";
+                            u.ID                           AS [ID],
+                            u.Login                        AS [Login],
+                            (u.Imie + ' ' + u.Nazwisko)    AS [Imię i nazwisko],
+                            l.DataAnonimizacji             AS [Data zapomnienia],
+                            l.WykonalAdministratorID       AS [ID administratora]
+                        FROM Uzytkownicy u
+                        JOIN LogiZapomnienia l ON u.ID = l.ZanonimizowanyUzytkownikID
+                        WHERE u.CzyZapomniany = 1
+                        ORDER BY l.DataAnonimizacji DESC";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
