@@ -175,3 +175,200 @@ CREATE TABLE PozycjeWypozyczenia (
 );
 GO
 
+--znormalizowana tabela na Wydawnictwa
+CREATE TABLE Wydawnictwa (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Nazwa NVARCHAR(100) NOT NULL UNIQUE
+);
+GO
+
+--kopiujemy unikalne nazwy wydawnictw z obecnej tabeli ksiazek do nowej tabeli
+INSERT INTO Wydawnictwa (Nazwa)
+SELECT DISTINCT Wydawnictwo 
+FROM KatalogKsiazek 
+WHERE Wydawnictwo IS NOT NULL;
+GO
+
+--nowa kolumna na klucz obcy
+ALTER TABLE KatalogKsiazek
+ADD WydawnictwoID INT;
+GO
+
+--polaczenie starych nazw z nowymi ID i uzupełnienie nowej kolumny
+UPDATE KatalogKsiazek
+SET WydawnictwoID = w.ID
+FROM KatalogKsiazek k
+JOIN Wydawnictwa w ON k.Wydawnictwo = w.Nazwa;
+GO
+
+--usuniecie starej kolumny tekstowej
+ALTER TABLE KatalogKsiazek
+DROP COLUMN Wydawnictwo;
+GO
+
+ALTER TABLE KatalogKsiazek
+ALTER COLUMN WydawnictwoID INT NOT NULL;
+GO
+
+ALTER TABLE KatalogKsiazek
+ADD CONSTRAINT FK_KatalogKsiazek_Wydawnictwa 
+FOREIGN KEY (WydawnictwoID) REFERENCES Wydawnictwa(ID);
+GO
+
+--zmiana sprawdzania peselu
+ALTER TABLE Uzytkownicy
+DROP CONSTRAINT CHK_Uzytkownicy_PESEL_Format;
+GO
+
+ALTER TABLE Uzytkownicy WITH NOCHECK
+ADD CONSTRAINT CHK_Uzytkownicy_PESEL_Format CHECK (
+    PESEL LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+    
+    AND (
+        (Plec = 'M' AND CAST(SUBSTRING(PESEL, 10, 1) AS INT) % 2 <> 0) OR
+        (Plec = 'K' AND CAST(SUBSTRING(PESEL, 10, 1) AS INT) % 2 = 0)
+    )
+    
+    AND SUBSTRING(PESEL, 1, 2) = RIGHT('00' + CAST(YEAR(DataUrodzenia) % 100 AS VARCHAR(2)), 2)
+    AND SUBSTRING(PESEL, 3, 2) = RIGHT('00' + CAST(
+        MONTH(DataUrodzenia) + 
+        CASE 
+            WHEN YEAR(DataUrodzenia) >= 1800 AND YEAR(DataUrodzenia) < 1900 THEN 80
+            WHEN YEAR(DataUrodzenia) >= 1900 AND YEAR(DataUrodzenia) < 2000 THEN 0
+            WHEN YEAR(DataUrodzenia) >= 2000 AND YEAR(DataUrodzenia) < 2100 THEN 20
+            WHEN YEAR(DataUrodzenia) >= 2100 AND YEAR(DataUrodzenia) < 2200 THEN 40
+            WHEN YEAR(DataUrodzenia) >= 2200 AND YEAR(DataUrodzenia) < 2300 THEN 60
+            ELSE 0 
+        END AS VARCHAR(2)
+    ), 2)
+    AND SUBSTRING(PESEL, 5, 2) = RIGHT('00' + CAST(DAY(DataUrodzenia) AS VARCHAR(2)), 2)
+
+    AND CAST(SUBSTRING(PESEL, 11, 1) AS INT) = (
+        10 - (
+            (
+                CAST(SUBSTRING(PESEL, 1, 1) AS INT) * 1 +
+                CAST(SUBSTRING(PESEL, 2, 1) AS INT) * 3 +
+                CAST(SUBSTRING(PESEL, 3, 1) AS INT) * 7 +
+                CAST(SUBSTRING(PESEL, 4, 1) AS INT) * 9 +
+                CAST(SUBSTRING(PESEL, 5, 1) AS INT) * 1 +
+                CAST(SUBSTRING(PESEL, 6, 1) AS INT) * 3 +
+                CAST(SUBSTRING(PESEL, 7, 1) AS INT) * 7 +
+                CAST(SUBSTRING(PESEL, 8, 1) AS INT) * 9 +
+                CAST(SUBSTRING(PESEL, 9, 1) AS INT) * 1 +
+                CAST(SUBSTRING(PESEL, 10, 1) AS INT) * 3
+            ) % 10
+        )
+    ) % 10
+);
+GO
+
+--normalizacja kodu pocztowego i miejscowości
+CREATE TABLE KodyPocztowe_Miejscowosci (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    KodPocztowy NVARCHAR(10) NOT NULL,
+    Miejscowosc NVARCHAR(100) NOT NULL,
+    CONSTRAINT UQ_Kod_Miejscowosc UNIQUE (KodPocztowy, Miejscowosc)
+);
+GO
+
+INSERT INTO KodyPocztowe_Miejscowosci (KodPocztowy, Miejscowosc)
+SELECT DISTINCT KodPocztowy, Miejscowosc 
+FROM Uzytkownicy 
+WHERE KodPocztowy IS NOT NULL AND Miejscowosc IS NOT NULL;
+GO
+
+ALTER TABLE Uzytkownicy
+ADD MiejscowoscKodID INT;
+GO
+
+UPDATE u
+SET u.MiejscowoscKodID = k.ID
+FROM Uzytkownicy u
+JOIN KodyPocztowe_Miejscowosci k 
+  ON u.KodPocztowy = k.KodPocztowy AND u.Miejscowosc = k.Miejscowosc;
+GO
+
+ALTER TABLE Uzytkownicy
+DROP COLUMN KodPocztowy;
+GO
+
+ALTER TABLE Uzytkownicy
+DROP COLUMN Miejscowosc;
+GO
+
+ALTER TABLE Uzytkownicy
+ALTER COLUMN MiejscowoscKodID INT NOT NULL;
+GO
+
+ALTER TABLE Uzytkownicy
+ADD CONSTRAINT FK_Uzytkownicy_KodyMiejscowosci 
+FOREIGN KEY (MiejscowoscKodID) REFERENCES KodyPocztowe_Miejscowosci(ID);
+GO
+
+--zapomienie uzytkownika
+CREATE TABLE LogiZapomnienia (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    ZanonimizowanyUzytkownikID INT NOT NULL,
+    WykonalAdministratorID INT NOT NULL,
+    DataAnonimizacji DATETIME NOT NULL DEFAULT GETDATE(),
+    Powod NVARCHAR(255) NULL,
+    CONSTRAINT FK_Logi_Zanonimizowany FOREIGN KEY (ZanonimizowanyUzytkownikID) REFERENCES Uzytkownicy(ID),
+    CONSTRAINT FK_Logi_Administrator FOREIGN KEY (WykonalAdministratorID) REFERENCES Uzytkownicy(ID)
+);
+GO
+
+CREATE PROCEDURE sp_ZanonimizujUzytkownika
+    @TargetUzytkownikID INT,         -- ID osoby, którą zapominamy
+    @AdminID INT,                    -- ID administratora, który klika przycisk
+    @LosoweImie NVARCHAR(50),        -- Wygenerowane w C# losowe imię
+    @LosoweNazwisko NVARCHAR(50),    -- Wygenerowane w C# losowe nazwisko
+    @LosowyPESEL CHAR(11),           -- Wygenerowany w C# fałszywy, ale poprawny matematycznie PESEL
+    @LosowaDataUr DATE,              -- Data urodzenia zgodna z fałszywym PESELEM
+    @LosowaPlec CHAR(1)              -- Płeć zgodna z fałszywym PESELEM
+AS
+BEGIN
+    -- Używamy transakcji. Jeśli cokolwiek pójdzie nie tak, baza cofnie wszystkie zmiany.
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- WARUNEK 1: Odbieranie wszystkich uprawnień (brak dostępu do systemu)
+        DELETE FROM Uzytkownicy_Uprawnienia
+        WHERE UzytkownikID = @TargetUzytkownikID;
+
+        -- WARUNEK 2: Ustawienie flagi i zmiana danych wrażliwych na losowe
+        UPDATE Uzytkownicy
+        SET Imie = @LosoweImie,
+            Nazwisko = @LosoweNazwisko,
+            PESEL = @LosowyPESEL,
+            DataUrodzenia = @LosowaDataUr,
+            Plec = @LosowaPlec,
+            -- Generujemy losowy email bezpośrednio w SQL (funkcja NEWID generuje losowy ciąg), 
+            -- który spełni nasz warunek LIKE '%_@_%._%'
+            Email = CAST(NEWID() AS NVARCHAR(36)) + '@anonim.local', 
+            HasloHash = 'ZABLOKOWANE', -- Trwale blokujemy możliwość logowania
+            CzyZablokowany = 1,
+            CzyZapomniany = 1
+        WHERE ID = @TargetUzytkownikID;
+
+        -- WARUNEK 3: Zapis do nowej tabeli LogiZapomnienia (kto i kiedy)
+        INSERT INTO LogiZapomnienia (ZanonimizowanyUzytkownikID, WykonalAdministratorID, DataAnonimizacji, Powod)
+        VALUES (@TargetUzytkownikID, @AdminID, GETDATE(), 'Realizacja User Story: Anonimizacja RODO');
+
+        -- Zakończenie sukcesem - zapisujemy zmiany
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Jeśli aplikacja podała zły PESEL i nasza walidacja go odrzuci, baza anuluje usuwanie uprawnień i logów
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+ALTER TABLE Uzytkownicy
+DROP CONSTRAINT FK__Uzytkowni__Zapom__2E1BDC42;
+GO
+
+ALTER TABLE Uzytkownicy
+DROP COLUMN ZapomnianyPrzezUzytkownikaID, DataZapomnienia;
+GO
