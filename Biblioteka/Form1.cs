@@ -18,11 +18,9 @@ namespace Biblioteka
         UCShowUsersData ucShowUsersData = new UCShowUsersData();
         UCForgetUsers ucForgetUsers = new UCForgetUsers();
         UCFindForgottenUsers ucFindForgottenUsers = new UCFindForgottenUsers();
-        UCLogin ucLogin = new UCLogin();
-        UCPasswordRecovery ucPasswordRecovery = new UCPasswordRecovery();
-        UCChangePassword ucChangePassword = new UCChangePassword();
-        UCSetNewPassword ucSetNewPassword = new UCSetNewPassword();
-        UCLogout ucLogout = new UCLogout();
+        UCManagePermissions ucManagePermissions = new UCManagePermissions();
+        UCUsersWithPermission ucUsersWithPermission = new UCUsersWithPermission();
+        UCEditUserPermissions ucEditUserPermissions = new UCEditUserPermissions();
 
         public Form1()
         {
@@ -82,30 +80,35 @@ namespace Biblioteka
         {
             PokazWidokZeStanem(ucFindForgottenUsers);
         }
-
-        private void btn_login_Click(object sender, EventArgs e)
+        private void btn_manage_permissions_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(ucLogin);
+            PokazZarzadzanieUprawnieniami();
         }
 
-        private void btn_change_password_Click(object sender, EventArgs e)
+        public void PokazZarzadzanieUprawnieniami()
         {
-            PokazWidokZeStanem(ucChangePassword);
+            PokazWidokZeStanem(ucManagePermissions);
         }
 
-        private void btn_password_recovery_Click(object sender, EventArgs e)
+        public void PokazUzytkownikowZUprawnieniem(int permissionId, string permissionName)
         {
-            PokazWidokZeStanem(ucPasswordRecovery);
+            ucUsersWithPermission = new UCUsersWithPermission();
+            ucUsersWithPermission.ZaladujDane(permissionId, permissionName);
+            PokazWidokZeStanem(ucUsersWithPermission);
         }
 
-        private void btn_set_new_password_Click(object sender, EventArgs e)
+        public void PokazEdycjeUprawnien(int userId, string userName)
         {
-            PokazWidokZeStanem(ucSetNewPassword);
+            ucEditUserPermissions = new UCEditUserPermissions();
+            ucEditUserPermissions.ZaladujDaneUzytkownika(userId, userName);
+            PokazWidokZeStanem(ucEditUserPermissions);
         }
 
-        private void btn_logout_Click(object sender, EventArgs e)
+        public void PowrotDoListyUprawnien()
         {
-            PokazWidokZeStanem(ucLogout);
+            PokazWidokZeStanem(ucManagePermissions);
         }
+
+
     }
 }
