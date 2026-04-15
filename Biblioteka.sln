@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteka", "Biblioteka\Biblioteka.csproj", "{76542D99-0413-4595-9B4E-F94A65ABE938}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteka.Tests", "Biblioteka.Test\Biblioteka.Tests.csproj", "{48EEC410-D65A-496F-9A46-F632B749FCAD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Biblioteka.Tests", "Biblioteka.Tests\Biblioteka.Tests.csproj", "{48EEC410-D65A-496F-9A46-F632B749FCAD}"
 	ProjectSection(ProjectDependencies) = postProject
 		{76542D99-0413-4595-9B4E-F94A65ABE938} = {76542D99-0413-4595-9B4E-F94A65ABE938}
 	EndProjectSection
