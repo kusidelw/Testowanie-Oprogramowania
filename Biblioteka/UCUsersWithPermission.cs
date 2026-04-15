@@ -22,10 +22,8 @@ namespace Biblioteka
 
         private void KonfigurujCheckListBox()
         {
-            // Konfiguracja CheckedListBox dla użytkowników Z uprawnieniem
-            chLB_User_With_Role.CheckOnClick = true;
 
-            // Konfiguracja CheckedListBox dla użytkowników BEZ uprawnienia
+            chLB_User_With_Role.CheckOnClick = true;
             chbl_UserWIthout_role.CheckOnClick = true;
         }
 
@@ -34,14 +32,10 @@ namespace Biblioteka
             _permissionId = permissionId;
             lbl_title.Text = $"ZARZĄDZANIE UPRAWNIENIEM: {permissionName}";
 
-            // Załaduj obie listy
             WczytajUzytkownikowZUprawnieniem();
             WczytajUzytkownikowBezUprawnienia();
         }
 
-        /// <summary>
-        /// Ładuje użytkowników POSIADAJĄCYCH dane uprawnienie
-        /// </summary>
         private void WczytajUzytkownikowZUprawnieniem()
         {
             try
@@ -96,9 +90,6 @@ namespace Biblioteka
             }
         }
 
-        /// <summary>
-        /// Ładuje użytkowników NIE POSIADAJĄCYCH danego uprawnienia
-        /// </summary>
         private void WczytajUzytkownikowBezUprawnienia()
         {
             try
@@ -153,15 +144,10 @@ namespace Biblioteka
         }
 
 
-
-        /// <summary>
-        /// Przycisk: Przypisz zaznaczonym - masowe dodawanie uprawnienia
-        /// </summary>
         private void btn_Add_Role_Click(object sender, EventArgs e)
         {
             try
             {
-                // 1. Zbierz zaznaczonych użytkowników (bez uprawnienia)
                 var zaznaczeni = chbl_UserWIthout_role.CheckedItems.Cast<UzytkownikListItem>().ToList();
 
                 if (zaznaczeni.Count == 0)
@@ -171,7 +157,6 @@ namespace Biblioteka
                     return;
                 }
 
-                // 2. Potwierdź operację
                 var result = MessageBox.Show(
                     $"Czy na pewno chcesz przypisać uprawnienie {zaznaczeni.Count} użytkownikom?",
                     "Potwierdzenie",
@@ -181,7 +166,6 @@ namespace Biblioteka
                 if (result != DialogResult.Yes)
                     return;
 
-                // 3. Masowo dodaj uprawnienia (TRANSAKCJA)
                 int dodanych = 0;
                 using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
@@ -207,14 +191,12 @@ namespace Biblioteka
 
                             transaction.Commit();
 
-                            // 4. Komunikat sukcesu
                             MessageBox.Show(
                                 $"Pomyślnie przypisano uprawnienie {dodanych} użytkownikom!",
                                 "Sukces",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
 
-                            // 5. Odśwież obie listy
                             WczytajUzytkownikowZUprawnieniem();
                             WczytajUzytkownikowBezUprawnienia();
                         }
@@ -236,14 +218,10 @@ namespace Biblioteka
             }
         }
 
-        /// <summary>
-        /// Przycisk: Odbierz zaznaczonym - masowe usuwanie uprawnienia
-        /// </summary>
         private void btn_Remove_Role_Click(object sender, EventArgs e)
         {
             try
             {
-                // 1. Zbierz zaznaczonych użytkowników (z uprawnieniem)
                 var zaznaczeni = chLB_User_With_Role.CheckedItems.Cast<UzytkownikListItem>().ToList();
 
                 if (zaznaczeni.Count == 0)
@@ -253,7 +231,6 @@ namespace Biblioteka
                     return;
                 }
 
-                // 2. Potwierdź operację
                 var result = MessageBox.Show(
                     $"Czy na pewno chcesz odebrać uprawnienie {zaznaczeni.Count} użytkownikom?",
                     "Potwierdzenie",
@@ -263,7 +240,6 @@ namespace Biblioteka
                 if (result != DialogResult.Yes)
                     return;
 
-                // 3. Masowo usuń uprawnienia (TRANSAKCJA)
                 int usunietych = 0;
                 using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
@@ -289,14 +265,12 @@ namespace Biblioteka
 
                             transaction.Commit();
 
-                            // 4. Komunikat sukcesu
                             MessageBox.Show(
                                 $"Pomyślnie odebrano uprawnienie {usunietych} użytkownikom!",
                                 "Sukces",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
 
-                            // 5. Odśwież obie listy
                             WczytajUzytkownikowZUprawnieniem();
                             WczytajUzytkownikowBezUprawnienia();
                         }

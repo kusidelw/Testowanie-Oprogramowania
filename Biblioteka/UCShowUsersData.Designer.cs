@@ -460,7 +460,6 @@
             this.clb_permissions.Name = "clb_permissions";
             this.clb_permissions.Size = new System.Drawing.Size(418, 106);
             this.clb_permissions.TabIndex = 37;
-            this.clb_permissions.SelectedIndexChanged += new System.EventHandler(this.clb_permissions_SelectedIndexChanged);
             // 
             // label1
             // 

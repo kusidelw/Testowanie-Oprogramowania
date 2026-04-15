@@ -127,11 +127,6 @@ namespace Biblioteka
             }
         }
 
-        private void clb_permissions_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void ZaladujUprawnienia()
         {
             try
@@ -140,7 +135,6 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // 1. Pobierz wszystkie uprawnienia
                     string sqlAllPermissions = "SELECT ID, Nazwa FROM Uprawnienia ORDER BY Nazwa";
                     List<Uprawnienie> allPermissions = new List<Uprawnienie>();
 
@@ -159,7 +153,6 @@ namespace Biblioteka
                         }
                     }
 
-                    // 2. Pobierz aktualne uprawnienia użytkownika
                     string sqlUserPermissions = @"
                         SELECT UprawnienieID 
                         FROM Uzytkownicy_Uprawnienia 
@@ -178,10 +171,8 @@ namespace Biblioteka
                         }
                     }
 
-                    // Zapisz oryginalne uprawnienia do porównania
                     originalPermissionIds = new List<int>(currentPermissionIds);
 
-                    // 3. Wypełnij CheckedListBox
                     clb_permissions.Items.Clear();
                     foreach (var perm in allPermissions)
                     {
@@ -189,7 +180,6 @@ namespace Biblioteka
                         clb_permissions.SetItemChecked(index, currentPermissionIds.Contains(perm.ID));
                     }
 
-                    // 4. Zablokuj CheckedListBox jeśli użytkownik zanonimizowany
                     if (czyUzytkownikZapomniany)
                     {
                         clb_permissions.Enabled = false;
@@ -211,14 +201,12 @@ namespace Biblioteka
         {
             try
             {
-                // 1. Zbierz zaznaczone uprawnienia
                 List<int> selectedPermissionIds = new List<int>();
                 foreach (Uprawnienie item in clb_permissions.CheckedItems)
                 {
                     selectedPermissionIds.Add(item.ID);
                 }
 
-                // 2. WALIDACJA - użytkownik musi mieć przynajmniej jedno uprawnienie
                 if (selectedPermissionIds.Count == 0)
                 {
                     MessageBox.Show(
@@ -229,17 +217,14 @@ namespace Biblioteka
                     return;
                 }
 
-                // 3. Sprawdź czy były zmiany
                 bool czyBylyZmiany = CzyBylyZmianyWUprawnieniach(selectedPermissionIds);
 
                 if (!czyBylyZmiany)
                 {
-                    // Brak zmian - po prostu odśwież widok bez komunikatu
                     ZaladujUprawnienia();
                     return;
                 }
 
-                // 4. Zapisz zmiany w bazie (TRANSAKCJA)
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
@@ -247,7 +232,6 @@ namespace Biblioteka
                     {
                         try
                         {
-                            // 4a. Usuń stare uprawnienia
                             string deleteQuery = "DELETE FROM Uzytkownicy_Uprawnienia WHERE UzytkownikID = @uid";
                             using (SqlCommand deleteCmd = new SqlCommand(deleteQuery, conn, transaction))
                             {
@@ -255,7 +239,6 @@ namespace Biblioteka
                                 deleteCmd.ExecuteNonQuery();
                             }
 
-                            // 4b. Dodaj nowe uprawnienia
                             foreach (int permId in selectedPermissionIds)
                             {
                                 string insertQuery = @"
@@ -271,14 +254,12 @@ namespace Biblioteka
 
                             transaction.Commit();
 
-                            // 5. Komunikat sukcesu
                             MessageBox.Show(
                                 "Uprawnienia zostały zaktualizowane pomyślnie!",
                                 "Sukces",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
 
-                            // 6. Odśwież listę uprawnień
                             ZaladujUprawnienia();
                         }
                         catch
@@ -301,31 +282,25 @@ namespace Biblioteka
 
         private void btn_cancel_Click(object sender, EventArgs e)
         {
-            // Anuluj zmiany - przywróć oryginalne uprawnienia
             ZaladujUprawnienia();
         }
 
-        /// <summary>
-        /// Sprawdza czy były zmiany w uprawnieniach użytkownika
-        /// </summary>
+
         private bool CzyBylyZmianyWUprawnieniach(List<int> nowePrawnienia)
         {
-            // Jeśli różna liczba uprawnień - są zmiany
             if (nowePrawnienia.Count != originalPermissionIds.Count)
                 return true;
 
-            // Posortuj obie listy i porównaj
             List<int> sortedNew = nowePrawnienia.OrderBy(x => x).ToList();
             List<int> sortedOriginal = originalPermissionIds.OrderBy(x => x).ToList();
 
-            // Porównaj element po elemencie
             for (int i = 0; i < sortedNew.Count; i++)
             {
                 if (sortedNew[i] != sortedOriginal[i])
                     return true;
             }
 
-            return false; // Brak zmian
+            return false;
         }
     }
 }
