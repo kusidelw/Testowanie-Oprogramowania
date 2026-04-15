@@ -62,6 +62,10 @@
             this.btn_back_to_list = new System.Windows.Forms.Button();
             this.btn_edit_data = new System.Windows.Forms.Button();
             this.lbl_anonymization_message = new System.Windows.Forms.Label();
+            this.clb_permissions = new System.Windows.Forms.CheckedListBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btn_cancel = new System.Windows.Forms.Button();
+            this.btn_save = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -413,7 +417,7 @@
             this.btn_back_to_list.AutoSize = true;
             this.btn_back_to_list.BackColor = System.Drawing.Color.LightCoral;
             this.btn_back_to_list.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_back_to_list.Location = new System.Drawing.Point(88, 575);
+            this.btn_back_to_list.Location = new System.Drawing.Point(88, 591);
             this.btn_back_to_list.Name = "btn_back_to_list";
             this.btn_back_to_list.Size = new System.Drawing.Size(223, 71);
             this.btn_back_to_list.TabIndex = 33;
@@ -427,7 +431,7 @@
             this.btn_edit_data.AutoSize = true;
             this.btn_edit_data.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.btn_edit_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_edit_data.Location = new System.Drawing.Point(791, 575);
+            this.btn_edit_data.Location = new System.Drawing.Point(734, 601);
             this.btn_edit_data.Name = "btn_edit_data";
             this.btn_edit_data.Size = new System.Drawing.Size(223, 71);
             this.btn_edit_data.TabIndex = 34;
@@ -447,11 +451,68 @@
             this.lbl_anonymization_message.Text = "UŻYTKOWNIK ZANONIMIZOWANY (RODO)";
             this.lbl_anonymization_message.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // clb_permissions
+            // 
+            this.clb_permissions.CheckOnClick = true;
+            this.clb_permissions.FormattingEnabled = true;
+            this.clb_permissions.Location = new System.Drawing.Point(637, 414);
+            this.clb_permissions.Margin = new System.Windows.Forms.Padding(4);
+            this.clb_permissions.Name = "clb_permissions";
+            this.clb_permissions.Size = new System.Drawing.Size(418, 106);
+            this.clb_permissions.TabIndex = 37;
+            this.clb_permissions.SelectedIndexChanged += new System.EventHandler(this.clb_permissions_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(562, 354);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(184, 32);
+            this.label1.TabIndex = 38;
+            this.label1.Text = "Uprawnienia";
+            // 
+            // btn_cancel
+            // 
+            this.btn_cancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btn_cancel.BackColor = System.Drawing.Color.LightBlue;
+            this.btn_cancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btn_cancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_cancel.Location = new System.Drawing.Point(919, 526);
+            this.btn_cancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_cancel.Name = "btn_cancel";
+            this.btn_cancel.Size = new System.Drawing.Size(136, 31);
+            this.btn_cancel.TabIndex = 40;
+            this.btn_cancel.Text = "Anuluj";
+            this.btn_cancel.UseVisualStyleBackColor = false;
+            this.btn_cancel.Click += new System.EventHandler(this.btn_cancel_Click);
+            // 
+            // btn_save
+            // 
+            this.btn_save.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btn_save.BackColor = System.Drawing.Color.LightBlue;
+            this.btn_save.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btn_save.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_save.Location = new System.Drawing.Point(637, 526);
+            this.btn_save.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_save.Name = "btn_save";
+            this.btn_save.Size = new System.Drawing.Size(137, 31);
+            this.btn_save.TabIndex = 39;
+            this.btn_save.Text = "Zapisz";
+            this.btn_save.UseVisualStyleBackColor = false;
+            this.btn_save.Click += new System.EventHandler(this.btn_save_Click);
+            // 
             // UCShowUsersData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Controls.Add(this.btn_cancel);
+            this.Controls.Add(this.btn_save);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.clb_permissions);
             this.Controls.Add(this.lbl_anonymization_message);
             this.Controls.Add(this.btn_edit_data);
             this.Controls.Add(this.btn_back_to_list);
@@ -487,7 +548,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UCShowUsersData";
-            this.Size = new System.Drawing.Size(1081, 690);
+            this.Size = new System.Drawing.Size(1081, 675);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -530,5 +591,9 @@
         private System.Windows.Forms.Button btn_back_to_list;
         private System.Windows.Forms.Button btn_edit_data;
         private System.Windows.Forms.Label lbl_anonymization_message;
+        private System.Windows.Forms.CheckedListBox clb_permissions;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btn_cancel;
+        private System.Windows.Forms.Button btn_save;
     }
 }
