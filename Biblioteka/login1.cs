@@ -13,12 +13,15 @@ namespace Biblioteka
         {
             InitializeComponent();
 
-            // Wymaganie niefunkcjonalne: Maskowanie hasła
-            txt_password.PasswordChar = '*';
-
             // Ustawienia początkowe etykiet
             Error_msg.Text = "";
             lbl_personal_data.Text = "Wprowadź dane użytkownika";
+        }
+
+        public void ShowLoginLayout()
+        {
+            this.Controls.Clear();
+            this.InitializeComponent(); // Przywraca pierwotny stan okna
         }
 
         private void btn_login_Click(object sender, EventArgs e)
