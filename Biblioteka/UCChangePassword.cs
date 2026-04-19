@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration; // Musisz dodać referencję do System.Configuration
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,16 +11,23 @@ namespace Biblioteka
 {
     public partial class UCChangePassword : UserControl
     {
+        // Pobieranie stringa z App.config (tak samo jak w login1)
+        private readonly string ConnectionString =
+            ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
+
         public UCChangePassword()
         {
             InitializeComponent();
-
             Error_msg.Text = "";
+
+            // Maskowanie haseł w kodzie (na wypadek, gdyby w Designerze było wyłączone)
+            txt_new_password.UseSystemPasswordChar = true;
+            txt_repeat_password.UseSystemPasswordChar = true;
         }
 
         private void btn_save_Click(object sender, EventArgs e)
         {
-            string login = txt_login.Text;
+            string login = txt_login.Text.Trim();
             string newPass = txt_new_password.Text;
             string repeatPass = txt_repeat_password.Text;
 
@@ -29,62 +38,107 @@ namespace Biblioteka
                 return;
             }
 
-            // 2. Scenariusz wyjątku E1 (USTAW_HAS_UZY_1): Niezgodność haseł
+            // 2. Sprawdzenie zgodności
             if (newPass != repeatPass)
             {
                 ShowError("Hasła nie są identyczne.");
                 return;
             }
 
-            // 3. Scenariusz wyjątku E1 (ZMIANA_HAS_ADMIN_1): Kryteria walidacji (8-15 znaków itp.)
+            // 3. Walidacja polityki (8-15 znaków, duża litera, znak specjalny)
             if (!ValidatePasswordPolicy(newPass))
             {
                 ShowError("Hasło nie spełnia wymogów bezpieczeństwa.");
                 return;
             }
 
-            // 4. Scenariusz wyjątku E2: Hasło historyczne (3 ostatnie)
-            if (IsPasswordInHistory(login, newPass))
+            try
             {
-                ShowError("Hasło nie może być jednym z 3 ostatnio używanych.");
-                return;
+                using (SqlConnection conn = new SqlConnection(ConnectionString))
+                {
+                    conn.Open();
+
+                    // 4. Sprawdzenie historii (Scenariusz E2)
+                    if (IsPasswordInHistory(conn, login, newPass))
+                    {
+                        ShowError("Hasło nie może być jednym z 3 ostatnio używanych.");
+                        return;
+                    }
+
+                    // 5. Aktualizacja hasła w bazie
+                    UpdatePasswordInDb(conn, login, newPass);
+
+                    MessageBox.Show("Hasło zostało zmienione pomyślnie!", "Sukces",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    ReturnToLogin();
+                }
             }
-
-            // SUKCES - Zapisanie hasła
-            MessageBox.Show("Hasło zostało zmienione pomyślnie!", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Po sukcesie wracamy do ekranu logowania (Scenariusz główny)
-            ReturnToLogin();
+            catch (Exception ex)
+            {
+                ShowError("Błąd bazy danych podczas zmiany hasła.");
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void btn_anuluj_Click(object sender, EventArgs e)
         {
-            // Scenariusz A1: Powrót do logowania bez zapisu
             ReturnToLogin();
         }
 
-        // --- METODY POMOCNICZE ---
+        // --- METODY LOGICZNE ---
 
         private bool ValidatePasswordPolicy(string pass)
         {
-            // Kryteria: 8-15 znaków
             if (pass.Length < 8 || pass.Length > 15) return false;
-
-            // Wielka litera, mała litera, cyfra
             bool hasUpper = pass.Any(char.IsUpper);
             bool hasLower = pass.Any(char.IsLower);
             bool hasDigit = pass.Any(char.IsDigit);
-
-            // Znaki specjalne zgodnie z GEN_HAS_SYS_1: -, _, !, *, #, $, &
             bool hasSpecial = Regex.IsMatch(pass, @"[-_!*#$&]");
 
             return hasUpper && hasLower && hasDigit && hasSpecial;
         }
 
-        private bool IsPasswordInHistory(string user, string pass)
+        private bool IsPasswordInHistory(SqlConnection conn, string login, string newPass)
         {
-            // Symulacja sprawdzenia w bazie (zawsze zwraca false dla testów UI)
-            return false;
+            // Przykładowe zapytanie sprawdzające tabelę HistoriaHasel
+            string query = @"
+                SELECT COUNT(1) FROM HistoriaHasel 
+                WHERE UzytkownikID = (SELECT ID FROM Uzytkownicy WHERE Login = @Login)
+                AND HasloHash = @NewPass";
+            // UWAGA: Tu w przyszłości użyj haszowania BCrypt!
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Login", login);
+                cmd.Parameters.AddWithValue("@NewPass", newPass);
+                return (int)cmd.ExecuteScalar() > 0;
+            }
+        }
+
+        private void UpdatePasswordInDb(SqlConnection conn, string login, string newPass)
+        {
+            // 1. Zmiana hasła głównego
+            string updateQuery = "UPDATE Uzytkownicy SET HasloHash = @NewPass WHERE Login = @Login";
+
+            // 2. Dodanie do historii (uproszczone)
+            string historyQuery = @"
+                INSERT INTO HistoriaHasel (UzytkownikID, HasloHash, DataZmiany)
+                VALUES ((SELECT ID FROM Uzytkownicy WHERE Login = @Login), @NewPass, GETDATE())";
+
+            using (SqlCommand cmd = new SqlCommand(updateQuery, conn))
+            {
+                cmd.Parameters.AddWithValue("@NewPass", newPass);
+                cmd.Parameters.AddWithValue("@Login", login);
+                cmd.ExecuteNonQuery();
+            }
+
+            using (SqlCommand cmdHistory = new SqlCommand(historyQuery, conn))
+            {
+                cmdHistory.Parameters.AddWithValue("@NewPass", newPass);
+                cmdHistory.Parameters.AddWithValue("@Login", login);
+                cmdHistory.ExecuteNonQuery();
+            }
         }
 
         private void ShowError(string msg)

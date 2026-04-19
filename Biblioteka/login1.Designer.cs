@@ -36,6 +36,7 @@
             this.txt_login = new System.Windows.Forms.TextBox();
             this.lbl_name = new System.Windows.Forms.Label();
             this.lbl_login = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Error_msg
@@ -44,9 +45,9 @@
             this.Error_msg.ForeColor = System.Drawing.Color.Firebrick;
             this.Error_msg.Location = new System.Drawing.Point(379, 428);
             this.Error_msg.Name = "Error_msg";
-            this.Error_msg.Size = new System.Drawing.Size(51, 20);
+            this.Error_msg.Size = new System.Drawing.Size(125, 20);
             this.Error_msg.TabIndex = 107;
-            this.Error_msg.Text = "label1";
+            this.Error_msg.Text = "Wypisanie błędu";
             // 
             // btn_Recover_pass
             // 
@@ -143,11 +144,21 @@
             this.lbl_login.TabIndex = 101;
             this.lbl_login.Text = "Login:";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(379, 143);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(229, 20);
+            this.label1.TabIndex = 108;
+            this.label1.Text = "Login: admin Hasło: Admin123!";
+            // 
             // login1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(908, 664);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.Error_msg);
             this.Controls.Add(this.btn_Recover_pass);
             this.Controls.Add(this.btn_login);
@@ -176,5 +187,6 @@
         private System.Windows.Forms.TextBox txt_login;
         private System.Windows.Forms.Label lbl_name;
         private System.Windows.Forms.Label lbl_login;
+        private System.Windows.Forms.Label label1;
     }
 }

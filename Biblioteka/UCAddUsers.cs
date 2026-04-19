@@ -58,53 +58,83 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // Sprawdzanie unikalności
+                    // 1. Sprawdzanie unikalności danych kluczowych
+                    // Metoda ValueExists musi obsługiwać parametry, aby zapobiec SQL Injection
                     if (ValueExists(conn, "Login", txt_login.Text.Trim()) ||
                         ValueExists(conn, "PESEL", txt_PESEL.Text.Trim()) ||
                         ValueExists(conn, "Email", txt_mail.Text.Trim()))
                     {
-                        MessageBox.Show("Użytkownik już istnieje", "Błąd zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return; 
+                        MessageBox.Show("Użytkownik z podanym loginem, numerem PESEL lub adresem e-mail już istnieje w systemie.",
+                                        "Błąd unikalności", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
-                    string hasloHash = HashSHA256(txt_PESEL.Text.Trim());
+
+                    // 2. Przygotowanie danych do zapisu
+                    string hasloHash = HashSHA256(txt_PESEL.Text.Trim()); // Hasło domyślne to PESEL
                     string plec = cb_gender.SelectedItem.ToString() == "Mężczyzna" ? "M" : "K";
 
+                    // Generowanie numeru karty (zmienna lokalna do komunikatu)
                     string nrKarty = "LIB-" + Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
+
+                    // 3. Obsługa znormalizowanej tabeli adresowej
+                    // Pobieramy ID z tabeli słownikowej lub dodajemy nowy wpis, jeśli nie istnieje
                     int miejscowoscKodId = PobierzLubDodajKodIMiejscowosc(conn, txt_zip_code.Text.Trim(), txt_town.Text.Trim());
 
+                    // 4. Zapytanie SQL dostosowane do aktualnej struktury tabeli Uzytkownicy
                     const string sql = @"
-                        INSERT INTO Uzytkownicy 
-                        (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, Ulica, NumerPosesji, NumerLokalu, PESEL, DataUrodzenia, Plec, Email, Telefon, CzyZapomniany)
-                        VALUES 
-                        (@Login, @Haslo, @Imie, @Nazwisko, @MiejscowoscKodID, @Ulica, @NumerPosesji, @NumerLokalu, @PESEL, @DataUrodzenia, @Plec, @Email, @Telefon, 0);";
+                INSERT INTO Uzytkownicy 
+                (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, Ulica, NumerPosesji, NumerLokalu, 
+                 PESEL, DataUrodzenia, Plec, Email, Telefon, CzyZapomniany, CzyZablokowany, LiczbaBlednychLogowan)
+                VALUES 
+                (@Login, @Haslo, @Imie, @Nazwisko, @MiejscowoscKodID, @Ulica, @NumerPosesji, @NumerLokalu, 
+                 @PESEL, @DataUrodzenia, @Plec, @Email, @Telefon, 0, 0, 0);";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Login", txt_login.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Haslo", hasloHash);
-                        cmd.Parameters.AddWithValue("@Imie", txt_name.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text.Trim());
-                        cmd.Parameters.AddWithValue("@MiejscowoscKodID", miejscowoscKodId); 
-                        cmd.Parameters.AddWithValue("@Ulica", string.IsNullOrWhiteSpace(txt_street.Text) ? (object)DBNull.Value : txt_street.Text.Trim());
-                        cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text.Trim());
-                        cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text.Trim());
-                        cmd.Parameters.AddWithValue("@PESEL", txt_PESEL.Text.Trim());
-                        cmd.Parameters.AddWithValue("@DataUrodzenia", DateTime.Parse(txt_birth_date.Text.Trim()));
-                        cmd.Parameters.AddWithValue("@Plec", plec);
-                        cmd.Parameters.AddWithValue("@Email", txt_mail.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Telefon", txt_phone_number.Text.Trim());
+                        // Parametry tekstowe i liczbowe
+                        cmd.Parameters.Add("@Login", SqlDbType.NVarChar).Value = txt_login.Text.Trim();
+                        cmd.Parameters.Add("@Haslo", SqlDbType.NVarChar).Value = hasloHash;
+                        cmd.Parameters.Add("@Imie", SqlDbType.NVarChar).Value = txt_name.Text.Trim();
+                        cmd.Parameters.Add("@Nazwisko", SqlDbType.NVarChar).Value = txt_surname.Text.Trim();
+                        cmd.Parameters.Add("@MiejscowoscKodID", SqlDbType.Int).Value = miejscowoscKodId;
+
+                        // Obsługa pól opcjonalnych (NULL w bazie)
+                        cmd.Parameters.Add("@Ulica", SqlDbType.NVarChar).Value =
+                            string.IsNullOrWhiteSpace(txt_street.Text) ? DBNull.Value : (object)txt_street.Text.Trim();
+
+                        cmd.Parameters.Add("@NumerPosesji", SqlDbType.NVarChar).Value = txt_property_number.Text.Trim();
+
+                        cmd.Parameters.Add("@NumerLokalu", SqlDbType.NVarChar).Value =
+                            string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? DBNull.Value : (object)txtlbl_apartment_number.Text.Trim();
+
+                        // Dane wrażliwe i formatowane
+                        cmd.Parameters.Add("@PESEL", SqlDbType.Char, 11).Value = txt_PESEL.Text.Trim();
+                        cmd.Parameters.Add("@DataUrodzenia", SqlDbType.Date).Value = DateTime.Parse(txt_birth_date.Text.Trim());
+                        cmd.Parameters.Add("@Plec", SqlDbType.Char, 1).Value = plec;
+                        cmd.Parameters.Add("@Email", SqlDbType.NVarChar).Value = txt_mail.Text.Trim();
+                        cmd.Parameters.Add("@Telefon", SqlDbType.VarChar, 9).Value = txt_phone_number.Text.Trim();
 
                         cmd.ExecuteNonQuery();
                     }
 
-                    MessageBox.Show($"Użytkownik został pomyślnie dodany!\nNr karty bibliotecznej: {nrKarty}", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($"Użytkownik został pomyślnie dodany!\nNr karty bibliotecznej: {nrKarty}",
+                                    "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     WyczyscFormularz();
                 }
             }
+            catch (FormatException)
+            {
+                MessageBox.Show("Błędny format daty urodzenia.", "Błąd danych", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (SqlException ex)
+            {
+                // Obsługa błędów naruszenia kluczy/constraintów z bazy danych
+                MessageBox.Show($"Błąd bazy danych ({ex.Number}): {ex.Message}", "Błąd SQL", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd bazy danych: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Wystąpił nieoczekiwany błąd: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -198,6 +228,10 @@ namespace Biblioteka
 
         private bool ValueExists(SqlConnection conn, string column, string value)
         {
+            // Zabezpieczenie przed nieprawidłowymi nazwami kolumn
+            string[] allowedColumns = { "Login", "PESEL", "Email" };
+            if (!allowedColumns.Contains(column)) return false;
+
             using (SqlCommand cmd = new SqlCommand($"SELECT COUNT(1) FROM Uzytkownicy WHERE {column} = @Val", conn))
             {
                 cmd.Parameters.AddWithValue("@Val", value);
@@ -205,23 +239,24 @@ namespace Biblioteka
             }
         }
 
-        private int PobierzLubDodajKodIMiejscowosc(SqlConnection conn, string kodPocztowy, string miejscowosc)
+        private int PobierzLubDodajKodIMiejscowosc(SqlConnection conn, string kodPocztowy, string miasto)
         {
-            string checkSql = "SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy = @Kod AND Miejscowosc = @Miasto";
-            using (SqlCommand cmd = new SqlCommand(checkSql, conn))
+            // Sprawdź czy para Kod + Miasto już istnieje
+            string selectSql = "SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy = @Kod AND Miejscowosc = @Miasto";
+            using (SqlCommand cmd = new SqlCommand(selectSql, conn))
             {
                 cmd.Parameters.AddWithValue("@Kod", kodPocztowy);
-                cmd.Parameters.AddWithValue("@Miasto", miejscowosc);
-                object result = cmd.ExecuteScalar();
-                if (result != null) return Convert.ToInt32(result); // Zwraca ID, jeśli adres już istnieje w słowniku
+                cmd.Parameters.AddWithValue("@Miasto", miasto);
+                object res = cmd.ExecuteScalar();
+                if (res != null) return (int)res;
             }
 
-            // Jeśli nie istnieje, dodajemy go i zwracamy nowe ID
+            // Jeśli nie istnieje, dodaj nowy i zwróć wygenerowane ID
             string insertSql = "INSERT INTO KodyPocztowe_Miejscowosci (KodPocztowy, Miejscowosc) OUTPUT INSERTED.ID VALUES (@Kod, @Miasto)";
             using (SqlCommand cmd = new SqlCommand(insertSql, conn))
             {
                 cmd.Parameters.AddWithValue("@Kod", kodPocztowy);
-                cmd.Parameters.AddWithValue("@Miasto", miejscowosc);
+                cmd.Parameters.AddWithValue("@Miasto", miasto);
                 return (int)cmd.ExecuteScalar();
             }
         }
