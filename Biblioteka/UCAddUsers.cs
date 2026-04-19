@@ -85,6 +85,7 @@ namespace Biblioteka
                 INSERT INTO Uzytkownicy 
                 (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, Ulica, NumerPosesji, NumerLokalu, 
                  PESEL, DataUrodzenia, Plec, Email, Telefon, CzyZapomniany, CzyZablokowany, LiczbaBlednychLogowan)
+                OUTPUT INSERTED.ID
                 VALUES 
                 (@Login, @Haslo, @Imie, @Nazwisko, @MiejscowoscKodID, @Ulica, @NumerPosesji, @NumerLokalu, 
                  @PESEL, @DataUrodzenia, @Plec, @Email, @Telefon, 0, 0, 0);";
@@ -114,7 +115,10 @@ namespace Biblioteka
                         cmd.Parameters.Add("@Email", SqlDbType.NVarChar).Value = txt_mail.Text.Trim();
                         cmd.Parameters.Add("@Telefon", SqlDbType.VarChar, 9).Value = txt_phone_number.Text.Trim();
 
-                        cmd.ExecuteNonQuery();
+                        int nowyUzytkownikId = (int)cmd.ExecuteScalar(); // Pobieramy ID nowo dodanego użytkownika
+
+                        // Automatyczne przypisanie roli "Czytelnik"
+                        PrzypisRoleCzytelnik(conn, nowyUzytkownikId);
                     }
 
                     MessageBox.Show($"Użytkownik został pomyślnie dodany!\nNr karty bibliotecznej: {nrKarty}",
@@ -269,6 +273,49 @@ namespace Biblioteka
                 StringBuilder sb = new StringBuilder();
                 foreach (byte b in bytes) sb.Append(b.ToString("x2"));
                 return sb.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Automatycznie przypisuje nowemu użytkownikowi rolę "Czytelnik"
+        /// </summary>
+        private void PrzypisRoleCzytelnik(SqlConnection conn, int uzytkownikId)
+        {
+            // 1. Pobierz ID roli "Czytelnik" z tabeli Uprawnienia
+            string selectRolaId = "SELECT ID FROM Uprawnienia WHERE Nazwa = @NazwaRoli";
+            int? rolaId = null;
+
+            using (SqlCommand cmdRola = new SqlCommand(selectRolaId, conn))
+            {
+                cmdRola.Parameters.Add("@NazwaRoli", SqlDbType.NVarChar).Value = "Czytelnik";
+                object result = cmdRola.ExecuteScalar();
+
+                if (result != null)
+                    rolaId = (int)result;
+            }
+
+            // 2. Jeśli rola "Czytelnik" istnieje, przypisz ją użytkownikowi
+            if (rolaId.HasValue)
+            {
+                string insertUprawnienie = @"
+                    INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID)
+                    VALUES (@UzytkownikID, @UprawnienieID)";
+
+                using (SqlCommand cmdUprawnienie = new SqlCommand(insertUprawnienie, conn))
+                {
+                    cmdUprawnienie.Parameters.Add("@UzytkownikID", SqlDbType.Int).Value = uzytkownikId;
+                    cmdUprawnienie.Parameters.Add("@UprawnienieID", SqlDbType.Int).Value = rolaId.Value;
+                    cmdUprawnienie.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                // Jeśli rola "Czytelnik" nie istnieje w bazie, wyświetl ostrzeżenie
+                MessageBox.Show(
+                    "Uwaga: Rola 'Czytelnik' nie została znaleziona w bazie danych. Użytkownik został dodany bez roli.",
+                    "Ostrzeżenie",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
         }
     }
