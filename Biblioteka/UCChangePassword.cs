@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration; // Musisz dodać referencję do System.Configuration
+using System.Configuration; 
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace Biblioteka
 {
     public partial class UCChangePassword : UserControl
     {
-        // Pobieranie stringa z App.config (tak samo jak w login1)
+        // Pobieranie stringa z App.config
         private readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
 
@@ -20,7 +20,7 @@ namespace Biblioteka
             InitializeComponent();
             Error_msg.Text = "";
 
-            // Maskowanie haseł w kodzie (na wypadek, gdyby w Designerze było wyłączone)
+            // Maskowanie haseł w kodzie
             txt_new_password.UseSystemPasswordChar = true;
             txt_repeat_password.UseSystemPasswordChar = true;
         }
@@ -58,7 +58,7 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // 4. Sprawdzenie historii (Scenariusz E2)
+                    // 4. Sprawdzenie historii 
                     if (IsPasswordInHistory(conn, login, newPass))
                     {
                         ShowError("Hasło nie może być jednym z 3 ostatnio używanych.");
@@ -106,7 +106,7 @@ namespace Biblioteka
                 SELECT COUNT(1) FROM HistoriaHasel 
                 WHERE UzytkownikID = (SELECT ID FROM Uzytkownicy WHERE Login = @Login)
                 AND HasloHash = @NewPass";
-            // UWAGA: Tu w przyszłości użyj haszowania BCrypt!
+            // UWAGA: Tu w przyszłości użyj haszowania
 
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {

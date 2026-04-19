@@ -83,7 +83,7 @@ namespace Biblioteka
                         return;
                     }
 
-                    // Krok 2: Sprawdź blokadę czasową (Scenariusz A1)
+                    // Krok 2: Sprawdź blokadę czasową 
                     if (czyZablokowany)
                     {
                         if (czasOdblokowania.HasValue && DateTime.Now < czasOdblokowania.Value)
@@ -101,7 +101,7 @@ namespace Biblioteka
                     }
 
                     // Krok 3: Sprawdź hasło
-                    // UWAGA: w produkcji porównuj hasze, np. BCrypt.Verify(haslo, hasloHash)
+                    // UWAGA! na razie nie implementujemy hashowania!!!
                     bool hasloPoprawne = (hasloHash == haslo);
 
                     if (!hasloPoprawne)
