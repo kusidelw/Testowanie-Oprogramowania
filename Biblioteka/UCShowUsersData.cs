@@ -192,7 +192,7 @@ namespace Biblioteka
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd ładowania uprawnień: " + ex.Message,
+                MessageBox.Show("Błąd ładowania ról: " + ex.Message,
                     "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -210,7 +210,7 @@ namespace Biblioteka
                 if (selectedPermissionIds.Count == 0)
                 {
                     MessageBox.Show(
-                        "Użytkownik musi posiadać co najmniej jedno uprawnienie.",
+                        "Użytkownik musi posiadać co najmniej jedną rolę.",
                         "Błąd walidacji",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
@@ -255,7 +255,7 @@ namespace Biblioteka
                             transaction.Commit();
 
                             MessageBox.Show(
-                                "Uprawnienia zostały zaktualizowane pomyślnie!",
+                                "Role zostały zaktualizowane pomyślnie!",
                                 "Sukces",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -273,7 +273,7 @@ namespace Biblioteka
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Błąd zapisu uprawnień: " + ex.Message,
+                    "Błąd zapisu ról: " + ex.Message,
                     "Błąd",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

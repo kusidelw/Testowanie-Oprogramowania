@@ -20,7 +20,6 @@ namespace Biblioteka
         UCFindForgottenUsers ucFindForgottenUsers = new UCFindForgottenUsers();
         UCManagePermissions ucManagePermissions = new UCManagePermissions();
         UCUsersWithPermission ucUsersWithPermission = new UCUsersWithPermission();
-        UCEditUserPermissions ucEditUserPermissions = new UCEditUserPermissions();
 
         public Form1()
         {
@@ -95,13 +94,6 @@ namespace Biblioteka
             ucUsersWithPermission = new UCUsersWithPermission();
             ucUsersWithPermission.ZaladujDane(permissionId, permissionName);
             PokazWidokZeStanem(ucUsersWithPermission);
-        }
-
-        public void PokazEdycjeUprawnien(int userId, string userName)
-        {
-            ucEditUserPermissions = new UCEditUserPermissions();
-            ucEditUserPermissions.ZaladujDaneUzytkownika(userId, userName);
-            PokazWidokZeStanem(ucEditUserPermissions);
         }
 
         public void PowrotDoListyUprawnien()

@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.lbl_title = new System.Windows.Forms.Label();
-            this.lbl_page_info = new System.Windows.Forms.Label();
-            this.btn_next_page = new System.Windows.Forms.Button();
-            this.btn_prev_page = new System.Windows.Forms.Button();
             this.dgv_permissions = new System.Windows.Forms.DataGridView();
             this.lbl_search = new System.Windows.Forms.Label();
             this.btn_search = new System.Windows.Forms.Button();
@@ -52,49 +49,8 @@
             this.lbl_title.Name = "lbl_title";
             this.lbl_title.Size = new System.Drawing.Size(888, 26);
             this.lbl_title.TabIndex = 0;
-            this.lbl_title.Text = "ZARZĄDZANIE UPRAWNIENIAMI";
+            this.lbl_title.Text = "ZARZĄDZANIE ROLAMI";
             this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lbl_page_info
-            // 
-            this.lbl_page_info.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.lbl_page_info.AutoSize = true;
-            this.lbl_page_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_page_info.Location = new System.Drawing.Point(344, 351);
-            this.lbl_page_info.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lbl_page_info.Name = "lbl_page_info";
-            this.lbl_page_info.Size = new System.Drawing.Size(75, 17);
-            this.lbl_page_info.TabIndex = 24;
-            this.lbl_page_info.Text = "Strona: 1";
-            this.lbl_page_info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // btn_next_page
-            // 
-            this.btn_next_page.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_next_page.BackColor = System.Drawing.Color.LightBlue;
-            this.btn_next_page.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btn_next_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_next_page.Location = new System.Drawing.Point(443, 347);
-            this.btn_next_page.Margin = new System.Windows.Forms.Padding(2);
-            this.btn_next_page.Name = "btn_next_page";
-            this.btn_next_page.Size = new System.Drawing.Size(102, 25);
-            this.btn_next_page.TabIndex = 23;
-            this.btn_next_page.Text = "Następna";
-            this.btn_next_page.UseVisualStyleBackColor = false;
-            // 
-            // btn_prev_page
-            // 
-            this.btn_prev_page.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btn_prev_page.BackColor = System.Drawing.Color.LightBlue;
-            this.btn_prev_page.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btn_prev_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_prev_page.Location = new System.Drawing.Point(211, 347);
-            this.btn_prev_page.Margin = new System.Windows.Forms.Padding(2);
-            this.btn_prev_page.Name = "btn_prev_page";
-            this.btn_prev_page.Size = new System.Drawing.Size(103, 25);
-            this.btn_prev_page.TabIndex = 22;
-            this.btn_prev_page.Text = "Poprzednia";
-            this.btn_prev_page.UseVisualStyleBackColor = false;
             // 
             // dgv_permissions
             // 
@@ -104,7 +60,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_permissions.BackgroundColor = System.Drawing.Color.Gainsboro;
             this.dgv_permissions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_permissions.Location = new System.Drawing.Point(155, 180);
+            this.dgv_permissions.Location = new System.Drawing.Point(23, 152);
             this.dgv_permissions.Margin = new System.Windows.Forms.Padding(2);
             this.dgv_permissions.Name = "dgv_permissions";
             this.dgv_permissions.ReadOnly = true;
@@ -112,7 +68,7 @@
             this.dgv_permissions.RowHeadersWidth = 51;
             this.dgv_permissions.RowTemplate.Height = 24;
             this.dgv_permissions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_permissions.Size = new System.Drawing.Size(425, 138);
+            this.dgv_permissions.Size = new System.Drawing.Size(425, 342);
             this.dgv_permissions.TabIndex = 21;
             this.dgv_permissions.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_permissions_CellDoubleClick);
             // 
@@ -122,12 +78,12 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_search.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.lbl_search.Location = new System.Drawing.Point(150, 92);
+            this.lbl_search.Location = new System.Drawing.Point(18, 64);
             this.lbl_search.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_search.Name = "lbl_search";
             this.lbl_search.Size = new System.Drawing.Size(426, 33);
             this.lbl_search.TabIndex = 20;
-            this.lbl_search.Text = "Szukaj uprawnienie:";
+            this.lbl_search.Text = "Szukaj roli: ";
             this.lbl_search.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btn_search
@@ -136,7 +92,7 @@
             this.btn_search.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btn_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search.Location = new System.Drawing.Point(605, 132);
+            this.btn_search.Location = new System.Drawing.Point(478, 104);
             this.btn_search.Margin = new System.Windows.Forms.Padding(2);
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(178, 36);
@@ -148,7 +104,7 @@
             // 
             this.txt_search_permission.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.txt_search_permission.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_permission.Location = new System.Drawing.Point(154, 137);
+            this.txt_search_permission.Location = new System.Drawing.Point(22, 109);
             this.txt_search_permission.Margin = new System.Windows.Forms.Padding(2);
             this.txt_search_permission.Name = "txt_search_permission";
             this.txt_search_permission.Size = new System.Drawing.Size(426, 26);
@@ -170,7 +126,7 @@
             this.lbl_count.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lbl_count.AutoSize = true;
             this.lbl_count.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_count.Location = new System.Drawing.Point(151, 408);
+            this.lbl_count.Location = new System.Drawing.Point(20, 517);
             this.lbl_count.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_count.Name = "lbl_count";
             this.lbl_count.Size = new System.Drawing.Size(107, 17);
@@ -184,9 +140,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.lbl_count);
-            this.Controls.Add(this.lbl_page_info);
-            this.Controls.Add(this.btn_next_page);
-            this.Controls.Add(this.btn_prev_page);
             this.Controls.Add(this.dgv_permissions);
             this.Controls.Add(this.lbl_search);
             this.Controls.Add(this.btn_search);
@@ -204,9 +157,6 @@
         #endregion
 
         private System.Windows.Forms.Label lbl_title;
-        private System.Windows.Forms.Label lbl_page_info;
-        private System.Windows.Forms.Button btn_next_page;
-        private System.Windows.Forms.Button btn_prev_page;
         private System.Windows.Forms.DataGridView dgv_permissions;
         private System.Windows.Forms.Label lbl_search;
         private System.Windows.Forms.Button btn_search;

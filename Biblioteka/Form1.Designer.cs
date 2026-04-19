@@ -61,7 +61,7 @@
             this.btn_manage_permissions.Name = "btn_manage_permissions";
             this.btn_manage_permissions.Size = new System.Drawing.Size(225, 58);
             this.btn_manage_permissions.TabIndex = 8;
-            this.btn_manage_permissions.Text = "Zarządzanie uprawnieniami";
+            this.btn_manage_permissions.Text = "Zarządzanie rolami";
             this.btn_manage_permissions.UseVisualStyleBackColor = true;
             this.btn_manage_permissions.Click += new System.EventHandler(this.btn_manage_permissions_Click);
             // 

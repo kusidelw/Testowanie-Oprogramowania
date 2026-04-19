@@ -83,12 +83,6 @@
     <Compile Include="UCEditData.Designer.cs">
       <DependentUpon>UCEditData.cs</DependentUpon>
     </Compile>
-    <Compile Include="UCEditUserPermissions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UCEditUserPermissions.Designer.cs">
-      <DependentUpon>UCEditUserPermissions.cs</DependentUpon>
-    </Compile>
     <Compile Include="UCFindForgottenUsers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -149,9 +143,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCEditData.resx">
       <DependentUpon>UCEditData.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UCEditUserPermissions.resx">
-      <DependentUpon>UCEditUserPermissions.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCFindForgottenUsers.resx">
       <DependentUpon>UCFindForgottenUsers.cs</DependentUpon>

@@ -30,7 +30,7 @@ namespace Biblioteka
         public void ZaladujDane(int permissionId, string permissionName)
         {
             _permissionId = permissionId;
-            lbl_title.Text = $"ZARZĄDZANIE UPRAWNIENIEM: {permissionName}";
+            lbl_title.Text = $"UŻYTKOWNICY O PODANEJ ROLI: {permissionName}";
 
             WczytajUzytkownikowZUprawnieniem();
             WczytajUzytkownikowBezUprawnienia();
@@ -78,7 +78,7 @@ namespace Biblioteka
                                 count++;
                             }
 
-                            lbl_count.Text = $"Liczba: {count} użytkowników z uprawnieniem";
+                            lbl_count.Text = $"Liczba: {count} użytkowników z rolą";
                         }
                     }
                 }
@@ -158,7 +158,7 @@ namespace Biblioteka
                 }
 
                 var result = MessageBox.Show(
-                    $"Czy na pewno chcesz przypisać uprawnienie {zaznaczeni.Count} użytkownikom?",
+                    $"Czy na pewno chcesz przypisać role {zaznaczeni.Count} użytkownikom?",
                     "Potwierdzenie",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
@@ -192,7 +192,7 @@ namespace Biblioteka
                             transaction.Commit();
 
                             MessageBox.Show(
-                                $"Pomyślnie przypisano uprawnienie {dodanych} użytkownikom!",
+                                $"Pomyślnie przypisano rolę {dodanych} użytkownikom!",
                                 "Sukces",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -211,7 +211,7 @@ namespace Biblioteka
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Błąd podczas przypisywania uprawnień: " + ex.Message,
+                    "Błąd podczas przypisywania ról: " + ex.Message,
                     "Błąd",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -232,7 +232,7 @@ namespace Biblioteka
                 }
 
                 var result = MessageBox.Show(
-                    $"Czy na pewno chcesz odebrać uprawnienie {zaznaczeni.Count} użytkownikom?",
+                    $"Czy na pewno chcesz odebrać rolę {zaznaczeni.Count} użytkownikom?",
                     "Potwierdzenie",
                     MessageBoxButtons.YesNo,
                     MessageBoxIcon.Warning);
@@ -266,7 +266,7 @@ namespace Biblioteka
                             transaction.Commit();
 
                             MessageBox.Show(
-                                $"Pomyślnie odebrano uprawnienie {usunietych} użytkownikom!",
+                                $"Pomyślnie odebrano rolę {usunietych} użytkownikom!",
                                 "Sukces",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
@@ -285,7 +285,7 @@ namespace Biblioteka
             catch (Exception ex)
             {
                 MessageBox.Show(
-                    "Błąd podczas odbierania uprawnień: " + ex.Message,
+                    "Błąd podczas odbierania roli: " + ex.Message,
                     "Błąd",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
