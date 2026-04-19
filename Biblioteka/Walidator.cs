@@ -81,5 +81,49 @@ namespace Biblioteka
 
             return true;
         }
+
+        // WALIDACJA HASEŁ
+        public static bool ValidatePasswordPolicy(string pass)
+        {
+            if (string.IsNullOrEmpty(pass)) return false;
+
+            // Kryteria: 8-15 znaków
+            if (pass.Length < 8 || pass.Length > 15) return false;
+
+            // Wielka litera, mała litera, cyfra
+            bool hasUpper = pass.Any(char.IsUpper);
+            bool hasLower = pass.Any(char.IsLower);
+            bool hasDigit = pass.Any(char.IsDigit);
+
+            // Znaki specjalne zgodnie z wymogami: -, _, !, *, #, $, &
+            bool hasSpecial = Regex.IsMatch(pass, @"[-_!*#$&]");
+
+            return hasUpper && hasLower && hasDigit && hasSpecial;
+        }
+
+        public static string GenerujHasloSystemowe()
+        {
+            const string wielkie = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string male = "abcdefghijklmnopqrstuvwxyz";
+            const string cyfry = "0123456789";
+            const string specjalne = "-_!*#$&";
+            Random rnd = new Random();
+
+            var haslo = new List<char>();
+            for (int i = 0; i < 3; i++) haslo.Add(wielkie[rnd.Next(wielkie.Length)]);
+            for (int i = 0; i < 3; i++) haslo.Add(male[rnd.Next(male.Length)]);
+            for (int i = 0; i < 2; i++) haslo.Add(cyfry[rnd.Next(cyfry.Length)]);
+            for (int i = 0; i < 2; i++) haslo.Add(specjalne[rnd.Next(specjalne.Length)]);
+
+            // Pomieszanie znaków, aby nie były zawsze w tej samej kolejności
+            return new string(haslo.OrderBy(x => rnd.Next()).ToArray());
+        }
+
+        //Sprawdzanie czy konto jest zablokowane
+        public static bool CzyKontoZablokowane(DateTime? dataBlokady, int minutyBlokady)
+        {
+            if (!dataBlokady.HasValue) return false;
+            return DateTime.Now < dataBlokady.Value.AddMinutes(minutyBlokady);
+        }
     }
 }

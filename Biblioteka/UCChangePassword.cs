@@ -46,7 +46,7 @@ namespace Biblioteka
             }
 
             // 3. Walidacja polityki (8-15 znaków, duża litera, znak specjalny)
-            if (!ValidatePasswordPolicy(newPass))
+            if (!Walidator.ValidatePasswordPolicy(newPass))
             {
                 ShowError("Hasło nie spełnia wymogów bezpieczeństwa.");
                 return;
@@ -87,17 +87,6 @@ namespace Biblioteka
         }
 
         // --- METODY LOGICZNE ---
-
-        private bool ValidatePasswordPolicy(string pass)
-        {
-            if (pass.Length < 8 || pass.Length > 15) return false;
-            bool hasUpper = pass.Any(char.IsUpper);
-            bool hasLower = pass.Any(char.IsLower);
-            bool hasDigit = pass.Any(char.IsDigit);
-            bool hasSpecial = Regex.IsMatch(pass, @"[-_!*#$&]");
-
-            return hasUpper && hasLower && hasDigit && hasSpecial;
-        }
 
         private bool IsPasswordInHistory(SqlConnection conn, string login, string newPass)
         {
