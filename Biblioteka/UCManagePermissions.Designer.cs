@@ -99,6 +99,7 @@
             this.btn_search.TabIndex = 19;
             this.btn_search.Text = "Szukaj";
             this.btn_search.UseVisualStyleBackColor = false;
+            this.btn_search.Click += new System.EventHandler(this.btn_search_Click);
             // 
             // txt_search_permission
             // 
@@ -109,6 +110,7 @@
             this.txt_search_permission.Name = "txt_search_permission";
             this.txt_search_permission.Size = new System.Drawing.Size(426, 26);
             this.txt_search_permission.TabIndex = 18;
+            this.txt_search_permission.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_search_permission_KeyDown);
             // 
             // panel1
             // 

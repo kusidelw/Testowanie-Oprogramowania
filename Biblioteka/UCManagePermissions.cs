@@ -84,7 +84,6 @@ namespace Biblioteka
 
         private void btn_search_Click(object sender, EventArgs e)
         {
-            // SCENARIUSZ ALTERNATYWNY A1 pkt. 3
             searchQuery = txt_search_permission.Text.Trim();
             WczytajUprawnienia();
         }
