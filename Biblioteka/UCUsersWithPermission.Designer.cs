@@ -113,6 +113,7 @@
             this.chLB_User_With_Role.Name = "chLB_User_With_Role";
             this.chLB_User_With_Role.Size = new System.Drawing.Size(397, 394);
             this.chLB_User_With_Role.TabIndex = 42;
+            this.chLB_User_With_Role.DoubleClick += new System.EventHandler(this.chLB_User_With_Role_DoubleClick);
             // 
             // chbl_UserWIthout_role
             // 
@@ -122,6 +123,7 @@
             this.chbl_UserWIthout_role.Name = "chbl_UserWIthout_role";
             this.chbl_UserWIthout_role.Size = new System.Drawing.Size(428, 394);
             this.chbl_UserWIthout_role.TabIndex = 43;
+            this.chbl_UserWIthout_role.DoubleClick += new System.EventHandler(this.chbl_UserWIthout_role_DoubleClick);
             // 
             // UCUsersWithPermission
             // 

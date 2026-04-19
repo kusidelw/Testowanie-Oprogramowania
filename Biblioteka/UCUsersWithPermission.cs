@@ -291,5 +291,38 @@ namespace Biblioteka
                     MessageBoxIcon.Error);
             }
         }
+
+        private void chLB_User_With_Role_DoubleClick(object sender, EventArgs e)
+        {
+            if (chLB_User_With_Role.SelectedItem != null)
+            {
+                var selectedUser = chLB_User_With_Role.SelectedItem as UzytkownikListItem;
+                if (selectedUser != null)
+                {
+                    PrzejdzDoKartyUzytkownika(selectedUser.ID);
+                }
+            }
+        }
+
+        private void chbl_UserWIthout_role_DoubleClick(object sender, EventArgs e)
+        {
+            if (chbl_UserWIthout_role.SelectedItem != null)
+            {
+                var selectedUser = chbl_UserWIthout_role.SelectedItem as UzytkownikListItem;
+                if (selectedUser != null)
+                {
+                    PrzejdzDoKartyUzytkownika(selectedUser.ID);
+                }
+            }
+        }
+
+        private void PrzejdzDoKartyUzytkownika(int userId)
+        {
+            Form parentForm = this.FindForm();
+            if (parentForm is Form1 mainForm)
+            {
+                mainForm.PokazKarteUzytkownika(userId);
+            }
+        }
     }
 }
