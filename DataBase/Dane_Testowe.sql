@@ -16,14 +16,14 @@ VALUES
     ('60-001', 'Poznan'),
     ('50-001', 'Wroclaw'),
     ('30-100', 'Krakow'),
-    ('91-200', '£Ûdü');
+    ('91-200', '≈Å√≥d≈∫');
 GO
 
 -- dodanie uzytkownikow
 INSERT INTO Uzytkownicy 
     (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, NumerPosesji, PESEL, DataUrodzenia, Plec, Email, Telefon)
 VALUES
-    ('admin',         'Admin123!',   'Admin',      'Admin',      (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='91-200' AND Miejscowosc='£Ûdü'),     '12',  '03251753619', '2003-05-17', 'M', 'admin@mail.pl',             '123456789'),
+    ('admin',         'Admin123!',   'Admin',      'Admin',      (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='91-200' AND Miejscowosc='≈Å√≥d≈∫'),     '12',  '03251753619', '2003-05-17', 'M', 'admin@mail.pl',             '123456789'),
     ('admin_kacper',  'Haslo123!',   'Kacper',     'Bednarek',   (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='00-001' AND Miejscowosc='Warszawa'), '10',  '95010111114', '1995-01-01', 'M', 'k.bednarek@biblioteka.pl',  '123456789'),
     ('biblio_natalia','Biblio123!',  'Natalia',    'Flaszka',    (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-001' AND Miejscowosc='Krakow'),   '5A',  '98020222223', '1998-02-02', 'K', 'n.flaszka@biblioteka.pl',   '987654321'),
     ('user_krystian', 'User123!',    'Krystian',   'Krynicki',   (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-001' AND Miejscowosc='Lodz'),     '12',  '90030333335', '1990-03-03', 'M', 'k.krynicki@poczta.pl',      '555666777'),
@@ -33,12 +33,12 @@ VALUES
     ('biblio_adam',   'AdamBiblio!', 'Adam',       'Kowalski',   (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Krakow'),   '44',  '85112099999', '1985-11-20', 'M', 'a.kowalski@biblioteka.pl',  '666555444');
 GO
 
--- Zapisanie hase≥ w tabeli historii
+-- Zapisanie hase≈Ç w tabeli historii
 INSERT INTO HistoriaHasel (UzytkownikID, HasloHash)
 SELECT ID, HasloHash FROM Uzytkownicy;
 GO
 
--- przypisanie uprawnien (skorygowana, nowoczesna sk≥adnia)
+-- przypisanie uprawnien (skorygowana, nowoczesna sk≈Çadnia)
 INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID)
 SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'admin'          AND p.Nazwa = 'Administrator' UNION ALL
 SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'admin_kacper'   AND p.Nazwa = 'Administrator' UNION ALL
