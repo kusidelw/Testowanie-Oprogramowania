@@ -150,7 +150,7 @@ namespace Biblioteka
             {
                 var zaznaczeni = chbl_UserWIthout_role.CheckedItems.Cast<UzytkownikListItem>().ToList();
 
-                if (zaznaczeni.Count == 0)
+                if (!PermissionValidator.CzyZaznaczonoUzytkownikow(zaznaczeni.Count))
                 {
                     MessageBox.Show("Nie zaznaczono żadnego użytkownika.",
                         "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -224,7 +224,7 @@ namespace Biblioteka
             {
                 var zaznaczeni = chLB_User_With_Role.CheckedItems.Cast<UzytkownikListItem>().ToList();
 
-                if (zaznaczeni.Count == 0)
+                if (!PermissionValidator.CzyZaznaczonoUzytkownikow(zaznaczeni.Count))
                 {
                     MessageBox.Show("Nie zaznaczono żadnego użytkownika.",
                         "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);

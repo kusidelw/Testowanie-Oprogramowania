@@ -207,7 +207,7 @@ namespace Biblioteka
                     selectedPermissionIds.Add(item.ID);
                 }
 
-                if (selectedPermissionIds.Count == 0)
+                if (!PermissionValidator.CzyMinimalnaLiczbaUprawnien(selectedPermissionIds))
                 {
                     MessageBox.Show(
                         "Użytkownik musi posiadać co najmniej jedną rolę.",
@@ -217,7 +217,7 @@ namespace Biblioteka
                     return;
                 }
 
-                bool czyBylyZmiany = CzyBylyZmianyWUprawnieniach(selectedPermissionIds);
+                bool czyBylyZmiany = PermissionValidator.CzyBylyZmianyWUprawnieniach(originalPermissionIds, selectedPermissionIds);
 
                 if (!czyBylyZmiany)
                 {
@@ -283,24 +283,6 @@ namespace Biblioteka
         private void btn_cancel_Click(object sender, EventArgs e)
         {
             ZaladujUprawnienia();
-        }
-
-
-        private bool CzyBylyZmianyWUprawnieniach(List<int> nowePrawnienia)
-        {
-            if (nowePrawnienia.Count != originalPermissionIds.Count)
-                return true;
-
-            List<int> sortedNew = nowePrawnienia.OrderBy(x => x).ToList();
-            List<int> sortedOriginal = originalPermissionIds.OrderBy(x => x).ToList();
-
-            for (int i = 0; i < sortedNew.Count; i++)
-            {
-                if (sortedNew[i] != sortedOriginal[i])
-                    return true;
-            }
-
-            return false;
         }
     }
 }

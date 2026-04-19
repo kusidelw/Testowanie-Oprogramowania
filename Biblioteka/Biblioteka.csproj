@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Models\Uprawnienie.cs" />
     <Compile Include="Models\UzytkownikListItem.cs" />
+    <Compile Include="PermissionValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UCAddUsers.cs">
