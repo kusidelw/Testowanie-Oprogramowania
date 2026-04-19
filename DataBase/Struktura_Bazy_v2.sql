@@ -13,7 +13,7 @@ GO
 	
 USE BibliotekaDB;
 GO
--- S£OWNIKI I TABELE NIEZALEZNE
+-- SLOWNIKI I TABELE NIEZALEZNE
 -- Tabela rol/uprawnien
 CREATE TABLE Uprawnienia (
     ID INT PRIMARY KEY IDENTITY(1,1),
@@ -52,8 +52,8 @@ CREATE TABLE Autorzy (
 );
 GO
 
--- G£OWNE TABELE SYSTEMOWE
--- G³owna tabela uzytkownikow (Czytelnicy, Bibliotekarze, Administratorzy, Managerzy)
+-- GLOWNE TABELE SYSTEMOWE
+-- Glowna tabela uzytkownikow (Czytelnicy, Bibliotekarze, Administratorzy, Managerzy)
 CREATE TABLE Uzytkownicy (
     ID INT PRIMARY KEY IDENTITY(1,1),
     Login NVARCHAR(50) NOT NULL UNIQUE,
@@ -61,7 +61,7 @@ CREATE TABLE Uzytkownicy (
     Imie NVARCHAR(50) NOT NULL,
     Nazwisko NVARCHAR(50) NOT NULL,
     
-    -- Adres powi¹zany relacyjnie
+    -- Adres powiazany relacyjnie
     MiejscowoscKodID INT NOT NULL,
     Ulica NVARCHAR(100) NULL,
     NumerPosesji NVARCHAR(20) NOT NULL,
@@ -131,8 +131,8 @@ CREATE TABLE KatalogKsiazek (
 );
 GO
 
--- TABELE RELACYJNE I ZALE¯NE (POWI¥ZANIA)
--- Relacja N:M pomiêezy Uzytkownikami a Uprawnieniami
+-- TABELE RELACYJNE I ZALEZNE (POWIAZANIA)
+-- Relacja N:M pomiedzy Uzytkownikami a Uprawnieniami
 CREATE TABLE Uzytkownicy_Uprawnienia (
     UzytkownikID INT NOT NULL,
     UprawnienieID INT NOT NULL,
@@ -186,8 +186,8 @@ CREATE TABLE Egzemplarze (
 );
 GO
 
--- MODU£ WYPO¯YCZEÑ
--- Nag³ówek wypo¿yczenia
+-- MODUL WYPOZYCZEN
+-- Naglowek wypozyczenia
 CREATE TABLE Wypozyczenia (
     ID INT PRIMARY KEY IDENTITY(1,1),
     CzytelnikID INT NOT NULL,
@@ -212,7 +212,7 @@ CREATE TABLE PozycjeWypozyczenia (
 );
 GO
 
--- PROCEDURY SK£ADOWANE
+-- PROCEDURY SKLADOWANE
 CREATE PROCEDURE sp_ZanonimizujUzytkownika
     @TargetUzytkownikID INT,        
     @AdminID INT,                  
