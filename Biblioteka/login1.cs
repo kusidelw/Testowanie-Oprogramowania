@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Data.SqlClient;
-using System.Windows.Forms;
 using System.Configuration;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace Biblioteka
 {
     public partial class login1 : Form
     {
         private readonly string ConnectionString =
-    ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
+            ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
+
+        // Odczytywana przez Program.cs po DialogResult.OK
+        public string ZalogowanaRola { get; private set; }
 
         public login1()
         {
@@ -17,11 +21,15 @@ namespace Biblioteka
             lbl_personal_data.Text = "Wprowadź dane użytkownika";
         }
 
+        // Przywraca widok logowania po powrocie z UCPasswordRecovery
         public void ShowLoginLayout()
         {
             this.Controls.Clear();
             this.InitializeComponent();
+            Error_msg.Text = "";
         }
+
+        // ── LOGOWANIE ────────────────────────────────────────────────────────────
 
         private void btn_login_Click(object sender, EventArgs e)
         {
@@ -30,8 +38,7 @@ namespace Biblioteka
 
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(haslo))
             {
-                Error_msg.ForeColor = System.Drawing.Color.Red;
-                Error_msg.Text = "Wprowadź login i hasło.";
+                ShowError("Wprowadź login i hasło.");
                 return;
             }
 
@@ -41,195 +48,187 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // Krok 1: Pobierz dane użytkownika razem z flagami blokady
-                    string queryUser = @"
-                        SELECT 
-                            u.ID,
-                            u.HasloHash,
-                            u.CzyZablokowany,
-                            u.LiczbaBlednychLogowan,
-                            u.CzasOdblokowania
-                        FROM Uzytkownicy u
-                        WHERE u.Login = @Login AND u.CzyZapomniany = 0";
+                    // Krok 1: Pobierz dane użytkownika
+                    UserAuthInfo user = GetUserData(conn, login);
 
-                    int userId = -1;
-                    string hasloHash = null;
-                    bool czyZablokowany = false;
-                    int liczbaBlednych = 0;
-                    DateTime? czasOdblokowania = null;
-
-                    using (SqlCommand cmd = new SqlCommand(queryUser, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Login", login);
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                userId = reader.GetInt32(0);
-                                hasloHash = reader.GetString(1);
-                                czyZablokowany = reader.GetBoolean(2);
-                                liczbaBlednych = reader.GetInt32(3);
-                                czasOdblokowania = reader.IsDBNull(4)
-                                                    ? (DateTime?)null
-                                                    : reader.GetDateTime(4);
-                            }
-                        }
-                    }
-
-                    // Użytkownik nie istnieje
-                    if (userId == -1)
+                    if (user == null)
                     {
                         HandleFailedLogin(conn, -1);
                         return;
                     }
 
-                    // Krok 2: Sprawdź blokadę czasową 
-                    if (czyZablokowany)
+                    // Krok 2: Sprawdź blokadę czasową (Scenariusz A1)
+                    if (user.CzyZablokowany)
                     {
-                        if (czasOdblokowania.HasValue && DateTime.Now < czasOdblokowania.Value)
+                        if (user.CzasOdblokowania.HasValue && DateTime.Now < user.CzasOdblokowania.Value)
                         {
-                            Error_msg.ForeColor = System.Drawing.Color.Red;
-                            Error_msg.Text = $"Konto zablokowane do: {czasOdblokowania.Value:HH:mm:ss}";
+                            ShowError($"Konto zablokowane do: {user.CzasOdblokowania.Value:HH:mm:ss}");
                             return;
                         }
                         else
                         {
-                            // Blokada minęła – odblokuj konto w bazie
-                            ResetBlokady(conn, userId);
-                            czyZablokowany = false;
+                            // Blokada minęła – odblokuj
+                            ResetBlokady(conn, user.Id);
                         }
                     }
 
-                    // Krok 3: Sprawdź hasło
-                    // UWAGA! na razie nie implementujemy hashowania!!!
-                    bool hasloPoprawne = (hasloHash == haslo);
-
-                    if (!hasloPoprawne)
+                    // Krok 3: Sprawdź hasło (Scenariusz E1 / E2)
+                    // UWAGA: bez hashowania zgodnie z obecnym założeniem projektu
+                    if (user.HasloHash != haslo)
                     {
-                        HandleFailedLogin(conn, userId, liczbaBlednych);
+                        HandleFailedLogin(conn, user.Id, user.LiczbaBlednych);
                         return;
                     }
 
-                    // Krok 4: Sprawdź, czy użytkownik ma rolę Administratora
-                    string queryAdmin = @"
-                        SELECT COUNT(1)
-                        FROM Uzytkownicy_Uprawnienia uu
-                        JOIN Uprawnienia up ON uu.UprawnienieID = up.ID
-                        WHERE uu.UzytkownikID = @UserID AND up.Nazwa = 'Administrator'";
+                    // Krok 4: Pobierz rolę
+                    string rola = GetUserRole(conn, user.Id);
 
-                    bool jestAdminem = false;
-                    using (SqlCommand cmdAdmin = new SqlCommand(queryAdmin, conn))
+                    if (string.IsNullOrEmpty(rola))
                     {
-                        cmdAdmin.Parameters.AddWithValue("@UserID", userId);
-                        jestAdminem = (int)cmdAdmin.ExecuteScalar() > 0;
-                    }
-
-                    if (!jestAdminem)
-                    {
-                        Error_msg.ForeColor = System.Drawing.Color.Red;
-                        Error_msg.Text = "Brak uprawnień administratora.";
-                        txt_password.Clear();
+                        ShowError("Użytkownik nie posiada przypisanej roli.");
                         return;
                     }
 
-                    // Krok 5: SUKCES – zresetuj licznik błędnych logowań
-                    ResetBlokady(conn, userId);
-
+                    // Krok 5: SUKCES – zresetuj blokadę i przekaż rolę do Program.cs
+                    ResetBlokady(conn, user.Id);
+                    ZalogowanaRola = rola;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
             }
-            catch (SqlException ex)
+            catch (Exception ex)
             {
-                Error_msg.ForeColor = System.Drawing.Color.Red;
-                Error_msg.Text = "Błąd połączenia z bazą danych.";
+                ShowError("Błąd systemowy. Spróbuj ponownie później.");
                 Console.WriteLine(ex.Message);
             }
         }
 
-        /// <summary>
-        /// Inkrementuje licznik błędnych prób i blokuje konto po 3 nieudanych logowaniach.
-        /// userId = -1 oznacza nieznanego użytkownika (nie aktualizujemy bazy).
-        /// </summary>
-        private void HandleFailedLogin(SqlConnection conn, int userId, int dotychczasoweBledne = 0)
-        {
-            Error_msg.ForeColor = System.Drawing.Color.Red;
+        // ── ODZYSKIWANIE HASŁA ────────────────────────────────────────────────────
 
+        private void btn_Recover_pass_Click(object sender, EventArgs e)
+        {
+            // Scenariusz ODZYSK_HAS_UZY_1: przejście do UCPasswordRecovery
+            UCPasswordRecovery ucRecovery = new UCPasswordRecovery();
+            this.Controls.Clear();
+            ucRecovery.Dock = DockStyle.Fill;
+            this.Controls.Add(ucRecovery);
+            this.Text = "Odzyskiwanie hasła";
+        }
+
+        // ── METODY POMOCNICZE ─────────────────────────────────────────────────────
+
+        private UserAuthInfo GetUserData(SqlConnection conn, string login)
+        {
+            string query = @"
+                SELECT ID, HasloHash, CzyZablokowany, LiczbaBlednychLogowan, CzasOdblokowania
+                FROM Uzytkownicy
+                WHERE Login = @Login AND CzyZapomniany = 0";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Login", login);
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new UserAuthInfo
+                        {
+                            Id = reader.GetInt32(0),
+                            HasloHash = reader.GetString(1),
+                            CzyZablokowany = reader.GetBoolean(2),
+                            LiczbaBlednych = reader.GetInt32(3),
+                            CzasOdblokowania = reader.IsDBNull(4)
+                                              ? (DateTime?)null
+                                              : reader.GetDateTime(4)
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        private string GetUserRole(SqlConnection conn, int userId)
+        {
+            string query = @"
+                SELECT TOP 1 up.Nazwa
+                FROM Uprawnienia up
+                JOIN Uzytkownicy_Uprawnienia uu ON up.ID = uu.UprawnienieID
+                WHERE uu.UzytkownikID = @UserID";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                return cmd.ExecuteScalar()?.ToString();
+            }
+        }
+
+        private void HandleFailedLogin(SqlConnection conn, int userId, int currentFailed = 0)
+        {
             if (userId != -1)
             {
-                int nowaLiczba = dotychczasoweBledne + 1;
+                int newCount = currentFailed + 1;
 
-                if (nowaLiczba >= 3)
+                if (newCount >= 3)
                 {
-                    // Zablokuj konto na 15 minut (Scenariusz E2)
-                    string blokuj = @"
-                        UPDATE Uzytkownicy
-                        SET CzyZablokowany = 1,
-                            LiczbaBlednychLogowan = @Liczba,
-                            CzasOdblokowania = DATEADD(MINUTE, 15, GETDATE())
-                        WHERE ID = @UserID";
-
-                    using (SqlCommand cmd = new SqlCommand(blokuj, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Liczba", nowaLiczba);
-                        cmd.Parameters.AddWithValue("@UserID", userId);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    Error_msg.Text = "Konto zablokowane na 15 min.";
+                    // Scenariusz E2: blokada na 15 minut
+                    ExecuteUpdate(conn,
+                        "UPDATE Uzytkownicy SET CzyZablokowany = 1, LiczbaBlednychLogowan = @Count, " +
+                        "CzasOdblokowania = DATEADD(MINUTE, 15, GETDATE()) WHERE ID = @ID",
+                        newCount, userId);
+                    ShowError("Konto zablokowane na 15 min.");
                 }
                 else
                 {
-                    // Zwiększ tylko licznik (Scenariusz E1)
-                    string update = @"
-                        UPDATE Uzytkownicy
-                        SET LiczbaBlednychLogowan = @Liczba
-                        WHERE ID = @UserID";
-
-                    using (SqlCommand cmd = new SqlCommand(update, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Liczba", nowaLiczba);
-                        cmd.Parameters.AddWithValue("@UserID", userId);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    Error_msg.Text = "Błędne dane.";
+                    // Scenariusz E1: błędne dane
+                    ExecuteUpdate(conn,
+                        "UPDATE Uzytkownicy SET LiczbaBlednychLogowan = @Count WHERE ID = @ID",
+                        newCount, userId);
+                    ShowError("Błędne dane.");
                 }
             }
             else
             {
-                // Nieznany login – nie zdradzamy, co jest złe (Scenariusz E1)
-                Error_msg.Text = "Błędne dane.";
+                // Nieznany login – nie zdradzamy szczegółów (wymóg prywatności)
+                ShowError("Błędne dane.");
             }
 
             txt_password.Clear();
             txt_login.Focus();
         }
 
-        /// <summary>Zeruje blokadę i licznik błędnych logowań po sukcesie lub po wygaśnięciu blokady.</summary>
         private void ResetBlokady(SqlConnection conn, int userId)
         {
-            string reset = @"
-                UPDATE Uzytkownicy
-                SET CzyZablokowany = 0,
-                    LiczbaBlednychLogowan = 0,
-                    CzasOdblokowania = NULL
-                WHERE ID = @UserID";
+            ExecuteUpdate(conn,
+                "UPDATE Uzytkownicy SET CzyZablokowany = 0, LiczbaBlednychLogowan = 0, " +
+                "CzasOdblokowania = NULL WHERE ID = @ID",
+                0, userId);
+        }
 
-            using (SqlCommand cmd = new SqlCommand(reset, conn))
+        private void ExecuteUpdate(SqlConnection conn, string query, int count, int userId)
+        {
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@UserID", userId);
+                cmd.Parameters.AddWithValue("@Count", count);
+                cmd.Parameters.AddWithValue("@ID", userId);
                 cmd.ExecuteNonQuery();
             }
         }
 
-        private void btn_Recover_pass_Click(object sender, EventArgs e)
+        private void ShowError(string msg)
         {
-            UCChangePassword ucChange = new UCChangePassword();
-            this.Controls.Clear();
-            ucChange.Dock = DockStyle.Fill;
-            this.Controls.Add(ucChange);
-            this.Text = "Odzyskiwanie i zmiana hasła";
+            Error_msg.ForeColor = Color.Red;
+            Error_msg.Text = msg;
+        }
+
+        // ── KLASA POMOCNICZA ──────────────────────────────────────────────────────
+
+        private class UserAuthInfo
+        {
+            public int Id { get; set; }
+            public string HasloHash { get; set; }
+            public bool CzyZablokowany { get; set; }
+            public int LiczbaBlednych { get; set; }
+            public DateTime? CzasOdblokowania { get; set; }
         }
     }
 }

@@ -1,30 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Biblioteka
 {
     internal static class Program
     {
-        /// <summary>
-        /// Główny punkt wejścia dla aplikacji.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Używamy using, aby poprawnie zwolnić pamięć po login1
-            using (login1 frm = new login1())
+            while (true)
             {
-                // Jeśli logowanie zakończyło się sukcesem (DialogResult.OK)
-                if (frm.ShowDialog() == DialogResult.OK)
+                string rola;
+
+                using (login1 loginForm = new login1())
                 {
-                    // TO JEST KLUCZ: Uruchomienie Form1
-                    Application.Run(new Form1());
+                    if (loginForm.ShowDialog() != DialogResult.OK)
+                        break; // Zamknięcie okna logowania = koniec aplikacji
+
+                    rola = loginForm.ZalogowanaRola;
+                }
+
+                Form mainForm;
+                switch (rola)
+                {
+                    case "Administrator": mainForm = new Form1(); break;
+                    case "Bibliotekarz": mainForm = new FormLiblarian(); break;
+                    case "Manager": mainForm = new FormMenager(); break;
+                    case "Czytelnik": mainForm = new FormReader(); break;
+                    default: continue; // nieznana rola → wróć do logowania
+                }
+
+                using (mainForm)
+                {
+                    mainForm.ShowDialog();
+                    // zamknięcie okna (wylogowanie) → pętla → nowy login1
                 }
             }
         }

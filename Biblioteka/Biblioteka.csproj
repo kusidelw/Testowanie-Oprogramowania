@@ -55,6 +55,24 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormLiblarian.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLiblarian.Designer.cs">
+      <DependentUpon>FormLiblarian.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMenager.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMenager.Designer.cs">
+      <DependentUpon>FormMenager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormReader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormReader.Designer.cs">
+      <DependentUpon>FormReader.cs</DependentUpon>
+    </Compile>
     <Compile Include="login1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +120,12 @@
     <Compile Include="UCManagePermissions.Designer.cs">
       <DependentUpon>UCManagePermissions.cs</DependentUpon>
     </Compile>
+    <Compile Include="UCPasswordRecovery.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCPasswordRecovery.Designer.cs">
+      <DependentUpon>UCPasswordRecovery.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCShowUsers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -123,6 +147,9 @@
     <Compile Include="Walidator.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLiblarian.resx">
+      <DependentUpon>FormLiblarian.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="login1.resx">
       <DependentUpon>login1.cs</DependentUpon>
@@ -153,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCManagePermissions.resx">
       <DependentUpon>UCManagePermissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCPasswordRecovery.resx">
+      <DependentUpon>UCPasswordRecovery.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCShowUsers.resx">
       <DependentUpon>UCShowUsers.cs</DependentUpon>

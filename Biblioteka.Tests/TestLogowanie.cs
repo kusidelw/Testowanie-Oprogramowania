@@ -11,7 +11,7 @@ namespace Biblioteka.Tests
         // Testowanie polityki haseł (długość, znaki specjalne, wielkość liter)
         [TestCase("Admin123!", ExpectedResult = true)]  // Wszystkie wymogi spełnione
         [TestCase("Haslo1!", ExpectedResult = false)]   // Za krótkie (<8)
-        [TestCase("TylkoMale1!", ExpectedResult = true)]
+        [TestCase("DuzeMale1!", ExpectedResult = true)]
         [TestCase("tylkomale1!", ExpectedResult = false)] // Brak wielkiej litery
         [TestCase("TYLKODUZE1!", ExpectedResult = false)] // Brak małej litery
         [TestCase("BezZnaku123", ExpectedResult = false)] // Brak znaku specjalnego
