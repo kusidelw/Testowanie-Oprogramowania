@@ -75,6 +75,7 @@ CREATE TABLE Uzytkownicy (
     Telefon VARCHAR(9) NOT NULL,
 
     -- Flagi systemowe i RODO
+	CzyPierwszeLogowanie BIT NOT NULL DEFAULT 1,
     CzyZapomniany BIT NOT NULL DEFAULT 0,
     CzyZablokowany BIT NOT NULL DEFAULT 0,
     LiczbaBlednychLogowan INT NOT NULL DEFAULT 0,
