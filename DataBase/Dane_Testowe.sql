@@ -40,14 +40,19 @@ GO
 
 -- przypisanie uprawnien (skorygowana, nowoczesna składnia)
 INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID)
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'admin'          AND p.Nazwa = 'Administrator' UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'admin_kacper'   AND p.Nazwa = 'Administrator' UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'biblio_natalia' AND p.Nazwa = 'Bibliotekarz'  UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'biblio_adam'    AND p.Nazwa = 'Bibliotekarz'  UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'user_krystian'  AND p.Nazwa = 'Czytelnik'     UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'maly_marek'     AND p.Nazwa = 'Czytelnik'     UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'ksiazkowa_ola'  AND p.Nazwa = 'Manager'     UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'babcia_stasia'  AND p.Nazwa = 'Manager';
+VALUES 
+-- Administratorzy
+((SELECT ID FROM Uzytkownicy WHERE Login = 'admin'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Administrator')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'admin_kacper'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Administrator')),
+-- Bibliotekarze
+((SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_adam'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+-- Czytelnicy
+((SELECT ID FROM Uzytkownicy WHERE Login = 'user_krystian'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'maly_marek'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+-- Managerowie
+((SELECT ID FROM Uzytkownicy WHERE Login = 'ksiazkowa_ola'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'babcia_stasia'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager'));
 GO
 
 -- gatunki i autorzy
@@ -79,13 +84,14 @@ GO
 
 -- powiazanie autorow z ksiazkami 
 INSERT INTO KsiazkaKatalog_Autorzy (KsiazkaID, AutorID)
-SELECT k.ID, a.ID FROM KatalogKsiazek k CROSS JOIN Autorzy a WHERE k.Tytul = 'Wiedzmin: Ostatnie Zyczenie' AND a.Nazwisko = 'Sapkowski'  UNION ALL
-SELECT k.ID, a.ID FROM KatalogKsiazek k CROSS JOIN Autorzy a WHERE k.Tytul = 'Pan Tadeusz'                  AND a.Nazwisko = 'Mickiewicz';
+VALUES 
+((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Wiedzmin: Ostatnie Zyczenie'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Sapkowski')),
+((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Pan Tadeusz'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Mickiewicz'));
 GO
 
 -- fizyczne egzemplarze
 INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
 VALUES
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Wiedzmin: Ostatnie Zyczenie'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')),
-    ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Pan Tadeusz'),                  'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia'));
+    ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Pan Tadeusz'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia'));
 GO
