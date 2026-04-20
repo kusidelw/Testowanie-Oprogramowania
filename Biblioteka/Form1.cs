@@ -1,32 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Biblioteka
 {
     public partial class Form1 : Form
     {
-        UCAddUsers ucAddUsers = new UCAddUsers();
-        UCShowUsers ucShowUsers = new UCShowUsers();
-        UCEditData ucEditData = new UCEditData();
-        UCShowUsersData ucShowUsersData = new UCShowUsersData();
-        UCForgetUsers ucForgetUsers = new UCForgetUsers();
-        UCFindForgottenUsers ucFindForgottenUsers = new UCFindForgottenUsers();
-        UCManagePermissions ucManagePermissions = new UCManagePermissions();
-        UCUsersWithPermission ucUsersWithPermission = new UCUsersWithPermission();
-        UCMenage_password_for_Admin ucMenage_Password_For_Admin = new UCMenage_password_for_Admin();
-
+        // Kontrolki tworzone leniwie (tylko gdy potrzebne) lub na żądanie
+        private UCAddUsers ucAddUsers;
+        private UCShowUsers ucShowUsers;
+        private UCEditData ucEditData;
+        private UCShowUsersData ucShowUsersData;
+        private UCForgetUsers ucForgetUsers;
+        private UCFindForgottenUsers ucFindForgottenUsers;
+        private UCManagePermissions ucManagePermissions;
+        private UCUsersWithPermission ucUsersWithPermission;
 
         public Form1()
         {
             InitializeComponent();
+
+            // Inicjalizacja po InitializeComponent — bezpieczna kolejność
+            ucAddUsers = new UCAddUsers();
+            ucShowUsers = new UCShowUsers();
+            ucEditData = new UCEditData();
+            ucShowUsersData = new UCShowUsersData();
+            ucForgetUsers = new UCForgetUsers();
+            ucFindForgottenUsers = new UCFindForgottenUsers();
+            ucManagePermissions = new UCManagePermissions();
         }
+
+        // ── NAWIGACJA ─────────────────────────────────────────────────────────────
 
         public void PokazWidokZeStanem(UserControl widok)
         {
@@ -34,7 +37,6 @@ namespace Biblioteka
             widok.Dock = DockStyle.Fill;
             MainPanel.Controls.Add(widok);
             MainPanel.Focus();
-
         }
 
         public void PowrotDoMenuGlownego()
@@ -42,25 +44,7 @@ namespace Biblioteka
             MainPanel.Controls.Clear();
         }
 
-
-        public void PrzejdzDoEdycji(int userId)
-        {
-            PokazWidokZeStanem(ucEditData);
-
-            ucEditData.ZaladujDaneDoEdycji(userId);
-        }
-
-        public void PokazKarteUzytkownika(int userId)
-        {
-            PokazWidokZeStanem(ucShowUsersData);
-
-            ucShowUsersData.ZaladujDaneUzytkownika(userId);
-        }
-        public void WrocDoWyszukiwarki()
-        {
-            UCShowUsers nowaLista = new UCShowUsers();
-            PokazWidokZeStanem(nowaLista);
-        }
+        // ── PRZYCISKI MENU ────────────────────────────────────────────────────────
 
         private void btn_add_user_Click(object sender, EventArgs e)
         {
@@ -81,9 +65,37 @@ namespace Biblioteka
         {
             PokazWidokZeStanem(ucFindForgottenUsers);
         }
+
         private void btn_manage_permissions_Click(object sender, EventArgs e)
         {
             PokazZarzadzanieUprawnieniami();
+        }
+
+        private void btn_menage_password_Click(object sender, EventArgs e)
+        {
+            // Nowa instancja przy każdym otwarciu — czysty stan (brak starych wyników wyszukiwania)
+            PokazWidokZeStanem(new UCMenage_password_for_Admin());
+        }
+
+        // ── METODY PUBLICZNE (wywoływane przez UserControls) ──────────────────────
+
+        public void PrzejdzDoEdycji(int userId)
+        {
+            PokazWidokZeStanem(ucEditData);
+            ucEditData.ZaladujDaneDoEdycji(userId);
+        }
+
+        public void PokazKarteUzytkownika(int userId)
+        {
+            PokazWidokZeStanem(ucShowUsersData);
+            ucShowUsersData.ZaladujDaneUzytkownika(userId);
+        }
+
+        public void WrocDoWyszukiwarki()
+        {
+            // Nowa instancja — odświeżona lista użytkowników
+            ucShowUsers = new UCShowUsers();
+            PokazWidokZeStanem(ucShowUsers);
         }
 
         public void PokazZarzadzanieUprawnieniami()
@@ -103,8 +115,11 @@ namespace Biblioteka
             PokazWidokZeStanem(ucManagePermissions);
         }
 
+        // ── WYLOGOWANIE — WYLOG_UZY_1 ─────────────────────────────────────────────
+
         private void btn_logout_Click(object sender, EventArgs e)
         {
+            // potwierdzenie
             DialogResult result = MessageBox.Show(
                 "Czy na pewno chcesz się wylogować?",
                 "Wylogowanie",
@@ -112,13 +127,13 @@ namespace Biblioteka
                 MessageBoxIcon.Question
             );
 
-            if (result == DialogResult.Yes)
-                this.Close();
-        }
+            // rezygnacja
+            if (result == DialogResult.No)
+                return;
 
-        private void btn_menage_password_Click(object sender, EventArgs e)
-        {
-            PokazWidokZeStanem(ucMenage_Password_For_Admin);
+            //  zamknięcie okna
+            // Program.cs otworzy świeży login1
+            this.Close();
         }
     }
 }
