@@ -46,8 +46,8 @@ SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'b
 SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'biblio_adam'    AND p.Nazwa = 'Bibliotekarz'  UNION ALL
 SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'user_krystian'  AND p.Nazwa = 'Czytelnik'     UNION ALL
 SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'maly_marek'     AND p.Nazwa = 'Czytelnik'     UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'ksiazkowa_ola'  AND p.Nazwa = 'Czytelnik'     UNION ALL
-SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'babcia_stasia'  AND p.Nazwa = 'Czytelnik';
+SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'ksiazkowa_ola'  AND p.Nazwa = 'Manager'     UNION ALL
+SELECT u.ID, p.ID FROM Uzytkownicy u CROSS JOIN Uprawnienia p WHERE u.Login = 'babcia_stasia'  AND p.Nazwa = 'Manager';
 GO
 
 -- gatunki i autorzy
