@@ -220,7 +220,7 @@ namespace Biblioteka
             Error_msg.Text = msg;
         }
 
-        // ── KLASA POMOCNICZA ──────────────────────────────────────────────────────
+        // ── KLASA POMOCNICZA ───────────
 
         private class UserAuthInfo
         {

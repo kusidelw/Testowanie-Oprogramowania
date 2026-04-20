@@ -120,6 +120,12 @@
     <Compile Include="UCManagePermissions.Designer.cs">
       <DependentUpon>UCManagePermissions.cs</DependentUpon>
     </Compile>
+    <Compile Include="UCMenage_password_for_Admin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCMenage_password_for_Admin.Designer.cs">
+      <DependentUpon>UCMenage_password_for_Admin.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCPasswordRecovery.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -151,6 +157,12 @@
     <EmbeddedResource Include="FormLiblarian.resx">
       <DependentUpon>FormLiblarian.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormMenager.resx">
+      <DependentUpon>FormMenager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormReader.resx">
+      <DependentUpon>FormReader.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="login1.resx">
       <DependentUpon>login1.cs</DependentUpon>
     </EmbeddedResource>
@@ -180,6 +192,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCManagePermissions.resx">
       <DependentUpon>UCManagePermissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCMenage_password_for_Admin.resx">
+      <DependentUpon>UCMenage_password_for_Admin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCPasswordRecovery.resx">
       <DependentUpon>UCPasswordRecovery.cs</DependentUpon>

@@ -46,7 +46,7 @@
             // 
             this.lbl_forget_users.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.lbl_forget_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold);
-            this.lbl_forget_users.Location = new System.Drawing.Point(-7, 8);
+            this.lbl_forget_users.Location = new System.Drawing.Point(-5, 11);
             this.lbl_forget_users.Name = "lbl_forget_users";
             this.lbl_forget_users.Size = new System.Drawing.Size(1248, 44);
             this.lbl_forget_users.TabIndex = 0;

@@ -16,5 +16,18 @@ namespace Biblioteka
         {
             InitializeComponent();
         }
+
+        private void btn_logout_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+                "Czy na pewno chcesz się wylogować?",
+                "Wylogowanie",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
+
+            if (result == DialogResult.Yes)
+                this.Close();
+        }
     }
 }

@@ -30,7 +30,7 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_logout = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_menage_password = new System.Windows.Forms.Button();
             this.btn_manage_permissions = new System.Windows.Forms.Button();
             this.btn_find_forgotten_users = new System.Windows.Forms.Button();
             this.btn_forget_users = new System.Windows.Forms.Button();
@@ -44,7 +44,7 @@
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel1.Controls.Add(this.btn_logout);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btn_menage_password);
             this.panel1.Controls.Add(this.btn_manage_permissions);
             this.panel1.Controls.Add(this.btn_find_forgotten_users);
             this.panel1.Controls.Add(this.btn_forget_users);
@@ -71,16 +71,17 @@
             this.btn_logout.UseVisualStyleBackColor = false;
             this.btn_logout.Click += new System.EventHandler(this.btn_logout_Click);
             // 
-            // button1
+            // btn_menage_password
             // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.Location = new System.Drawing.Point(0, 357);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(300, 71);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "Zarządzaj hasłami użytkowników";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btn_menage_password.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_menage_password.Location = new System.Drawing.Point(0, 357);
+            this.btn_menage_password.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_menage_password.Name = "btn_menage_password";
+            this.btn_menage_password.Size = new System.Drawing.Size(300, 71);
+            this.btn_menage_password.TabIndex = 9;
+            this.btn_menage_password.Text = "Zarządzaj hasłami użytkowników";
+            this.btn_menage_password.UseVisualStyleBackColor = true;
+            this.btn_menage_password.Click += new System.EventHandler(this.btn_menage_password_Click);
             // 
             // btn_manage_permissions
             // 
@@ -178,7 +179,7 @@
         private System.Windows.Forms.Button btn_forget_users;
         private System.Windows.Forms.Button btn_manage_permissions;
         private System.Windows.Forms.Button btn_logout;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_menage_password;
     }
 }
 

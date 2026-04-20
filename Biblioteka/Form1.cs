@@ -20,6 +20,8 @@ namespace Biblioteka
         UCFindForgottenUsers ucFindForgottenUsers = new UCFindForgottenUsers();
         UCManagePermissions ucManagePermissions = new UCManagePermissions();
         UCUsersWithPermission ucUsersWithPermission = new UCUsersWithPermission();
+        UCMenage_password_for_Admin ucMenage_Password_For_Admin = new UCMenage_password_for_Admin();
+
 
         public Form1()
         {
@@ -112,6 +114,11 @@ namespace Biblioteka
 
             if (result == DialogResult.Yes)
                 this.Close();
+        }
+
+        private void btn_menage_password_Click(object sender, EventArgs e)
+        {
+            PokazWidokZeStanem(ucMenage_Password_For_Admin);
         }
     }
 }
