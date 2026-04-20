@@ -70,7 +70,8 @@ namespace Biblioteka
                     }
 
                     // 2. Przygotowanie danych do zapisu
-                    string hasloHash = HashSHA256(txt_PESEL.Text.Trim()); // Hasło domyślne to PESEL
+                    string hasloTymczasowe = Walidator.GenerujHasloSystemowe();
+                    string hasloHash = hasloTymczasowe;
                     string plec = cb_gender.SelectedItem.ToString() == "Mężczyzna" ? "M" : "K";
 
                     // Generowanie numeru karty (zmienna lokalna do komunikatu)
@@ -122,7 +123,10 @@ namespace Biblioteka
                     }
 
                     MessageBox.Show($"Użytkownik został pomyślnie dodany!\nNr karty bibliotecznej: {nrKarty}",
-                                    "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // Wysyłka hasła tymczasowego na email nowego użytkownika
+                    WyslijHasloNaEmail(txt_mail.Text.Trim(), txt_login.Text.Trim(), hasloTymczasowe);
 
                     WyczyscFormularz();
                 }
@@ -276,6 +280,50 @@ namespace Biblioteka
             }
         }
 
+        private void WyslijHasloNaEmail(string email, string login, string hasloTymczasowe)
+        {
+            try
+            {
+                string smtpHost = ConfigurationManager.AppSettings["SmtpHost"];
+                int smtpPort = int.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
+                string smtpUser = ConfigurationManager.AppSettings["SmtpUser"];
+                string smtpPass = ConfigurationManager.AppSettings["SmtpPass"];
+
+                using (System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(smtpHost, smtpPort))
+                {
+                    smtp.EnableSsl = false; // Mailtrap sandbox nie wymaga SSL na porcie 2525
+                    smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                    smtp.UseDefaultCredentials = false; // WAŻNE: musi być przed Credentials
+                    smtp.Credentials = new System.Net.NetworkCredential(smtpUser, smtpPass);
+                    smtp.Timeout = 10000;
+
+                    System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage
+                    {
+                        From = new System.Net.Mail.MailAddress("noreply@biblioteka.pl", "System Biblioteki"),
+                        Subject = "Witaj w systemie biblioteki – Twoje dane logowania",
+                        Body = $"Witaj {login},\n\n" +
+                                     $"Twoje konto zostało utworzone.\n\n" +
+                                     $"Login: {login}\n" +
+                                     $"Hasło tymczasowe: {hasloTymczasowe}\n\n" +
+                                     $"Przy pierwszym logowaniu zostaniesz poproszony o zmianę hasła.\n\n" +
+                                     $"Pozdrawiamy,\nSystem Biblioteki",
+                        IsBodyHtml = false
+                    };
+                    msg.To.Add(email);
+                    smtp.Send(msg);
+                }
+            }
+            catch (System.Net.Mail.SmtpException ex)
+            {
+                MessageBox.Show(
+                    "Użytkownik został dodany, ale nie udało się wysłać e-maila z hasłem.\n" +
+                    "Skontaktuj się z administratorem systemu.\n\n" +
+                    $"Szczegóły: {ex.StatusCode} – {ex.Message}",
+                    "Błąd wysyłki e-mail",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
         /// <summary>
         /// Automatycznie przypisuje nowemu użytkownikowi rolę "Czytelnik"
         /// </summary>
@@ -317,6 +365,7 @@ namespace Biblioteka
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
             }
+
         }
     }
 }
