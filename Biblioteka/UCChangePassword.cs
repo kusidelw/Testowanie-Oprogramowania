@@ -24,27 +24,27 @@ namespace Biblioteka
         }
 
         // ── ZAPISZ ───────────────────────────────────────────────────────────────
-
+        public bool IsFirstLogin { get; set; } = false;
         private void btn_save_Click(object sender, EventArgs e)
         {
             string newPass = txt_new_password.Text;
             string repeatPass = txt_repeat_password.Text;
 
-            // Scenariusz E1: pola puste
+            // E1: pola puste
             if (string.IsNullOrWhiteSpace(newPass) || string.IsNullOrWhiteSpace(repeatPass))
             {
                 ShowError("Proszę uzupełnić wszystkie pola.");
                 return;
             }
 
-            // Scenariusz E1: hasła nie są identyczne
+            // E1: hasła nie są identyczne
             if (newPass != repeatPass)
             {
                 ShowError("Hasła nie są identyczne.");
                 return;
             }
 
-            // Scenariusz E2: walidacja polityki (8-15 znaków, W/M/C/S)
+            // E2: walidacja polityki (8-15 znaków, W/M/C/S)
             if (!ValidatePasswordPolicy(newPass))
             {
                 ShowError("Hasło musi mieć 8-15 znaków, zawierać dużą literę, małą literę, cyfrę i znak specjalny.");
@@ -57,7 +57,7 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // Scenariusz E2: historia 3 ostatnich haseł
+                    // E2: historia 3 ostatnich haseł
                     if (IsPasswordInRecentHistory(conn, newPass))
                     {
                         ShowError("Nowe hasło musi być inne niż 3 ostatnio używane.");
@@ -67,10 +67,24 @@ namespace Biblioteka
                     // Zapis w transakcji
                     UpdatePasswordWithHistory(conn, newPass);
 
+                    // Jeśli to pierwsze logowanie — wyzeruj flagę
+                    if (IsFirstLogin)
+                        ResetCzyPierwszeLogowanie(conn);
+
                     MessageBox.Show("Hasło zostało zmienione pomyślnie!", "Sukces",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    ReturnToLogin();
+                    // Scenariusz główny pkt. 4: umożliwienie dalszej pracy
+                    if (IsFirstLogin)
+                    {
+                        // Informujemy login1 żeby dokończył proces logowania
+                        if (this.ParentForm is login1 frm)
+                            frm.ProceedAfterPasswordChange();
+                    }
+                    else
+                    {
+                        ReturnToLogin();
+                    }
                 }
             }
             catch (Exception ex)
@@ -80,14 +94,38 @@ namespace Biblioteka
             }
         }
 
+
         // ── ANULUJ ───────────────────────────────────────────────────────────────
 
         private void btn_anuluj_Click(object sender, EventArgs e)
         {
-            // Scenariusz A1: rezygnacja z zmiany → powrót do logowania
-            ReturnToLogin();
+            if (IsFirstLogin)
+            {
+                // A1: System przerywa sesję, zmiana hasła nie zostaje zapisana
+                DialogResult result = MessageBox.Show(
+                    "Rezygnacja ze zmiany hasła spowoduje wylogowanie.\nCzy na pewno chcesz się wylogować?",
+                    "Wylogowanie",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                    ReturnToLogin(); // Wróć do ekranu logowania bez zapisu
+            }
+            else
+            {
+                ReturnToLogin();
+            }
         }
 
+        private void ResetCzyPierwszeLogowanie(SqlConnection conn)
+        {
+            using (SqlCommand cmd = new SqlCommand(
+                "UPDATE Uzytkownicy SET CzyPierwszeLogowanie = 0 WHERE Login = @Login", conn))
+            {
+                cmd.Parameters.AddWithValue("@Login", TargetLogin);
+                cmd.ExecuteNonQuery();
+            }
+        }
         // ── METODY LOGICZNE ───────────────────────────────────────────────────────
 
         private bool IsPasswordInRecentHistory(SqlConnection conn, string newPass)

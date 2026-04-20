@@ -21,12 +21,19 @@ namespace Biblioteka
             lbl_personal_data.Text = "Wprowadź dane użytkownika";
         }
 
-        // Przywraca widok logowania po powrocie z UCPasswordRecovery
+        // Przywraca widok logowania po powrocie z UCPasswordRecovery lub po anulowaniu zmiany hasła
         public void ShowLoginLayout()
         {
             this.Controls.Clear();
             this.InitializeComponent();
             Error_msg.Text = "";
+        }
+
+        // Wywoływane przez UCChangePassword po pomyślnej zmianie hasła (USTAW_HAS_UZY_1 pkt. 4)
+        public void ProceedAfterPasswordChange()
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         // ── LOGOWANIE ────────────────────────────────────────────────────────────
@@ -89,8 +96,28 @@ namespace Biblioteka
                         return;
                     }
 
-                    // Krok 5: SUKCES – zresetuj blokadę i przekaż rolę do Program.cs
+                    // Krok 5: Reset blokady po udanym logowaniu
                     ResetBlokady(conn, user.Id);
+
+                    // Krok 6: USTAW_HAS_UZY_1 — wymuszenie zmiany hasła przy pierwszym logowaniu
+                    if (user.CzyPierwszeLogowanie)
+                    {
+                        // Zapamiętaj rolę — po zmianie hasła ProceedAfterPasswordChange() ją użyje
+                        ZalogowanaRola = rola;
+
+                        // Wyświetl UCChangePassword na tym samym oknie
+                        UCChangePassword ucChange = new UCChangePassword();
+                        ucChange.TargetLogin = login;
+                        ucChange.IsFirstLogin = true;
+                        ucChange.Dock = DockStyle.Fill;
+
+                        this.Controls.Clear();
+                        this.Controls.Add(ucChange);
+                        this.Text = "Wymagana zmiana hasła";
+                        return; // NIE zamykamy login1 — czekamy na zmianę hasła
+                    }
+
+                    // Krok 7: Normalne logowanie — przekaż rolę i zamknij
                     ZalogowanaRola = rola;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -120,7 +147,8 @@ namespace Biblioteka
         private UserAuthInfo GetUserData(SqlConnection conn, string login)
         {
             string query = @"
-                SELECT ID, HasloHash, CzyZablokowany, LiczbaBlednychLogowan, CzasOdblokowania
+                SELECT ID, HasloHash, CzyZablokowany, LiczbaBlednychLogowan, 
+                       CzasOdblokowania, CzyPierwszeLogowanie
                 FROM Uzytkownicy
                 WHERE Login = @Login AND CzyZapomniany = 0";
 
@@ -138,8 +166,9 @@ namespace Biblioteka
                             CzyZablokowany = reader.GetBoolean(2),
                             LiczbaBlednych = reader.GetInt32(3),
                             CzasOdblokowania = reader.IsDBNull(4)
-                                              ? (DateTime?)null
-                                              : reader.GetDateTime(4)
+                                                   ? (DateTime?)null
+                                                   : reader.GetDateTime(4),
+                            CzyPierwszeLogowanie = reader.GetBoolean(5)
                         };
                     }
                 }
@@ -220,7 +249,7 @@ namespace Biblioteka
             Error_msg.Text = msg;
         }
 
-        // ── KLASA POMOCNICZA ───────────
+        // ── KLASA POMOCNICZA ──────────────────────────────────────────────────────
 
         private class UserAuthInfo
         {
@@ -229,6 +258,7 @@ namespace Biblioteka
             public bool CzyZablokowany { get; set; }
             public int LiczbaBlednych { get; set; }
             public DateTime? CzasOdblokowania { get; set; }
+            public bool CzyPierwszeLogowanie { get; set; }
         }
     }
 }

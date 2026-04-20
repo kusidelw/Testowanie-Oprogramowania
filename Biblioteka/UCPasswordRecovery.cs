@@ -176,7 +176,6 @@ namespace Biblioteka
 
         private void SendPasswordByEmail(string email, string haslo)
         {
-            // Dane konfiguracyjne SMTP z App.config
             string smtpHost = ConfigurationManager.AppSettings["SmtpHost"];
             int smtpPort = int.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
             string smtpUser = ConfigurationManager.AppSettings["SmtpUser"];
@@ -184,19 +183,21 @@ namespace Biblioteka
 
             using (SmtpClient smtp = new SmtpClient(smtpHost, smtpPort))
             {
-                smtp.EnableSsl = true;
+                smtp.EnableSsl = false; // Mailtrap sandbox — TLS opcjonalny, nie wymagany
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false; // WAŻNE: musi być przed Credentials
                 smtp.Credentials = new NetworkCredential(smtpUser, smtpPass);
+                smtp.Timeout = 10000;
 
                 MailMessage msg = new MailMessage
                 {
-                    From = new MailAddress(smtpUser, "System Biblioteki"),
+                    From = new MailAddress("noreply@biblioteka.pl", "System Biblioteki"),
                     Subject = "Odzyskiwanie hasła",
                     Body = $"Twoje nowe hasło tymczasowe: {haslo}\n\n" +
                                  "Po zalogowaniu zostaniesz poproszony o jego zmianę.",
                     IsBodyHtml = false
                 };
                 msg.To.Add(email);
-
                 smtp.Send(msg);
             }
         }
