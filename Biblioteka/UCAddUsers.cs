@@ -291,9 +291,9 @@ namespace Biblioteka
 
                 using (System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient(smtpHost, smtpPort))
                 {
-                    smtp.EnableSsl = false; // Mailtrap sandbox nie wymaga SSL na porcie 2525
+                    smtp.EnableSsl = false; 
                     smtp.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-                    smtp.UseDefaultCredentials = false; // WAŻNE: musi być przed Credentials
+                    smtp.UseDefaultCredentials = false; 
                     smtp.Credentials = new System.Net.NetworkCredential(smtpUser, smtpPass);
                     smtp.Timeout = 10000;
 

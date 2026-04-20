@@ -12,7 +12,7 @@ namespace Biblioteka
         private readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
 
-        // Ustawiany przez login1.SwitchToChangePassword() lub UCPasswordRecovery
+      
         public string TargetLogin { get; set; }
 
         public UCChangePassword()
@@ -30,21 +30,21 @@ namespace Biblioteka
             string newPass = txt_new_password.Text;
             string repeatPass = txt_repeat_password.Text;
 
-            // E1: pola puste
+            //pola puste
             if (string.IsNullOrWhiteSpace(newPass) || string.IsNullOrWhiteSpace(repeatPass))
             {
                 ShowError("Proszę uzupełnić wszystkie pola.");
                 return;
             }
 
-            // E1: hasła nie są identyczne
+            // hasła nie są identyczne
             if (newPass != repeatPass)
             {
                 ShowError("Hasła nie są identyczne.");
                 return;
             }
 
-            // E2: walidacja polityki (8-15 znaków, W/M/C/S)
+            //walidacja polityki (8-15 znaków, W/M/C/S)
             if (!ValidatePasswordPolicy(newPass))
             {
                 ShowError("Hasło musi mieć 8-15 znaków, zawierać dużą literę, małą literę, cyfrę i znak specjalny.");
@@ -57,7 +57,7 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // E2: historia 3 ostatnich haseł
+                    // historia 3 ostatnich haseł
                     if (IsPasswordInRecentHistory(conn, newPass))
                     {
                         ShowError("Nowe hasło musi być inne niż 3 ostatnio używane.");
@@ -74,7 +74,7 @@ namespace Biblioteka
                     MessageBox.Show("Hasło zostało zmienione pomyślnie!", "Sukces",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    // Scenariusz główny pkt. 4: umożliwienie dalszej pracy
+                    // umożliwienie dalszej pracy
                     if (IsFirstLogin)
                     {
                         // Informujemy login1 żeby dokończył proces logowania
@@ -101,7 +101,7 @@ namespace Biblioteka
         {
             if (IsFirstLogin)
             {
-                // A1: System przerywa sesję, zmiana hasła nie zostaje zapisana
+                // System przerywa sesję, zmiana hasła nie zostaje zapisana
                 DialogResult result = MessageBox.Show(
                     "Rezygnacja ze zmiany hasła spowoduje wylogowanie.\nCzy na pewno chcesz się wylogować?",
                     "Wylogowanie",
@@ -164,7 +164,7 @@ namespace Biblioteka
                         userId = (int)cmdId.ExecuteScalar();
                     }
 
-                    // 1. Aktualizacja hasła głównego
+                    //  Aktualizacja hasła głównego
                     using (SqlCommand cmdUpdate = new SqlCommand(
                         "UPDATE Uzytkownicy SET HasloHash = @NewPass WHERE ID = @ID",
                         conn, transaction))
@@ -174,7 +174,7 @@ namespace Biblioteka
                         cmdUpdate.ExecuteNonQuery();
                     }
 
-                    // 2. Zapis do historii haseł
+                    // Zapis do historii haseł
                     using (SqlCommand cmdHistory = new SqlCommand(
                         "INSERT INTO HistoriaHasel (UzytkownikID, HasloHash, DataZmiany) " +
                         "VALUES (@ID, @NewPass, GETDATE())",

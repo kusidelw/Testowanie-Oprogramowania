@@ -11,7 +11,7 @@ namespace Biblioteka
         private readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
 
-        // Odczytywana przez Program.cs po DialogResult.OK
+      
         public string ZalogowanaRola { get; private set; }
 
         public login1()
@@ -29,7 +29,7 @@ namespace Biblioteka
             Error_msg.Text = "";
         }
 
-        // Wywoływane przez UCChangePassword po pomyślnej zmianie hasła (USTAW_HAS_UZY_1 pkt. 4)
+        // Wywoływane przez UCChangePassword po pomyślnej zmianie hasła 
         public void ProceedAfterPasswordChange()
         {
             this.DialogResult = DialogResult.OK;
@@ -55,7 +55,7 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // Krok 1: Pobierz dane użytkownika
+                    // Pobierz dane użytkownika
                     UserAuthInfo user = GetUserData(conn, login);
 
                     if (user == null)
@@ -64,7 +64,7 @@ namespace Biblioteka
                         return;
                     }
 
-                    // Krok 2: Sprawdź blokadę czasową (Scenariusz A1)
+                    // Sprawdź blokadę czasową 
                     if (user.CzyZablokowany)
                     {
                         if (user.CzasOdblokowania.HasValue && DateTime.Now < user.CzasOdblokowania.Value)
@@ -79,15 +79,15 @@ namespace Biblioteka
                         }
                     }
 
-                    // Krok 3: Sprawdź hasło (Scenariusz E1 / E2)
-                    // UWAGA: bez hashowania zgodnie z obecnym założeniem projektu
+                    // Sprawdź hasło 
+                    // UWAGA: bez hashowania zgodnie z obecnym założeniem projektu---------------------------------------------------
                     if (user.HasloHash != haslo)
                     {
                         HandleFailedLogin(conn, user.Id, user.LiczbaBlednych);
                         return;
                     }
 
-                    // Krok 4: Pobierz rolę
+                    //  Pobierz rolę
                     string rola = GetUserRole(conn, user.Id);
 
                     if (string.IsNullOrEmpty(rola))
@@ -96,10 +96,10 @@ namespace Biblioteka
                         return;
                     }
 
-                    // Krok 5: Reset blokady po udanym logowaniu
+                    //  Reset blokady po udanym logowaniu
                     ResetBlokady(conn, user.Id);
 
-                    // Krok 6: USTAW_HAS_UZY_1 — wymuszenie zmiany hasła przy pierwszym logowaniu
+                    //  wymuszenie zmiany hasła przy pierwszym logowaniu
                     if (user.CzyPierwszeLogowanie)
                     {
                         // Zapamiętaj rolę — po zmianie hasła ProceedAfterPasswordChange() ją użyje
@@ -117,7 +117,7 @@ namespace Biblioteka
                         return; // NIE zamykamy login1 — czekamy na zmianę hasła
                     }
 
-                    // Krok 7: Normalne logowanie — przekaż rolę i zamknij
+                    // Normalne logowanie — przekaż rolę i zamknij
                     ZalogowanaRola = rola;
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -134,7 +134,7 @@ namespace Biblioteka
 
         private void btn_Recover_pass_Click(object sender, EventArgs e)
         {
-            // Scenariusz ODZYSK_HAS_UZY_1: przejście do UCPasswordRecovery
+           
             UCPasswordRecovery ucRecovery = new UCPasswordRecovery();
             this.Controls.Clear();
             ucRecovery.Dock = DockStyle.Fill;
@@ -199,7 +199,7 @@ namespace Biblioteka
 
                 if (newCount >= 3)
                 {
-                    // Scenariusz E2: blokada na 15 minut
+                    // blokada na 15 minut
                     ExecuteUpdate(conn,
                         "UPDATE Uzytkownicy SET CzyZablokowany = 1, LiczbaBlednychLogowan = @Count, " +
                         "CzasOdblokowania = DATEADD(MINUTE, 15, GETDATE()) WHERE ID = @ID",
@@ -208,7 +208,7 @@ namespace Biblioteka
                 }
                 else
                 {
-                    // Scenariusz E1: błędne dane
+                    // błędne dane
                     ExecuteUpdate(conn,
                         "UPDATE Uzytkownicy SET LiczbaBlednychLogowan = @Count WHERE ID = @ID",
                         newCount, userId);
@@ -217,7 +217,7 @@ namespace Biblioteka
             }
             else
             {
-                // Nieznany login – nie zdradzamy szczegółów (wymóg prywatności)
+                // Nieznany login – nie zdradzamy szczegółów
                 ShowError("Błędne dane.");
             }
 

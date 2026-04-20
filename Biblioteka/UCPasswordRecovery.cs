@@ -23,7 +23,7 @@ namespace Biblioteka
 
         private void btn_anuluj_Click(object sender, EventArgs e)
         {
-            // Scenariusz A1: powrót do ekranu logowania
+            
             ReturnToLogin();
         }
 
@@ -54,8 +54,7 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // Krok 1: Weryfikacja loginu i emaila (Scenariusz główny pkt. 3)
-                    // Scenariusz E1: komunikat nie zdradza, które pole jest błędne
+                    //  Weryfikacja loginu i emaila 
                     int? userId = GetUserIdIfValid(conn, login, email);
 
                     if (userId == null)
@@ -64,7 +63,7 @@ namespace Biblioteka
                         return;
                     }
 
-                    // Scenariusz E1 z GEN_HAS_SYS_1: blokada dla kont zapomnianych
+                    // blokada dla kont zapomnianych
                     if (IsCzyZapomniany(conn, userId.Value))
                     {
                         // Nie zdradzamy, że konto istnieje — ten sam komunikat co wyżej
@@ -72,13 +71,13 @@ namespace Biblioteka
                         return;
                     }
 
-                    // Krok 2: Generowanie hasła systemowego (GEN_HAS_SYS_1)
+                    //  Generowanie hasła systemowego 
                     string noweHaslo = Walidator.GenerujHasloSystemowe();
 
-                    // Krok 3: Zapis nowego hasła do bazy (w transakcji)
+                    // Zapis nowego hasła do bazy 
                     SaveNewPassword(conn, userId.Value, noweHaslo);
 
-                    // Krok 4: Wysłanie hasła mailem (Scenariusz główny pkt. 4)
+                    // Wysłanie hasła mailem 
                     SendPasswordByEmail(email, noweHaslo);
 
                     MessageBox.Show(
@@ -92,7 +91,7 @@ namespace Biblioteka
             }
             catch (SmtpException)
             {
-                // Scenariusz A1 z GEN_HAS_SYS_1: błąd serwera pocztowego
+                //błąd serwera pocztowego
                 ShowError("Błąd wysyłki e-mail. Skontaktuj się z administratorem.");
             }
             catch (Exception ex)
@@ -143,9 +142,9 @@ namespace Biblioteka
             {
                 try
                 {
-                    // 1. Aktualizacja hasła głównego
                     using (SqlCommand cmdUpdate = new SqlCommand(
-                        "UPDATE Uzytkownicy SET HasloHash = @Haslo WHERE ID = @ID",
+                        // Ustawiamy też CzyPierwszeLogowanie = 1 (hasło ważne tylko do pierwszego logowania)
+                        "UPDATE Uzytkownicy SET HasloHash = @Haslo, CzyPierwszeLogowanie = 1 WHERE ID = @ID",
                         conn, transaction))
                     {
                         cmdUpdate.Parameters.AddWithValue("@Haslo", noweHaslo);
@@ -153,7 +152,6 @@ namespace Biblioteka
                         cmdUpdate.ExecuteNonQuery();
                     }
 
-                    // 2. Zapis do historii haseł
                     using (SqlCommand cmdHistory = new SqlCommand(
                         "INSERT INTO HistoriaHasel (UzytkownikID, HasloHash, DataZmiany) " +
                         "VALUES (@ID, @Haslo, GETDATE())",
@@ -183,9 +181,9 @@ namespace Biblioteka
 
             using (SmtpClient smtp = new SmtpClient(smtpHost, smtpPort))
             {
-                smtp.EnableSsl = false; // Mailtrap sandbox — TLS opcjonalny, nie wymagany
+                smtp.EnableSsl = false; 
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.UseDefaultCredentials = false; // WAŻNE: musi być przed Credentials
+                smtp.UseDefaultCredentials = false; 
                 smtp.Credentials = new NetworkCredential(smtpUser, smtpPass);
                 smtp.Timeout = 10000;
 
