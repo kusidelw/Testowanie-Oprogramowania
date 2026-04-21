@@ -12,7 +12,6 @@ namespace Biblioteka
         private readonly string ConnectionString =
             ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
 
-        // ID użytkownika wybranego w DataGridView
         private int _wybranyUzytkownikId = -1;
         private string _wybranyLogin = null;
 
@@ -23,71 +22,103 @@ namespace Biblioteka
             txt_repeat_password.UseSystemPasswordChar = true;
             lbl_error.Text = "";
 
-            // Konfiguracja DataGridView
             dgv_users.ReadOnly = true;
             dgv_users.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_users.MultiSelect = false;
             dgv_users.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_users.SelectionChanged += dgv_users_SelectionChanged;
 
-            // Pola hasła zablokowane dopóki nie wybrano użytkownika
             SetPasswordFieldsEnabled(false);
+
+            // Load zamiast VisibleChanged — odpala się gdy kontrolka jest w pełni gotowa
+            this.Load += UCMenage_password_for_Admin_Load;
+            this.VisibleChanged += UCMenage_password_for_Admin_VisibleChanged;
         }
 
-        // ── SZUKAJ ───────────────────────────────────────────────────────────────
-
-        private void btn_search_user_Click(object sender, EventArgs e)
+        private void UCMenage_password_for_Admin_Load(object sender, EventArgs e)
         {
-            string fraza = txt_search_user.Text.Trim();
+            // Pierwsze załadowanie — kontrolka gotowa
+            WczytajUzytkownikow("");
+        }
 
-            // Wyczyść poprzedni wybór
+
+        private void UCMenage_password_for_Admin_VisibleChanged(object sender, EventArgs e)
+        {
+            // Odświeżenie przy każdym powrocie do zakładki
+            // IsHandleCreated zapewnia że kontrolka jest już wyrenderowana
+            if (this.Visible && this.IsHandleCreated)
+                ResetujStan();
+        }
+
+        public void OdswiezDane()
+        {
+            ResetujStan();
+        }
+
+        private void ResetujStan()
+        {
+            txt_search_user.Clear();
+
             _wybranyUzytkownikId = -1;
             _wybranyLogin = null;
-            SetPasswordFieldsEnabled(false);
-            ClearPasswordFields();
 
+            ClearPasswordFields();
+            SetPasswordFieldsEnabled(false);
+            ClearError();
+
+            // Załaduj wszystkich użytkowników przy otwarciu
+            WczytajUzytkownikow("");
+        }
+
+        // ── ŁADOWANIE DANYCH ──────────────────────────────────────────────────────
+
+        private void WczytajUzytkownikow(string fraza)
+        {
             try
             {
                 using (SqlConnection conn = new SqlConnection(ConnectionString))
                 {
                     conn.Open();
 
-                    // Wyszukiwanie po Login, PESEL lub Email
-                    // Pomijamy konta zapomniane (RODO)
                     string query = @"
                         SELECT 
                             u.ID,
                             u.Login,
-                            u.Imie,
-                            u.Nazwisko,
+                            (u.Imie + ' ' + u.Nazwisko) AS [Imię i nazwisko],
                             u.Email,
-                            up.Nazwa AS Rola
+                            up.Nazwa                    AS Rola
                         FROM Uzytkownicy u
-                        LEFT JOIN Uzytkownicy_Uprawnienia uu ON u.ID = uu.UzytkownikID
-                        LEFT JOIN Uprawnienia up ON uu.UprawnienieID = up.ID
+                        LEFT JOIN Uzytkownicy_Uprawnienia uu ON u.ID  = uu.UzytkownikID
+                        LEFT JOIN Uprawnienia up ON uu.UprawnienieID  = up.ID
                         WHERE u.CzyZapomniany = 0
                           AND (
-                              u.Login LIKE @Fraza OR
-                              u.PESEL LIKE @Fraza OR
-                              u.Email LIKE @Fraza
+                              @Fraza = '' OR
+                              u.Login LIKE @FrazaLike OR
+                              u.PESEL LIKE @FrazaLike OR
+                              u.Email LIKE @FrazaLike
                           )
                         ORDER BY u.Nazwisko, u.Imie";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@Fraza", $"%{fraza}%");
+                        cmd.Parameters.AddWithValue("@Fraza", fraza);
+                        cmd.Parameters.AddWithValue("@FrazaLike", $"%{fraza}%");
 
                         DataTable dt = new DataTable();
                         using (SqlDataAdapter da = new SqlDataAdapter(cmd))
                             da.Fill(dt);
 
-                        // Ukryj kolumnę ID w widoku, ale zachowaj w danych
+                        // Odepnij event przed ustawieniem DataSource
+                        dgv_users.SelectionChanged -= dgv_users_SelectionChanged;
                         dgv_users.DataSource = dt;
 
                         if (dgv_users.Columns.Contains("ID"))
                             dgv_users.Columns["ID"].Visible = false;
 
-                        if (dt.Rows.Count == 0)
+                        // Przywróć event
+                        dgv_users.SelectionChanged += dgv_users_SelectionChanged;
+
+                        if (dt.Rows.Count == 0 && !string.IsNullOrEmpty(fraza))
                             ShowError("Nie znaleziono użytkowników spełniających kryteria.");
                         else
                             ClearError();
@@ -96,12 +127,32 @@ namespace Biblioteka
             }
             catch (Exception ex)
             {
-                ShowError("Błąd podczas wyszukiwania.");
+                ShowError("Błąd podczas ładowania użytkowników.");
                 Console.WriteLine(ex.Message);
             }
         }
 
-        // Obsługa wyboru wiersza w DataGridView
+        // ── SZUKAJ ───────────────────────────────────────────────────────────────
+
+        private void btn_search_user_Click(object sender, EventArgs e)
+        {
+            string fraza = txt_search_user.Text.Trim();
+
+            _wybranyUzytkownikId = -1;
+            _wybranyLogin = null;
+            SetPasswordFieldsEnabled(false);
+            ClearPasswordFields();
+
+            WczytajUzytkownikow(fraza);
+        }
+
+        // Wyszukiwanie klawiszem Enter
+        private void txt_search_user_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                btn_search_user_Click(sender, e);
+        }
+
         private void dgv_users_SelectionChanged(object sender, EventArgs e)
         {
             if (dgv_users.SelectedRows.Count == 0)
@@ -121,11 +172,10 @@ namespace Biblioteka
             ClearError();
         }
 
-        // ── ZAPISZ — ZMIANA_HAS_ADMIN_1 ────────────────────────────
+        // ── ZAPISZ — ZMIANA_HAS_ADMIN_1 ──────────────────────────────────────────
 
         private void btn_save_Click(object sender, EventArgs e)
         {
-            //  musi być wybrany użytkownik
             if (_wybranyUzytkownikId == -1)
             {
                 ShowError("Wybierz użytkownika z listy.");
@@ -135,21 +185,19 @@ namespace Biblioteka
             string newPass = txt_new_password.Text;
             string repeatPass = txt_repeat_password.Text;
 
-            // Walidacja pustych pól
             if (string.IsNullOrWhiteSpace(newPass) || string.IsNullOrWhiteSpace(repeatPass))
             {
                 ShowError("Proszę uzupełnić oba pola hasła.");
                 return;
             }
 
-            // Walidacja zgodności pól
             if (newPass != repeatPass)
             {
                 ShowError("Hasła nie są identyczne.");
                 return;
             }
 
-            //  walidacja polityki (8-15 znaków, W/M/C/S)
+            // Scenariusz E1: walidacja polityki haseł
             if (!Walidator.ValidatePasswordPolicy(newPass))
             {
                 ShowError("Hasło musi mieć 8-15 znaków, zawierać dużą literę, małą literę, cyfrę i znak specjalny (- _ ! * # $ &).");
@@ -162,14 +210,13 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // historia 3 ostatnich haseł
+                    // Scenariusz E2: historia 3 ostatnich haseł
                     if (IsPasswordInRecentHistory(conn, newPass))
                     {
                         ShowError("Nowe hasło musi być inne niż 3 ostatnio używane.");
                         return;
                     }
 
-                    // zapis w transakcji
                     SavePasswordWithHistory(conn, newPass);
 
                     MessageBox.Show(
@@ -178,13 +225,8 @@ namespace Biblioteka
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
 
-                    // Po zmianie wyczyść pola i resetuj wybór
-                    ClearPasswordFields();
-                    dgv_users.ClearSelection();
-                    _wybranyUzytkownikId = -1;
-                    _wybranyLogin = null;
-                    SetPasswordFieldsEnabled(false);
-                    ClearError();
+                    // Reset po zapisie — odświeży też DataGridView
+                    ResetujStan();
                 }
             }
             catch (Exception ex)
@@ -194,18 +236,11 @@ namespace Biblioteka
             }
         }
 
-        // ── WRÓĆ DO LISTY —  
+        // ── WRÓĆ DO LISTY — Scenariusz A1 ────────────────────────────────────────
 
         private void btn_back_to_list_Click(object sender, EventArgs e)
         {
-            // A1: zamknięcie formularza bez zapisywania zmian
-            ClearPasswordFields();
-            dgv_users.ClearSelection();
-            _wybranyUzytkownikId = -1;
-            _wybranyLogin = null;
-            SetPasswordFieldsEnabled(false);
-            ClearError();
-
+            // A1: zamknięcie bez zapisywania
             Form parentForm = this.FindForm();
             if (parentForm is Form1 mainForm)
                 mainForm.PowrotDoMenuGlownego();
@@ -239,11 +274,10 @@ namespace Biblioteka
             {
                 try
                 {
-                    // 1. Aktualizacja hasła + ustawienie CzyPierwszeLogowanie = 1
-                    //    (użytkownik będzie zmuszony do zmiany przy następnym logowaniu)
+                    // 1. Aktualizacja hasła + CzyPierwszeLogowanie = 1
                     using (SqlCommand cmdUpdate = new SqlCommand(@"
                         UPDATE Uzytkownicy 
-                        SET HasloHash = @NewPass,
+                        SET HasloHash            = @NewPass,
                             CzyPierwszeLogowanie = 1
                         WHERE ID = @UserID",
                         conn, transaction))

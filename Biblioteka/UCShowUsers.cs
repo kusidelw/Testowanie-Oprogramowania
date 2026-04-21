@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Windows.Forms;
 
 namespace Biblioteka
 {
@@ -25,15 +19,13 @@ namespace Biblioteka
             InitializeComponent();
             KonfigurujDGV();
             WczytajUzytkownikow();
-            this.VisibleChanged += UCShowUsers_VisibleChanged; //automatyczne odświeżanie
+            this.VisibleChanged += UCShowUsers_VisibleChanged;
         }
 
-        private void UCShowUsers_VisibleChanged(object sender, EventArgs e) 
+        private void UCShowUsers_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)
-            {
                 WczytajUzytkownikow();
-            }
         }
 
         private void KonfigurujDGV()
@@ -54,13 +46,15 @@ namespace Biblioteka
                 {
                     conn.Open();
 
-                    // 1. Liczenie rekordów - Wyszukiwanie PESEL wymaga pełnego ciągu znaków , Login, Imię i Nazwisko pozwalają na wyszukiwanie po częściowych frazach
+                    // 1. Liczenie rekordów
+                    // PESEL wymaga pełnego ciągu, Login/Imię/Nazwisko pozwalają na częściowe frazy
                     string sqlCount = @"
-                SELECT COUNT(*) FROM Uzytkownicy
-                WHERE CzyZapomniany = 0
-                AND (@Query = '' OR Login LIKE @QueryLike 
-                     OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
-                     OR PESEL = @Query)";
+                        SELECT COUNT(*) FROM Uzytkownicy
+                        WHERE CzyZapomniany = 0
+                          AND (@Query = '' 
+                               OR Login LIKE @QueryLike 
+                               OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
+                               OR PESEL = @Query)";
 
                     int totalRecords;
                     using (SqlCommand cmd = new SqlCommand(sqlCount, conn))
@@ -70,19 +64,23 @@ namespace Biblioteka
                         totalRecords = (int)cmd.ExecuteScalar();
                     }
 
-                    //REAKCJA NA BRAK WYNIKÓW (Scenariusz E1) 
+                    // Scenariusz E1: brak wyników dla aktywnego wyszukiwania
                     if (totalRecords == 0 && !string.IsNullOrEmpty(searchQuery))
                     {
-                        MessageBox.Show("Nie znaleziono użytkownika o podanych kryteriach.", "Brak wyników", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(
+                            "Nie znaleziono użytkownika o podanych kryteriach.",
+                            "Brak wyników",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
 
-                        if (dgv_users_list.DataSource is DataTable dt) 
-                        {
-                            dt.Clear(); //zostawiamy nagłówki, ale czyścimy dane
-                        }
+                        if (dgv_users_list.DataSource is DataTable dt)
+                            dt.Clear();
 
-                        lbl_page_info.Text = "Strona: 1 / 1"; 
+                        lbl_page_info.Text = "Strona: 1 / 1";
 
-                        return; 
+                        // Odblokowanie/zablokowanie przycisków stronicowania
+                        AktualizujPrzyciskiStron();
+                        return;
                     }
 
                     // 2. Obliczanie stron
@@ -90,20 +88,21 @@ namespace Biblioteka
                     if (currentPage > totalPages) currentPage = totalPages;
                     lbl_page_info.Text = $"Strona: {currentPage} / {totalPages}";
 
-                    // 3. Pobieranie danych
+                    // 3. Pobieranie danych ze stronicowaniem
                     string sqlData = @"
-                            SELECT 
-                                ID AS [ID],
-                                Login AS [Login],
-                                (Imie + ' ' + Nazwisko) AS [Imię i nazwisko],
-                                Email AS [Adres e-mail]
-                            FROM Uzytkownicy
-                            WHERE CzyZapomniany = 0
-                            AND (@Query = '' OR Login LIKE @QueryLike 
-                                 OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
-                                 OR PESEL LIKE @QueryLike)
-                            ORDER BY Nazwisko, Imie
-                            OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
+                        SELECT 
+                            ID                          AS [ID],
+                            Login                       AS [Login],
+                            (Imie + ' ' + Nazwisko)     AS [Imię i nazwisko],
+                            Email                       AS [Adres e-mail]
+                        FROM Uzytkownicy
+                        WHERE CzyZapomniany = 0
+                          AND (@Query = '' 
+                               OR Login LIKE @QueryLike 
+                               OR (Imie + ' ' + Nazwisko) LIKE @QueryLike 
+                               OR PESEL = @Query)
+                        ORDER BY Nazwisko, Imie
+                        OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY";
 
                     using (SqlCommand cmd = new SqlCommand(sqlData, conn))
                     {
@@ -112,21 +111,36 @@ namespace Biblioteka
                         cmd.Parameters.AddWithValue("@Offset", (currentPage - 1) * pageSize);
                         cmd.Parameters.AddWithValue("@PageSize", pageSize);
 
-                        SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
-                        adapter.Fill(dt);
+                        new SqlDataAdapter(cmd).Fill(dt);
                         dgv_users_list.DataSource = dt;
                     }
 
+                    // Ukryj kolumnę ID 
                     if (dgv_users_list.Columns["ID"] != null)
                         dgv_users_list.Columns["ID"].Visible = false;
+
+                    AktualizujPrzyciskiStron();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd bazy danych: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Błąd bazy danych: " + ex.Message,
+                    "Błąd",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
+
+        // Blokuje przyciski gdy nie ma sensu ich używać
+        private void AktualizujPrzyciskiStron()
+        {
+            btn_prev_page.Enabled = currentPage > 1;
+            btn_next_page.Enabled = currentPage < totalPages;
+        }
+
+        // ── WYSZUKIWANIE ──────────────────────────────────────────────────────────
 
         private void btn_search_user_Click_1(object sender, EventArgs e)
         {
@@ -135,11 +149,14 @@ namespace Biblioteka
             WczytajUzytkownikow();
         }
 
+        // Wyszukiwanie klawiszem Enter
         private void txt_search_user_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
                 btn_search_user_Click_1(sender, e);
         }
+
+        // ── STRONICOWANIE ─────────────────────────────────────────────────────────
 
         private void btn_next_page_Click(object sender, EventArgs e)
         {
@@ -159,18 +176,17 @@ namespace Biblioteka
             }
         }
 
+        // ── PODGLĄD KARTY UŻYTKOWNIKA (dwuklik) ──────────────────────────────────
+
         private void dgv_users_list_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0) 
-            {
-                int userId = (int)dgv_users_list.Rows[e.RowIndex].Cells["ID"].Value;
+            if (e.RowIndex < 0) return;
 
-                Form parentForm = this.FindForm();
-                if (parentForm is Form1 mainForm)
-                {
-                    mainForm.PokazKarteUzytkownika(userId); 
-                }
-            }
+            int userId = Convert.ToInt32(dgv_users_list.Rows[e.RowIndex].Cells["ID"].Value);
+
+            Form parentForm = this.FindForm();
+            if (parentForm is Form1 mainForm)
+                mainForm.PokazKarteUzytkownika(userId);
         }
     }
 }

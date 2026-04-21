@@ -31,6 +31,7 @@ namespace Biblioteka
                 dgv_users.DataSource = null;
                 txt_search_user.Clear();
                 searchQuery = "";
+                WczytajUzytkownikow(); 
             }
         }
 
@@ -138,7 +139,7 @@ namespace Biblioteka
             int userId = (int)dgv_users.SelectedRows[0].Cells["ID"].Value;
             string userName = dgv_users.SelectedRows[0].Cells["Imię i nazwisko"].Value.ToString();
 
-            // Scenariusz E1 – sprawdzenie czy użytkownik już zapomniany
+           //  sprawdzenie czy użytkownik już zapomniany
             try
             {
                 using (SqlConnection conn = new SqlConnection(ConnStr))
@@ -210,6 +211,7 @@ namespace Biblioteka
                 dgv_users.DataSource = null;
                 txt_search_user.Clear();
                 searchQuery = "";
+                WczytajUzytkownikow();
             }
             catch (Exception ex)
             {

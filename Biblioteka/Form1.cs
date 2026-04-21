@@ -132,8 +132,8 @@ namespace Biblioteka
                 return;
 
             //  zamknięcie okna
-            // Program.cs otworzy świeży login1
             this.Close();
         }
+
     }
 }

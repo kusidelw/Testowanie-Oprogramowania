@@ -109,7 +109,7 @@
             this.btn_back_to_list.Name = "btn_back_to_list";
             this.btn_back_to_list.Size = new System.Drawing.Size(250, 89);
             this.btn_back_to_list.TabIndex = 34;
-            this.btn_back_to_list.Text = "WRÓĆ DO LISTY";
+            this.btn_back_to_list.Text = "ANULUJ";
             this.btn_back_to_list.UseVisualStyleBackColor = false;
             this.btn_back_to_list.Click += new System.EventHandler(this.btn_back_to_list_Click);
             // 
@@ -223,6 +223,7 @@
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "UCMenage_password_for_Admin";
             this.Size = new System.Drawing.Size(1392, 810);
+            this.Load += new System.EventHandler(this.UCMenage_password_for_Admin_VisibleChanged);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_users)).EndInit();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
