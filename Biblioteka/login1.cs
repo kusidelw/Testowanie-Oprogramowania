@@ -13,6 +13,7 @@ namespace Biblioteka
 
       
         public string ZalogowanaRola { get; private set; }
+        public int ZalogowanyUserId { get; private set; }
 
         public login1()
         {
@@ -104,6 +105,7 @@ namespace Biblioteka
                     {
                         // Zapamiętaj rolę — po zmianie hasła ProceedAfterPasswordChange() ją użyje
                         ZalogowanaRola = rola;
+                        ZalogowanyUserId = user.Id;
 
                         // Wyświetl UCChangePassword na tym samym oknie
                         UCChangePassword ucChange = new UCChangePassword();
@@ -117,8 +119,10 @@ namespace Biblioteka
                         return; // NIE zamykamy login1 — czekamy na zmianę hasła
                     }
 
-                    // Normalne logowanie — przekaż rolę i zamknij
+                    // Normalne logowanie — przekaż rolę i ID użytkownika, a następnie zamknij
                     ZalogowanaRola = rola;
+                    ZalogowanyUserId = user.Id;
+
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
@@ -189,6 +193,11 @@ namespace Biblioteka
                 cmd.Parameters.AddWithValue("@UserID", userId);
                 return cmd.ExecuteScalar()?.ToString();
             }
+        }
+
+        public int GetLoggedUserId()
+        {
+            return ZalogowanyUserId;
         }
 
         private void HandleFailedLogin(SqlConnection conn, int userId, int currentFailed = 0)

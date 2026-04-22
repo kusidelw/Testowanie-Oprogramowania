@@ -14,6 +14,9 @@ namespace Biblioteka
 {
     public partial class UCForgetUsers : UserControl
     {
+        // ID aktualnie zalogowanego użytkownika ustawiane przez Form1
+        public int? CurrentUserId { get; set; }
+
         private string ConnStr = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
         private string searchQuery = "";
 
@@ -101,6 +104,16 @@ namespace Biblioteka
                         SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
+
+                        // Usuwa wiersz odpowiadający zalogowanemu użytkownikowi
+                        if (CurrentUserId.HasValue)
+                        {
+                            DataRow[] rows = dt.Select($"ID = {CurrentUserId.Value}");
+                            foreach (var r in rows)
+                                r.Delete();
+                            dt.AcceptChanges();
+                        }
+
                         dgv_users.DataSource = dt;
                     }
 
@@ -138,6 +151,14 @@ namespace Biblioteka
 
             int userId = (int)dgv_users.SelectedRows[0].Cells["ID"].Value;
             string userName = dgv_users.SelectedRows[0].Cells["Imię i nazwisko"].Value.ToString();
+
+            // Dodatkowe zabezpieczenie przed zapomnieniem samego siebie
+            if (CurrentUserId.HasValue && CurrentUserId.Value == userId)
+            {
+                MessageBox.Show("Nie możesz zapomnieć samego siebie.", "Operacja zabroniona",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
            //  sprawdzenie czy użytkownik już zapomniany
             try

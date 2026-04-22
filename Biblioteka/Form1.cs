@@ -5,6 +5,10 @@ namespace Biblioteka
 {
     public partial class Form1 : Form
     {
+        // ID zalogowanego użytkownika 
+        private int? currentUserId;
+
+
         // Kontrolki tworzone leniwie (tylko gdy potrzebne) lub na żądanie
         private UCAddUsers ucAddUsers;
         private UCShowUsers ucShowUsers;
@@ -17,7 +21,9 @@ namespace Biblioteka
 
         public Form1()
         {
+
             InitializeComponent();
+
 
             // Inicjalizacja po InitializeComponent — bezpieczna kolejność
             ucAddUsers = new UCAddUsers();
@@ -58,6 +64,10 @@ namespace Biblioteka
 
         private void btn_forget_users_Click(object sender, EventArgs e)
         {
+            // Przekaż ID aktualnie zalogowanego użytkownika 
+            if (ucForgetUsers != null)
+                ucForgetUsers.CurrentUserId = currentUserId;
+
             PokazWidokZeStanem(ucForgetUsers);
         }
 
@@ -115,6 +125,14 @@ namespace Biblioteka
             PokazWidokZeStanem(ucManagePermissions);
         }
 
+        // Ustawia ID aktualnie zalogowanego użytkownika 
+        public void SetCurrentUser(int? userId)
+        {
+            currentUserId = userId;
+            if (ucForgetUsers != null)
+                ucForgetUsers.CurrentUserId = userId;
+        }
+
         // ── WYLOGOWANIE — WYLOG_UZY_1 ─────────────────────────────────────────────
 
         private void btn_logout_Click(object sender, EventArgs e)
@@ -132,7 +150,9 @@ namespace Biblioteka
                 return;
 
             //  zamknięcie okna
+            SetCurrentUser(null); 
             this.Close();
+
         }
 
     }

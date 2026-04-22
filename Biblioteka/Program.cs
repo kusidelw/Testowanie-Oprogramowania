@@ -13,6 +13,7 @@ namespace Biblioteka
 
             while (true)
             {
+                int? loggedUserId = null;
                 string rola;
 
                 using (login1 loginForm = new login1())
@@ -20,6 +21,7 @@ namespace Biblioteka
                     if (loginForm.ShowDialog() != DialogResult.OK)
                         break; // Zamknięcie okna logowania = koniec aplikacji
 
+                    loggedUserId = loginForm.GetLoggedUserId();
                     rola = loginForm.ZalogowanaRola;
                 }
 
@@ -32,6 +34,10 @@ namespace Biblioteka
                     case "Czytelnik": mainForm = new FormReader(); break;
                     default: continue; // nieznana rola → wróć do logowania
                 }
+
+                // Przekazanie ID zalogowanego użytkownika do głównego formularza
+                if (mainForm is Form1 f1)
+                    f1.SetCurrentUser(loggedUserId);
 
                 using (mainForm)
                 {
