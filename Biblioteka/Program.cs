@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Biblioteka
@@ -13,34 +14,21 @@ namespace Biblioteka
 
             while (true)
             {
-                int? loggedUserId = null;
-                string rola;
+                List<string> role;
+                int userId;
 
                 using (login1 loginForm = new login1())
                 {
                     if (loginForm.ShowDialog() != DialogResult.OK)
                         break; // Zamknięcie okna logowania = koniec aplikacji
 
-                    loggedUserId = loginForm.GetLoggedUserId();
-                    rola = loginForm.ZalogowanaRola;
+                    userId = loginForm.GetLoggedUserId();
+                    role = loginForm.ZalogowaneRole;
                 }
 
-                Form mainForm;
-                switch (rola)
+                using (Form1 mainForm = new Form1())
                 {
-                    case "Administrator": mainForm = new Form1(); break;
-                    case "Bibliotekarz": mainForm = new FormLiblarian(); break;
-                    case "Manager": mainForm = new FormMenager(); break;
-                    case "Czytelnik": mainForm = new FormReader(); break;
-                    default: continue; // nieznana rola → wróć do logowania
-                }
-
-                // Przekazanie ID zalogowanego użytkownika do głównego formularza
-                if (mainForm is Form1 f1)
-                    f1.SetCurrentUser(loggedUserId);
-
-                using (mainForm)
-                {
+                    mainForm.SetSession(userId, role);
                     mainForm.ShowDialog();
                     // zamknięcie okna (wylogowanie) → pętla → nowy login1
                 }
