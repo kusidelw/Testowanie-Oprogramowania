@@ -37,6 +37,7 @@ namespace Biblioteka
         private UCReturnBook ucReturnBook;
         private UCCzytelnik ucCzytelnik;
         private UCManager ucManager;
+        private Button btn_audit_books;
 
         public Form1()
         {
@@ -180,14 +181,20 @@ namespace Biblioteka
             panelCzytelnik.Controls.Add(btnCzytelnikDemo);
             panelCzytelnik.ResumeLayout(false);
 
-            // ── 4d. MANAGER — przykładowy przycisk + puste UC ────────────────────
+            // ── 4d. MANAGER ───────────────────────────────────────────────────────
             btnKatManager = UtworzNaglowek("Manager");
             panelManager = UtworzPodPanel();
             panelManager.SuspendLayout();
-            var btnManagerDemo = new Button { Text = "Przykładowy przycisk" };
-            StylujPrzyciskMenu(btnManagerDemo);
-            btnManagerDemo.Click += (s, e) => PokazWidokZeStanem(ucManager);
-            panelManager.Controls.Add(btnManagerDemo);
+
+            var btn_show_books_manager = new Button { Text = "Przeglądaj książki" };
+            btn_audit_books = new Button { Text = "Audyt książek" };
+            StylujPrzyciskMenu(btn_show_books_manager);
+            StylujPrzyciskMenu(btn_audit_books);
+            btn_show_books_manager.Click += (s, e) => PokazWidokZeStanem(ucShowBooks);
+            btn_audit_books.Click += (s, e) => PokazWidokZeStanem(ucManager);
+
+            panelManager.Controls.Add(btn_show_books_manager);
+            panelManager.Controls.Add(btn_audit_books);
             panelManager.ResumeLayout(false);
 
             // ── 5. Zdarzenia przełączania sekcji ──────────────────────────────────
@@ -368,6 +375,15 @@ namespace Biblioteka
             if (ucBorrowBook != null)
                 ucBorrowBook.CurrentUserId = currentUserId;
 
+            if (ucManager != null)
+                ucManager.CurrentUserId = currentUserId;
+
+            if (ucShowBooks != null)
+            {
+                ucShowBooks.CurrentUserId  = currentUserId;
+                ucShowBooks.IsBibliotekarz = _role.Contains("Bibliotekarz");
+            }
+
             AplikujRole();
         }
 
@@ -383,12 +399,12 @@ namespace Biblioteka
 
             // Administrator: zawiera przyciski Admin + Bibliotekarz (btn_add_user, btn_show_users) + Manager (btn_manage_permissions)
             UstawSekcje(btnKatAdministrator, panelAdmin,
-                widoczna: jestAdmin || jestBibliotekarz || jestManager,
+                widoczna: jestAdmin,
                 nazwaKategorii: "Administrator");
 
             // Bibliotekarz: btn_show_books widoczne dla wszystkich ról
             UstawSekcje(btnKatBibliotekarz, panelBibliotekarz,
-                widoczna: jestAdmin || jestBibliotekarz || jestManager || jestCzytelnik,
+                widoczna: jestBibliotekarz,
                 nazwaKategorii: "Bibliotekarz");
 
             // Czytelnik: placeholder — widoczny tylko dla roli Czytelnik
@@ -402,16 +418,16 @@ namespace Biblioteka
                 nazwaKategorii: "Manager");
 
             // ── Widoczność poszczególnych przycisków (niezmieniona logika RBAC) ──
-            btn_add_user.Visible             = jestAdmin || jestBibliotekarz;
-            btn_add_book.Visible             = jestAdmin || jestBibliotekarz;
-            btn_show_books.Visible           = jestAdmin || jestBibliotekarz || jestManager || jestCzytelnik;
-            btn_borrow_book.Visible          = jestAdmin || jestBibliotekarz;
-            btn_return_book.Visible          = jestAdmin || jestBibliotekarz;
-            btn_show_users.Visible           = jestAdmin || jestBibliotekarz || jestManager;
-            btn_forget_users.Visible         = jestAdmin;
+            btn_add_user.Visible = jestAdmin;
+            btn_show_users.Visible = jestAdmin;
+            btn_forget_users.Visible = jestAdmin;
             btn_find_forgotten_users.Visible = jestAdmin;
-            btn_manage_permissions.Visible   = jestAdmin || jestManager;
-            btn_menage_password.Visible      = jestAdmin;
+            btn_manage_permissions.Visible  = jestAdmin;
+            btn_menage_password.Visible  = jestAdmin;
+            btn_add_book.Visible = jestBibliotekarz;
+            btn_show_books.Visible = jestBibliotekarz || jestManager || jestCzytelnik;
+            btn_borrow_book.Visible = jestBibliotekarz || jestManager;
+            btn_return_book.Visible = jestBibliotekarz || jestManager;
         }
 
         // ── WYLOGOWANIE — WYLOG_UZY_1 ─────────────────────────────────────────────

@@ -61,6 +61,8 @@
     <Compile Include="login1.Designer.cs">
       <DependentUpon>login1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Autor.cs" />
+    <Compile Include="Models\Gatunek.cs" />
     <Compile Include="Models\Uprawnienie.cs" />
     <Compile Include="Models\UzytkownikListItem.cs" />
     <Compile Include="PermissionValidator.cs" />
@@ -198,6 +200,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCBorrowBook.resx">
       <DependentUpon>UCBorrowBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCManager.resx">
+      <DependentUpon>UCManager.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCReturnBook.resx">
       <DependentUpon>UCReturnBook.cs</DependentUpon>

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
+using Biblioteka.Models;
 
 namespace Biblioteka
 {
@@ -14,18 +15,192 @@ namespace Biblioteka
 
         public int? CurrentUserId { get; set; }
 
+        // Gdy ustawione — formularz działa w trybie "dołóż egzemplarze do istniejącej książki"
+        public int? IstniejacaKsiazkaId { get; set; }
+
         public UCAddBook()
         {
             InitializeComponent();
-            this.VisibleChanged += (sender, e) =>
-            {
-                if (Visible)
-                {
-                    WyczyscFormularz();
-                }
-            };
+
+            WyczyscFormularz();
+            WczytajAutorowDoListy();
+            WczytajGatunkiDoListy();
         }
 
+        // Tryb "dołóż egzemplarze" — wypełnia i blokuje pola tytuł/autor/gatunek
+        public void ZaladujDaneIstniejacejKsiazki(int ksiazkaId)
+        {
+            const string sql = @"
+                SELECT K.Tytul, G.Nazwa AS Gatunek, G.ID AS GatunekID,
+                       K.LiczbaStron, K.RokWydania, K.Cena, K.Opis,
+                       W.Nazwa AS Wydawnictwo
+                FROM KatalogKsiazek K
+                JOIN Gatunki     G ON G.ID = K.GatunekID
+                LEFT JOIN Wydawnictwa W ON W.ID = K.WydawnictwoID
+                WHERE K.ID = @ID;";
+
+            const string sqlAutorzy = @"
+                SELECT A.ID, A.Imie, A.Nazwisko
+                FROM Autorzy A
+                JOIN KsiazkaKatalog_Autorzy KA ON KA.AutorID = A.ID
+                WHERE KA.KsiazkaID = @ID;";
+
+            int gatunekId = -1;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ksiazkaId);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                txt_tytul.Text        = reader["Tytul"].ToString();
+                                txt_wydawnictwo.Text  = reader["Wydawnictwo"].ToString();
+                                txt_liczba_stron.Text = reader["LiczbaStron"].ToString();
+                                txt_rok_wydania.Text  = reader["RokWydania"].ToString();
+                                txt_cena.Text         = reader["Cena"].ToString();
+                                txt_opis.Text         = reader.IsDBNull(reader.GetOrdinal("Opis"))
+                                    ? "" : reader["Opis"].ToString();
+                                gatunekId = (int)reader["GatunekID"];
+                            }
+                        }
+                    }
+
+                    // Zaznacz odpowiednich autorów w liście
+                    using (SqlCommand cmd = new SqlCommand(sqlAutorzy, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ksiazkaId);
+                        var autorzyIds = new System.Collections.Generic.List<int>();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                            while (reader.Read())
+                                autorzyIds.Add((int)reader["ID"]);
+
+                        for (int i = 0; i < chlb_autorzy.Items.Count; i++)
+                        {
+                            var autor = (Autor)chlb_autorzy.Items[i];
+                            chlb_autorzy.SetItemChecked(i, autorzyIds.Contains(autor.ID));
+                        }
+                    }
+
+                    // Zaznacz gatunek w liście
+                    for (int i = 0; i < chlb_gatunki.Items.Count; i++)
+                    {
+                        var gatunek = (Gatunek)chlb_gatunki.Items[i];
+                        chlb_gatunki.SetItemChecked(i, gatunek.ID == gatunekId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd wczytywania danych książki: " + ex.Message, "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Zablokuj pola tylko do odczytu
+            txt_tytul.ReadOnly  = true;
+            txt_tytul.BackColor = System.Drawing.SystemColors.Control;
+
+            // Ukryj kontrolki do zarządzania autorami i gatunkami
+            chlb_autorzy.Enabled = false;
+            chlb_gatunki.Enabled = false;
+            txt_autor_imie.Visible     = false;
+            txt_autor_nazwisko.Visible = false;
+            btn_search.Visible         = false;
+            btn_add_author.Visible     = false;
+            btn_delete_autor.Visible   = false;
+            btn_search_gatunek.Visible = false;
+            btn_add_gatunek.Visible    = false;
+            btn_delete_gatunek.Visible = false;
+            txt_gatunek.Visible        = false;
+
+            lbl_naglowek.Text = "DODAWANIE EGZEMPLARZY";
+        }
+
+        private void WczytajAutorowDoListy(string imie = null, string nazwisko = null)
+        {
+            chlb_autorzy.Items.Clear();
+
+            const string sql = @"SELECT ID, Imie, Nazwisko FROM Autorzy
+                WHERE Imie LIKE @Imie AND Nazwisko LIKE @Nazwisko
+                ORDER BY Nazwisko, Imie;";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.Add("@Imie", $"%{imie}%");
+                        cmd.Parameters.Add("@Nazwisko", $"%{nazwisko}%");
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                            while (reader.Read())
+                            {
+                                var autor = new Autor
+                                {
+                                    ID = (int)reader["ID"],
+                                    Imie = reader["Imie"].ToString(),
+                                    Nazwisko = reader["Nazwisko"].ToString()
+                                };
+                                chlb_autorzy.Items.Add(autor, false);
+                            }
+                             
+
+                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas wczytywania autorów: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void WczytajGatunkiDoListy(string nazwa = null)
+        {
+            chlb_gatunki.Items.Clear();
+
+            const string sql = @"SELECT ID, Nazwa FROM Gatunki
+                WHERE Nazwa LIKE @Nazwa
+                ORDER BY Nazwa;";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.Add("@Nazwa", $"%{nazwa}%");
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                            while (reader.Read())
+                            {
+                                var gatunek = new Gatunek
+                                {
+                                    ID = (int)reader["ID"],
+                                    Nazwa = reader["Nazwa"].ToString()
+                                };
+                                chlb_gatunki.Items.Add(gatunek, false);
+                            }
+
+
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas wczytywania gatunków: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void btn_zapisz_Click(object sender, EventArgs e)
         {
             if (WalidujFormularz())
@@ -67,17 +242,6 @@ namespace Biblioteka
                 isValid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(txt_gatunek.Text))
-            {
-                OznaczBlad(txt_gatunek, "Gatunek jest wymagany.");
-                isValid = false;
-            }
-            else if (txt_gatunek.Text.Trim().Length > 100)
-            {
-                OznaczBlad(txt_gatunek, "Gatunek może mieć maksymalnie 100 znaków.");
-                isValid = false;
-            }
-
             if (string.IsNullOrWhiteSpace(txt_wydawnictwo.Text))
             {
                 OznaczBlad(txt_wydawnictwo, "Wydawnictwo jest wymagane.");
@@ -89,26 +253,19 @@ namespace Biblioteka
                 isValid = false;
             }
 
-            if (string.IsNullOrWhiteSpace(txt_autor_imie.Text))
+            if (IstniejacaKsiazkaId == null)
             {
-                OznaczBlad(txt_autor_imie, "Imię autora jest wymagane.");
-                isValid = false;
-            }
-            else if (txt_autor_imie.Text.Trim().Length > 50)
-            {
-                OznaczBlad(txt_autor_imie, "Imię autora może mieć maksymalnie 50 znaków.");
-                isValid = false;
-            }
+                if (chlb_gatunki.CheckedItems.Count == 0 || chlb_gatunki.CheckedItems.Count > 1)
+                {
+                    error_add_book_form.SetError(chlb_gatunki, "Wybierz dokładnie jeden gatunek.");
+                    isValid = false;
+                }
 
-            if (string.IsNullOrWhiteSpace(txt_autor_nazwisko.Text))
-            {
-                OznaczBlad(txt_autor_nazwisko, "Nazwisko autora jest wymagane.");
-                isValid = false;
-            }
-            else if (txt_autor_nazwisko.Text.Trim().Length > 50)
-            {
-                OznaczBlad(txt_autor_nazwisko, "Nazwisko autora może mieć maksymalnie 50 znaków.");
-                isValid = false;
+                if (chlb_autorzy.CheckedItems.Count == 0)
+                {
+                    error_add_book_form.SetError(chlb_autorzy, "Wybierz co najmniej jednego autora.");
+                    isValid = false;
+                }
             }
 
             if (!int.TryParse(txt_liczba_stron.Text.Trim(), out liczbaStron) || liczbaStron <= 0)
@@ -125,7 +282,7 @@ namespace Biblioteka
                 isValid = false;
             }
 
-            if (!TryParseCena(txt_cena.Text.Trim(), out cena) || cena <= 0)
+            if (!decimal.TryParse(txt_cena.Text.Trim(), out cena) || cena <= 0)
             {
                 OznaczBlad(txt_cena, "Cena musi być liczbą większą od zera.");
                 isValid = false;
@@ -142,97 +299,148 @@ namespace Biblioteka
 
         private void ZapiszKsiazkeDoBazy()
         {
+            if (!CurrentUserId.HasValue)
+            {
+                MessageBox.Show("Brak informacji o zalogowanym bibliotekarzu.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (IstniejacaKsiazkaId.HasValue)
+            {
+                DodajEgzemplarzeDoIstniejacejKsiazki();
+                return;
+            }
+
+            var gatunek = (Gatunek)chlb_gatunki.CheckedItems[0];
+            int liczbaStron = int.Parse(txt_liczba_stron.Text.Trim());
+            int rokWydania  = int.Parse(txt_rok_wydania.Text.Trim());
+            decimal cena    = decimal.Parse(txt_cena.Text.Trim());
+            int liczbaSztuk = int.Parse(txt_liczba_sztuk.Text.Trim());
+
             SqlTransaction transaction = null;
 
             try
             {
-                if (!CurrentUserId.HasValue)
-                {
-                    MessageBox.Show("Brak informacji o zalogowanym bibliotekarzu.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                string tytul = txt_tytul.Text.Trim();
-                string gatunek = txt_gatunek.Text.Trim();
-                string wydawnictwo = txt_wydawnictwo.Text.Trim();
-                string imieAutora = txt_autor_imie.Text.Trim();
-                string nazwiskoAutora = txt_autor_nazwisko.Text.Trim();
-                int liczbaStron = int.Parse(txt_liczba_stron.Text.Trim());
-                int rokWydania = int.Parse(txt_rok_wydania.Text.Trim());
-                decimal cena = ParseCena(txt_cena.Text.Trim());
-                string opis = txt_opis.Text.Trim();
-                int liczbaSztuk = int.Parse(txt_liczba_sztuk.Text.Trim());
-
                 using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
                     conn.Open();
                     transaction = conn.BeginTransaction();
 
-                    int gatunekId = PobierzLubDodajIdSlownika(conn, transaction, "Gatunki", gatunek);
-                    int wydawnictwoId = PobierzLubDodajIdSlownika(conn, transaction, "Wydawnictwa", wydawnictwo);
-                    int ksiazkaId = DodajKsiazkeDoKatalogu(conn, transaction, tytul, gatunekId, wydawnictwoId, liczbaStron, rokWydania, cena, opis);
-                    int autorId = PobierzLubDodajAutora(conn, transaction, imieAutora, nazwiskoAutora);
+                    // 1. Wydawnictwo — lookup-or-insert
+                    int wydawnictwoId = PobierzLubDodajWydawnictwo(conn, transaction, txt_wydawnictwo.Text.Trim());
 
-                    PowiazAutoraZKsiazka(conn, transaction, ksiazkaId, autorId);
-                    DodajEgzemplarze(conn, transaction, ksiazkaId, liczbaSztuk, CurrentUserId.Value);
+                    // 2. Dodaj książkę
+                    const string sqlKsiazka = @"INSERT INTO KatalogKsiazek (Tytul, GatunekID, WydawnictwoID, LiczbaStron, RokWydania, Cena, Opis)
+                        VALUES (@Tytul, @GatunekID, @WydawnictwoID, @LiczbaStron, @RokWydania, @Cena, @Opis);
+                        SELECT CAST(SCOPE_IDENTITY() AS INT);";
+
+                    int ksiazkaId;
+                    using (SqlCommand cmd = new SqlCommand(sqlKsiazka, conn, transaction))
+                    {
+                        cmd.Parameters.Add("@Tytul", txt_tytul.Text.Trim());
+                        cmd.Parameters.Add("@GatunekID",gatunek.ID);
+                        cmd.Parameters.Add("@WydawnictwoID", wydawnictwoId);
+                        cmd.Parameters.Add("@LiczbaStron", liczbaStron);
+                        cmd.Parameters.Add("@RokWydania", rokWydania);
+                        cmd.Parameters.Add("@Cena", cena);
+                        cmd.Parameters.Add("@Opis", txt_opis.Text.Trim());
+
+                        ksiazkaId = (int)cmd.ExecuteScalar();
+                    }
+
+                    // 3. Powiąż zaznaczonych autorów
+                    const string sqlAutor = "INSERT INTO KsiazkaKatalog_Autorzy (KsiazkaID, AutorID) VALUES (@KsiazkaID, @AutorID);";
+                    foreach (Autor autor in chlb_autorzy.CheckedItems)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(sqlAutor, conn, transaction))
+                        {
+                            cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = ksiazkaId;
+                            cmd.Parameters.Add("@AutorID",   SqlDbType.Int).Value = autor.ID;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    // 4. Dodaj egzemplarze
+                    const string sqlEgz = "INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID) VALUES (@KsiazkaID, 'Dostepna', @BibID);";
+                    for (int i = 0; i < liczbaSztuk; i++)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(sqlEgz, conn, transaction))
+                        {
+                            cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = ksiazkaId;
+                            cmd.Parameters.Add("@BibID",     SqlDbType.Int).Value = CurrentUserId.Value;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
 
                     transaction.Commit();
                 }
 
                 WyczyscFormularz();
-                MessageBox.Show("Dodano książkę", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Dodano książkę.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                string rollbackKomunikat = string.Empty;
+                if (transaction?.Connection?.State == ConnectionState.Open)
+                    try { transaction.Rollback(); } catch { }
 
-                if (transaction != null && transaction.Connection != null)
+                MessageBox.Show("Błąd podczas dodawania książki: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DodajEgzemplarzeDoIstniejacejKsiazki()
+        {
+            int liczbaSztuk = int.Parse(txt_liczba_sztuk.Text.Trim());
+
+            SqlTransaction transaction = null;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
-                    if (transaction.Connection.State == ConnectionState.Open)
+                    conn.Open();
+                    transaction = conn.BeginTransaction();
+
+                    const string sqlEgz = @"INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
+                        VALUES (@KsiazkaID, 'Dostepna', @BibID);";
+
+                    for (int i = 0; i < liczbaSztuk; i++)
                     {
-                        try
+                        using (SqlCommand cmd = new SqlCommand(sqlEgz, conn, transaction))
                         {
-                            transaction.Rollback();
-                        }
-                        catch (Exception rollbackEx)
-                        {
-                            rollbackKomunikat = "\nDodatkowo nie udało się wycofać transakcji: " + rollbackEx.Message;
+                            cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = IstniejacaKsiazkaId.Value;
+                            cmd.Parameters.Add("@BibID",     SqlDbType.Int).Value = CurrentUserId.Value;
+                            cmd.ExecuteNonQuery();
                         }
                     }
+
+                    transaction.Commit();
                 }
 
-                MessageBox.Show("Wystąpił błąd podczas dodawania książki: " + ex.Message + rollbackKomunikat, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Dodano {liczbaSztuk} egzemplarz(y) do istniejącej pozycji.", "Sukces",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                Form parentForm = this.FindForm();
+                if (parentForm is Form1 mainForm)
+                    mainForm.PowrotDoMenuGlownego();
+            }
+            catch (Exception ex)
+            {
+                if (transaction?.Connection?.State == ConnectionState.Open)
+                    try { transaction.Rollback(); } catch { }
+                MessageBox.Show("Błąd podczas dodawania egzemplarzy: " + ex.Message, "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private int PobierzLubDodajIdSlownika(SqlConnection conn, SqlTransaction transaction, string nazwaTabeli, string nazwa)
+        private int PobierzLubDodajWydawnictwo(SqlConnection conn, SqlTransaction transaction, string nazwa)
         {
-            string selectSql;
-            string insertSql;
-
-            switch (nazwaTabeli)
-            {
-                case "Gatunki":
-                    selectSql = "SELECT ID FROM Gatunki WHERE Nazwa = @Nazwa";
-                    insertSql = "INSERT INTO Gatunki (Nazwa) VALUES (@Nazwa); SELECT CAST(SCOPE_IDENTITY() AS INT);";
-                    break;
-                case "Wydawnictwa":
-                    selectSql = "SELECT ID FROM Wydawnictwa WHERE Nazwa = @Nazwa";
-                    insertSql = "INSERT INTO Wydawnictwa (Nazwa) VALUES (@Nazwa); SELECT CAST(SCOPE_IDENTITY() AS INT);";
-                    break;
-                default:
-                    throw new ArgumentException("Nieobsługiwana tabela słownikowa.");
-            }
+            const string selectSql = "SELECT ID FROM Wydawnictwa WHERE Nazwa = @Nazwa;";
+            const string insertSql = "INSERT INTO Wydawnictwa (Nazwa) VALUES (@Nazwa); SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
             using (SqlCommand cmd = new SqlCommand(selectSql, conn, transaction))
             {
                 cmd.Parameters.Add("@Nazwa", SqlDbType.NVarChar, 100).Value = nazwa;
-                object existingId = cmd.ExecuteScalar();
-
-                if (existingId != null)
-                {
-                    return Convert.ToInt32(existingId);
-                }
+                object id = cmd.ExecuteScalar();
+                if (id != null) return Convert.ToInt32(id);
             }
 
             using (SqlCommand cmd = new SqlCommand(insertSql, conn, transaction))
@@ -242,98 +450,7 @@ namespace Biblioteka
             }
         }
 
-        private int DodajKsiazkeDoKatalogu(
-            SqlConnection conn,
-            SqlTransaction transaction,
-            string tytul,
-            int gatunekId,
-            int wydawnictwoId,
-            int liczbaStron,
-            int rokWydania,
-            decimal cena,
-            string opis)
-        {
-            const string sql = @"
-INSERT INTO KatalogKsiazek
-    (Tytul, GatunekID, WydawnictwoID, LiczbaStron, RokWydania, Cena, Opis)
-VALUES
-    (@Tytul, @GatunekID, @WydawnictwoID, @LiczbaStron, @RokWydania, @Cena, @Opis);
-SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
-            using (SqlCommand cmd = new SqlCommand(sql, conn, transaction))
-            {
-                cmd.Parameters.Add("@Tytul", SqlDbType.NVarChar, 255).Value = tytul;
-                cmd.Parameters.Add("@GatunekID", SqlDbType.Int).Value = gatunekId;
-                cmd.Parameters.Add("@WydawnictwoID", SqlDbType.Int).Value = wydawnictwoId;
-                cmd.Parameters.Add("@LiczbaStron", SqlDbType.Int).Value = liczbaStron;
-                cmd.Parameters.Add("@RokWydania", SqlDbType.Int).Value = rokWydania;
-                cmd.Parameters.Add("@Cena", SqlDbType.Decimal).Value = cena;
-                cmd.Parameters["@Cena"].Precision = 10;
-                cmd.Parameters["@Cena"].Scale = 2;
-                cmd.Parameters.Add("@Opis", SqlDbType.NVarChar, -1).Value =
-                    string.IsNullOrWhiteSpace(opis) ? (object)DBNull.Value : opis;
-
-                return (int)cmd.ExecuteScalar();
-            }
-        }
-
-        private int PobierzLubDodajAutora(SqlConnection conn, SqlTransaction transaction, string imie, string nazwisko)
-        {
-            const string selectSql = "SELECT ID FROM Autorzy WHERE Imie = @Imie AND Nazwisko = @Nazwisko;";
-            const string insertSql = @"
-INSERT INTO Autorzy (Imie, Nazwisko)
-VALUES (@Imie, @Nazwisko);
-SELECT CAST(SCOPE_IDENTITY() AS INT);";
-
-            using (SqlCommand cmd = new SqlCommand(selectSql, conn, transaction))
-            {
-                cmd.Parameters.Add("@Imie", SqlDbType.NVarChar, 50).Value = imie;
-                cmd.Parameters.Add("@Nazwisko", SqlDbType.NVarChar, 50).Value = nazwisko;
-                object existingId = cmd.ExecuteScalar();
-
-                if (existingId != null)
-                {
-                    return Convert.ToInt32(existingId);
-                }
-            }
-
-            using (SqlCommand cmd = new SqlCommand(insertSql, conn, transaction))
-            {
-                cmd.Parameters.Add("@Imie", SqlDbType.NVarChar, 50).Value = imie;
-                cmd.Parameters.Add("@Nazwisko", SqlDbType.NVarChar, 50).Value = nazwisko;
-                return (int)cmd.ExecuteScalar();
-            }
-        }
-
-        private void PowiazAutoraZKsiazka(SqlConnection conn, SqlTransaction transaction, int ksiazkaId, int autorId)
-        {
-            const string sql = "INSERT INTO KsiazkaKatalog_Autorzy (KsiazkaID, AutorID) VALUES (@KsiazkaID, @AutorID);";
-
-            using (SqlCommand cmd = new SqlCommand(sql, conn, transaction))
-            {
-                cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = ksiazkaId;
-                cmd.Parameters.Add("@AutorID", SqlDbType.Int).Value = autorId;
-                cmd.ExecuteNonQuery();
-            }
-        }
-
-        private void DodajEgzemplarze(SqlConnection conn, SqlTransaction transaction, int ksiazkaId, int liczbaSztuk, int bibliotekarzId)
-        {
-            const string sql = @"
-INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
-VALUES (@KsiazkaID, @Status, @ZarejestrowanePrzezID);";
-
-            for (int i = 0; i < liczbaSztuk; i++)
-            {
-                using (SqlCommand cmd = new SqlCommand(sql, conn, transaction))
-                {
-                    cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = ksiazkaId;
-                    cmd.Parameters.Add("@Status", SqlDbType.NVarChar, 50).Value = "Dostepna";
-                    cmd.Parameters.Add("@ZarejestrowanePrzezID", SqlDbType.Int).Value = bibliotekarzId;
-                    cmd.ExecuteNonQuery();
-                }
-            }
-        }
 
         private void OznaczBlad(Control ctrl, string msg)
         {
@@ -389,22 +506,198 @@ VALUES (@KsiazkaID, @Status, @ZarejestrowanePrzezID);";
             }
         }
 
-        private bool TryParseCena(string tekst, out decimal cena)
+
+        private void btn_search_Click(object sender, EventArgs e)
         {
-            return decimal.TryParse(tekst, NumberStyles.Number, CultureInfo.CurrentCulture, out cena) ||
-                   decimal.TryParse(tekst, NumberStyles.Number, CultureInfo.InvariantCulture, out cena);
+            WczytajAutorowDoListy(txt_autor_imie.Text.Trim(), txt_autor_nazwisko.Text.Trim());
         }
 
-        private decimal ParseCena(string tekst)
+        private void btn_add_author_Click(object sender, EventArgs e)
         {
-            decimal cena;
+            var imieAutora     = txt_autor_imie.Text.Trim();
+            var nazwiskoAutora = txt_autor_nazwisko.Text.Trim();
 
-            if (TryParseCena(tekst, out cena))
+            if (string.IsNullOrWhiteSpace(imieAutora) || string.IsNullOrWhiteSpace(nazwiskoAutora))
             {
-                return cena;
+                MessageBox.Show("Podaj imię i nazwisko autora.", "Walidacja", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            throw new FormatException("Niepoprawny format ceny.");
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+
+                        const string insertSql = @"IF NOT EXISTS (SELECT 1 FROM Autorzy WHERE Imie = @Imie AND Nazwisko = @Nazwisko)
+                                INSERT INTO Autorzy (Imie, Nazwisko) VALUES (@Imie, @Nazwisko);";
+
+                    using (SqlCommand cmd = new SqlCommand(insertSql, conn))
+                    {
+                        cmd.Parameters.Add("@Imie", imieAutora);
+                        cmd.Parameters.Add("@Nazwisko", nazwiskoAutora);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                txt_autor_imie.Clear();
+                txt_autor_nazwisko.Clear();
+                txt_autor_imie.Focus();
+
+                WczytajAutorowDoListy();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas dodawania autora: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
+        private void btn_delete_autor_Click(object sender, EventArgs e)
+        {
+            if (chlb_autorzy.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Nie zaznaczono żadnego autora do usunięcia.", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var result = MessageBox.Show("Czy na pewno chcesz usunąć zaznaczonych autorów? Ta operacja jest nieodwracalna.", "Potwierdzenie", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No)
+                return;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+
+                    foreach (Autor autor in chlb_autorzy.CheckedItems)
+                    {
+                        const string sprawdzSql = "SELECT COUNT(*) FROM KsiazkaKatalog_Autorzy WHERE AutorID = @ID";
+                        using (SqlCommand cmd = new SqlCommand(sprawdzSql, conn))
+                        {
+                            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = autor.ID;
+                            int liczbaPowiazanychKsiazek = (int)cmd.ExecuteScalar();
+
+                            if (liczbaPowiazanychKsiazek > 0)
+                            {
+                                MessageBox.Show(
+                                    $"Nie można usunąć autora \"{autor.Imie} {autor.Nazwisko}\" — jest przypisany do {liczbaPowiazanychKsiazek} książek.",
+                                    "Operacja niemożliwa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                continue;
+                            }
+                        }
+
+                        const string deleteSql = "DELETE FROM Autorzy WHERE ID = @ID";
+                        using (SqlCommand cmd = new SqlCommand(deleteSql, conn))
+                        {
+                            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = autor.ID;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                WczytajAutorowDoListy();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas usuwania autora: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btn_search_gatunek_Click(object sender, EventArgs e)
+        {
+            WczytajGatunkiDoListy(txt_gatunek.Text.Trim());
+        }
+
+        private void btn_add_gatunek_Click(object sender, EventArgs e)
+        {
+            var gatunek = txt_gatunek.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(gatunek))
+            {
+                MessageBox.Show("Podaj gatunek", "Walidacja", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+
+                    const string insertSql = @"IF NOT EXISTS (SELECT 1 FROM Gatunki WHERE Nazwa = @Nazwa)
+                                INSERT INTO Gatunki (Nazwa) VALUES (@Nazwa);";
+
+                    using (SqlCommand cmd = new SqlCommand(insertSql, conn))
+                    {
+                        cmd.Parameters.Add("@Nazwa", gatunek);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+
+                txt_gatunek.Clear();
+                txt_gatunek.Focus();
+
+                WczytajGatunkiDoListy();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas dodawania gatunku: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btn_delete_gatunek_Click(object sender, EventArgs e)
+        {
+            if (chlb_gatunki.CheckedItems.Count == 0)
+            {
+                MessageBox.Show("Nie zaznaczono żadnego gatunku do usunięcia.", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var result = MessageBox.Show("Czy na pewno chcesz usunąć zaznaczone gatunki? Ta operacja jest nieodwracalna.", "Potwierdzenie", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.No)
+                return;
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+
+                    foreach (Gatunek gatunek in chlb_gatunki.CheckedItems)
+                    {
+                        const string sprawdzSql = "SELECT COUNT(*) FROM KatalogKsiazek WHERE GatunekID = @ID";
+                        using (SqlCommand cmd = new SqlCommand(sprawdzSql, conn))
+                        {
+                            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = gatunek.ID;
+                            int liczbaPowiazanychKsiazek = (int)cmd.ExecuteScalar();
+
+                            if (liczbaPowiazanychKsiazek > 0)
+                            {
+                                MessageBox.Show(
+                                    $"Nie można usunąć gatunku \"{gatunek.Nazwa}\" — jest przypisany do {liczbaPowiazanychKsiazek} książek.",
+                                    "Operacja niemożliwa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                continue;
+                            }
+                        }
+
+                        const string deleteSql = "DELETE FROM Gatunki WHERE ID = @ID";
+                        using (SqlCommand cmd = new SqlCommand(deleteSql, conn))
+                        {
+                            cmd.Parameters.Add("@ID", SqlDbType.Int).Value = gatunek.ID;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+                WczytajGatunkiDoListy();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas usuwania gatunku: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
     }
 }
