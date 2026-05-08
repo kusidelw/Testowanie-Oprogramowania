@@ -138,9 +138,6 @@ namespace Biblioteka
                     string sqlData = @"
                         SELECT
                             K.ID,
-                            K.Tytul                                                                    AS [Tytuł],
-                            ISNULL(G.Nazwa, '')                                                        AS [Gatunek],
-                            ISNULL(W.Nazwa, '')                                                        AS [Wydawnictwo],
                             ISNULL((SELECT STUFF((
                                 SELECT ', ' + A2.Imie + ' ' + A2.Nazwisko
                                 FROM KsiazkaKatalog_Autorzy KA2
@@ -148,7 +145,12 @@ namespace Biblioteka
                                 WHERE KA2.KsiazkaID = K.ID
                                 ORDER BY A2.Nazwisko, A2.Imie
                                 FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, '')), '')  AS [Autorzy],
+                            K.Tytul                                                                    AS [Tytuł],
+                            ISNULL(G.Nazwa, '')                                                        AS [Gatunek],
+                            K.LiczbaStron                                                              AS [Liczba stron],
+                            ISNULL(W.Nazwa, '')                                                        AS [Wydawnictwo],
                             K.RokWydania                                                               AS [Rok wydania],
+                            K.Cena                                                                     AS [Cena],
                             (SELECT COUNT(*)
                              FROM Egzemplarze E WHERE E.KsiazkaID = K.ID)                             AS [Egzemplarze],
                             (SELECT COUNT(*)
