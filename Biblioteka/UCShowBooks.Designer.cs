@@ -58,9 +58,9 @@ namespace Biblioteka
             this.panel_header.Controls.Add(this.lbl_title);
             this.panel_header.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_header.Location = new System.Drawing.Point(0, 0);
-            this.panel_header.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel_header.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel_header.Name = "panel_header";
-            this.panel_header.Size = new System.Drawing.Size(1287, 56);
+            this.panel_header.Size = new System.Drawing.Size(965, 46);
             this.panel_header.TabIndex = 0;
             // 
             // lbl_title
@@ -68,9 +68,10 @@ namespace Biblioteka
             this.lbl_title.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold);
-            this.lbl_title.Location = new System.Drawing.Point(0, 8);
+            this.lbl_title.Location = new System.Drawing.Point(0, 6);
+            this.lbl_title.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_title.Name = "lbl_title";
-            this.lbl_title.Size = new System.Drawing.Size(1287, 32);
+            this.lbl_title.Size = new System.Drawing.Size(965, 26);
             this.lbl_title.TabIndex = 0;
             this.lbl_title.Text = "PRZEGLĄD KSIĄŻEK";
             this.lbl_title.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -79,45 +80,50 @@ namespace Biblioteka
             // 
             this.lbl_filter_tytul.AutoSize = true;
             this.lbl_filter_tytul.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_filter_tytul.Location = new System.Drawing.Point(30, 86);
+            this.lbl_filter_tytul.Location = new System.Drawing.Point(22, 70);
+            this.lbl_filter_tytul.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_filter_tytul.Name = "lbl_filter_tytul";
-            this.lbl_filter_tytul.Size = new System.Drawing.Size(56, 20);
+            this.lbl_filter_tytul.Size = new System.Drawing.Size(49, 17);
             this.lbl_filter_tytul.TabIndex = 1;
             this.lbl_filter_tytul.Text = "Tytuł:";
             // 
             // txt_search_tytul
             // 
             this.txt_search_tytul.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_tytul.Location = new System.Drawing.Point(120, 86);
+            this.txt_search_tytul.Location = new System.Drawing.Point(90, 70);
+            this.txt_search_tytul.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_search_tytul.Name = "txt_search_tytul";
-            this.txt_search_tytul.Size = new System.Drawing.Size(253, 27);
+            this.txt_search_tytul.Size = new System.Drawing.Size(191, 23);
             this.txt_search_tytul.TabIndex = 2;
             // 
             // lbl_filter_autor
             // 
             this.lbl_filter_autor.AutoSize = true;
             this.lbl_filter_autor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_filter_autor.Location = new System.Drawing.Point(390, 86);
+            this.lbl_filter_autor.Location = new System.Drawing.Point(292, 70);
+            this.lbl_filter_autor.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_filter_autor.Name = "lbl_filter_autor";
-            this.lbl_filter_autor.Size = new System.Drawing.Size(60, 20);
+            this.lbl_filter_autor.Size = new System.Drawing.Size(52, 17);
             this.lbl_filter_autor.TabIndex = 3;
             this.lbl_filter_autor.Text = "Autor:";
             // 
             // txt_search_autor
             // 
             this.txt_search_autor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_autor.Location = new System.Drawing.Point(527, 83);
+            this.txt_search_autor.Location = new System.Drawing.Point(395, 67);
+            this.txt_search_autor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_search_autor.Name = "txt_search_autor";
-            this.txt_search_autor.Size = new System.Drawing.Size(241, 27);
+            this.txt_search_autor.Size = new System.Drawing.Size(182, 23);
             this.txt_search_autor.TabIndex = 4;
             // 
             // btn_search
             // 
             this.btn_search.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search.Location = new System.Drawing.Point(1122, 75);
+            this.btn_search.Location = new System.Drawing.Point(842, 61);
+            this.btn_search.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_search.Name = "btn_search";
-            this.btn_search.Size = new System.Drawing.Size(140, 34);
+            this.btn_search.Size = new System.Drawing.Size(105, 28);
             this.btn_search.TabIndex = 5;
             this.btn_search.Text = "Szukaj";
             this.btn_search.UseVisualStyleBackColor = false;
@@ -127,9 +133,10 @@ namespace Biblioteka
             // 
             this.btn_clear_filters.BackColor = System.Drawing.Color.LightYellow;
             this.btn_clear_filters.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_clear_filters.Location = new System.Drawing.Point(1122, 118);
+            this.btn_clear_filters.Location = new System.Drawing.Point(842, 96);
+            this.btn_clear_filters.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_clear_filters.Name = "btn_clear_filters";
-            this.btn_clear_filters.Size = new System.Drawing.Size(140, 34);
+            this.btn_clear_filters.Size = new System.Drawing.Size(105, 28);
             this.btn_clear_filters.TabIndex = 6;
             this.btn_clear_filters.Text = "Wyczyść filtry";
             this.btn_clear_filters.UseVisualStyleBackColor = false;
@@ -143,14 +150,15 @@ namespace Biblioteka
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv_books_list.BackgroundColor = System.Drawing.Color.Gainsboro;
             this.dgv_books_list.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_books_list.Location = new System.Drawing.Point(22, 186);
+            this.dgv_books_list.Location = new System.Drawing.Point(16, 151);
+            this.dgv_books_list.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgv_books_list.Name = "dgv_books_list";
             this.dgv_books_list.ReadOnly = true;
             this.dgv_books_list.RowHeadersVisible = false;
             this.dgv_books_list.RowHeadersWidth = 51;
             this.dgv_books_list.RowTemplate.Height = 24;
             this.dgv_books_list.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_books_list.Size = new System.Drawing.Size(1227, 454);
+            this.dgv_books_list.Size = new System.Drawing.Size(920, 369);
             this.dgv_books_list.TabIndex = 7;
             this.dgv_books_list.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_books_list_CellDoubleClick);
             this.dgv_books_list.SelectionChanged += new System.EventHandler(this.dgv_books_list_SelectionChanged);
@@ -160,9 +168,10 @@ namespace Biblioteka
             this.btn_prev_page.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_prev_page.BackColor = System.Drawing.Color.LightBlue;
             this.btn_prev_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_prev_page.Location = new System.Drawing.Point(428, 658);
+            this.btn_prev_page.Location = new System.Drawing.Point(321, 535);
+            this.btn_prev_page.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_prev_page.Name = "btn_prev_page";
-            this.btn_prev_page.Size = new System.Drawing.Size(137, 31);
+            this.btn_prev_page.Size = new System.Drawing.Size(103, 25);
             this.btn_prev_page.TabIndex = 8;
             this.btn_prev_page.Text = "Poprzednia";
             this.btn_prev_page.UseVisualStyleBackColor = false;
@@ -173,9 +182,10 @@ namespace Biblioteka
             this.lbl_page_info.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lbl_page_info.AutoSize = true;
             this.lbl_page_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_page_info.Location = new System.Drawing.Point(593, 663);
+            this.lbl_page_info.Location = new System.Drawing.Point(445, 539);
+            this.lbl_page_info.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_page_info.Name = "lbl_page_info";
-            this.lbl_page_info.Size = new System.Drawing.Size(114, 20);
+            this.lbl_page_info.Size = new System.Drawing.Size(99, 17);
             this.lbl_page_info.TabIndex = 9;
             this.lbl_page_info.Text = "Strona: 1 / 1";
             this.lbl_page_info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -185,9 +195,10 @@ namespace Biblioteka
             this.btn_next_page.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_next_page.BackColor = System.Drawing.Color.LightBlue;
             this.btn_next_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_next_page.Location = new System.Drawing.Point(737, 658);
+            this.btn_next_page.Location = new System.Drawing.Point(553, 535);
+            this.btn_next_page.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_next_page.Name = "btn_next_page";
-            this.btn_next_page.Size = new System.Drawing.Size(136, 31);
+            this.btn_next_page.Size = new System.Drawing.Size(102, 25);
             this.btn_next_page.TabIndex = 10;
             this.btn_next_page.Text = "Następna";
             this.btn_next_page.UseVisualStyleBackColor = false;
@@ -199,9 +210,10 @@ namespace Biblioteka
             this.btn_details.BackColor = System.Drawing.Color.LightGreen;
             this.btn_details.Enabled = false;
             this.btn_details.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_details.Location = new System.Drawing.Point(1092, 658);
+            this.btn_details.Location = new System.Drawing.Point(819, 535);
+            this.btn_details.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_details.Name = "btn_details";
-            this.btn_details.Size = new System.Drawing.Size(157, 31);
+            this.btn_details.Size = new System.Drawing.Size(118, 25);
             this.btn_details.TabIndex = 11;
             this.btn_details.Text = "Szczegóły";
             this.btn_details.UseVisualStyleBackColor = false;
@@ -210,36 +222,40 @@ namespace Biblioteka
             // txt_search_wydawnictwo
             // 
             this.txt_search_wydawnictwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_wydawnictwo.Location = new System.Drawing.Point(527, 125);
+            this.txt_search_wydawnictwo.Location = new System.Drawing.Point(395, 102);
+            this.txt_search_wydawnictwo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_search_wydawnictwo.Name = "txt_search_wydawnictwo";
-            this.txt_search_wydawnictwo.Size = new System.Drawing.Size(241, 27);
+            this.txt_search_wydawnictwo.Size = new System.Drawing.Size(182, 23);
             this.txt_search_wydawnictwo.TabIndex = 15;
             // 
             // lbl_wydawnictwo
             // 
             this.lbl_wydawnictwo.AutoSize = true;
             this.lbl_wydawnictwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_wydawnictwo.Location = new System.Drawing.Point(390, 129);
+            this.lbl_wydawnictwo.Location = new System.Drawing.Point(292, 105);
+            this.lbl_wydawnictwo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_wydawnictwo.Name = "lbl_wydawnictwo";
-            this.lbl_wydawnictwo.Size = new System.Drawing.Size(128, 20);
+            this.lbl_wydawnictwo.Size = new System.Drawing.Size(108, 17);
             this.lbl_wydawnictwo.TabIndex = 14;
             this.lbl_wydawnictwo.Text = "Wydawnictwo:";
             // 
             // txt_search_gatunek
             // 
             this.txt_search_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.txt_search_gatunek.Location = new System.Drawing.Point(120, 125);
+            this.txt_search_gatunek.Location = new System.Drawing.Point(90, 102);
+            this.txt_search_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_search_gatunek.Name = "txt_search_gatunek";
-            this.txt_search_gatunek.Size = new System.Drawing.Size(253, 27);
+            this.txt_search_gatunek.Size = new System.Drawing.Size(191, 23);
             this.txt_search_gatunek.TabIndex = 13;
             // 
             // lbl_gatunek
             // 
             this.lbl_gatunek.AutoSize = true;
             this.lbl_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_gatunek.Location = new System.Drawing.Point(30, 129);
+            this.lbl_gatunek.Location = new System.Drawing.Point(22, 105);
+            this.lbl_gatunek.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_gatunek.Name = "lbl_gatunek";
-            this.lbl_gatunek.Size = new System.Drawing.Size(84, 20);
+            this.lbl_gatunek.Size = new System.Drawing.Size(74, 17);
             this.lbl_gatunek.TabIndex = 12;
             this.lbl_gatunek.Text = "Gatunek:";
             // 
@@ -247,18 +263,20 @@ namespace Biblioteka
             // 
             this.lbl_status.AutoSize = true;
             this.lbl_status.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_status.Location = new System.Drawing.Point(785, 89);
+            this.lbl_status.Location = new System.Drawing.Point(589, 72);
+            this.lbl_status.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_status.Name = "lbl_status";
-            this.lbl_status.Size = new System.Drawing.Size(69, 20);
+            this.lbl_status.Size = new System.Drawing.Size(59, 17);
             this.lbl_status.TabIndex = 16;
             this.lbl_status.Text = "Status:";
             // 
             // cbm_status
             // 
             this.cbm_status.FormattingEnabled = true;
-            this.cbm_status.Location = new System.Drawing.Point(860, 86);
+            this.cbm_status.Location = new System.Drawing.Point(645, 70);
+            this.cbm_status.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbm_status.Name = "cbm_status";
-            this.cbm_status.Size = new System.Drawing.Size(187, 24);
+            this.cbm_status.Size = new System.Drawing.Size(141, 21);
             this.cbm_status.TabIndex = 17;
             // 
             // btn_dodaj_nowy_egzemplarz
@@ -267,17 +285,18 @@ namespace Biblioteka
             this.btn_dodaj_nowy_egzemplarz.BackColor = System.Drawing.Color.LightGreen;
             this.btn_dodaj_nowy_egzemplarz.Enabled = false;
             this.btn_dodaj_nowy_egzemplarz.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_dodaj_nowy_egzemplarz.Location = new System.Drawing.Point(22, 658);
+            this.btn_dodaj_nowy_egzemplarz.Location = new System.Drawing.Point(16, 535);
+            this.btn_dodaj_nowy_egzemplarz.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_dodaj_nowy_egzemplarz.Name = "btn_dodaj_nowy_egzemplarz";
-            this.btn_dodaj_nowy_egzemplarz.Size = new System.Drawing.Size(214, 31);
+            this.btn_dodaj_nowy_egzemplarz.Size = new System.Drawing.Size(160, 25);
             this.btn_dodaj_nowy_egzemplarz.TabIndex = 18;
-            this.btn_dodaj_nowy_egzemplarz.Text = "Dodaj Egzemplarz";
+            this.btn_dodaj_nowy_egzemplarz.Text = "Dodaj egzemplarze";
             this.btn_dodaj_nowy_egzemplarz.UseVisualStyleBackColor = false;
             this.btn_dodaj_nowy_egzemplarz.Click += new System.EventHandler(this.btn_dodaj_nowy_egzemplarz_Click);
             // 
             // UCShowBooks
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.btn_dodaj_nowy_egzemplarz);
@@ -299,9 +318,9 @@ namespace Biblioteka
             this.Controls.Add(this.txt_search_tytul);
             this.Controls.Add(this.lbl_filter_tytul);
             this.Controls.Add(this.panel_header);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "UCShowBooks";
-            this.Size = new System.Drawing.Size(1287, 702);
+            this.Size = new System.Drawing.Size(965, 570);
             this.panel_header.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_books_list)).EndInit();
             this.ResumeLayout(false);

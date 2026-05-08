@@ -72,17 +72,18 @@ namespace Biblioteka
             this.panel1.Controls.Add(this.lbl_naglowek);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1184, 58);
+            this.panel1.Size = new System.Drawing.Size(888, 47);
             this.panel1.TabIndex = 0;
             // 
             // lbl_naglowek
             // 
             this.lbl_naglowek.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lbl_naglowek.Location = new System.Drawing.Point(3, 9);
+            this.lbl_naglowek.Location = new System.Drawing.Point(2, 7);
+            this.lbl_naglowek.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_naglowek.Name = "lbl_naglowek";
-            this.lbl_naglowek.Size = new System.Drawing.Size(1178, 34);
+            this.lbl_naglowek.Size = new System.Drawing.Size(884, 28);
             this.lbl_naglowek.TabIndex = 0;
             this.lbl_naglowek.Text = "REJESTRACJA KSIĄŻEK";
             this.lbl_naglowek.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -91,180 +92,200 @@ namespace Biblioteka
             // 
             this.lbl_tytul.AutoSize = true;
             this.lbl_tytul.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_tytul.Location = new System.Drawing.Point(22, 83);
+            this.lbl_tytul.Location = new System.Drawing.Point(16, 67);
+            this.lbl_tytul.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_tytul.Name = "lbl_tytul";
-            this.lbl_tytul.Size = new System.Drawing.Size(61, 25);
+            this.lbl_tytul.Size = new System.Drawing.Size(47, 20);
             this.lbl_tytul.TabIndex = 1;
             this.lbl_tytul.Text = "Tytuł:";
             // 
             // txt_tytul
             // 
             this.txt_tytul.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_tytul.Location = new System.Drawing.Point(165, 80);
+            this.txt_tytul.Location = new System.Drawing.Point(124, 65);
+            this.txt_tytul.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_tytul.Name = "txt_tytul";
-            this.txt_tytul.Size = new System.Drawing.Size(264, 30);
+            this.txt_tytul.Size = new System.Drawing.Size(199, 26);
             this.txt_tytul.TabIndex = 2;
             // 
             // lbl_gatunek
             // 
             this.lbl_gatunek.AutoSize = true;
             this.lbl_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_gatunek.Location = new System.Drawing.Point(475, 384);
+            this.lbl_gatunek.Location = new System.Drawing.Point(356, 312);
+            this.lbl_gatunek.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_gatunek.Name = "lbl_gatunek";
-            this.lbl_gatunek.Size = new System.Drawing.Size(92, 25);
+            this.lbl_gatunek.Size = new System.Drawing.Size(75, 20);
             this.lbl_gatunek.TabIndex = 3;
             this.lbl_gatunek.Text = "Gatunek:";
             // 
             // txt_gatunek
             // 
             this.txt_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_gatunek.Location = new System.Drawing.Point(618, 381);
+            this.txt_gatunek.Location = new System.Drawing.Point(464, 310);
+            this.txt_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_gatunek.Name = "txt_gatunek";
-            this.txt_gatunek.Size = new System.Drawing.Size(264, 30);
+            this.txt_gatunek.Size = new System.Drawing.Size(199, 26);
             this.txt_gatunek.TabIndex = 4;
             // 
             // lbl_wydawnictwo
             // 
             this.lbl_wydawnictwo.AutoSize = true;
             this.lbl_wydawnictwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_wydawnictwo.Location = new System.Drawing.Point(22, 125);
+            this.lbl_wydawnictwo.Location = new System.Drawing.Point(16, 102);
+            this.lbl_wydawnictwo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_wydawnictwo.Name = "lbl_wydawnictwo";
-            this.lbl_wydawnictwo.Size = new System.Drawing.Size(139, 25);
+            this.lbl_wydawnictwo.Size = new System.Drawing.Size(109, 20);
             this.lbl_wydawnictwo.TabIndex = 5;
             this.lbl_wydawnictwo.Text = "Wydawnictwo:";
             // 
             // txt_wydawnictwo
             // 
             this.txt_wydawnictwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_wydawnictwo.Location = new System.Drawing.Point(165, 122);
+            this.txt_wydawnictwo.Location = new System.Drawing.Point(124, 99);
+            this.txt_wydawnictwo.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_wydawnictwo.Name = "txt_wydawnictwo";
-            this.txt_wydawnictwo.Size = new System.Drawing.Size(264, 30);
+            this.txt_wydawnictwo.Size = new System.Drawing.Size(199, 26);
             this.txt_wydawnictwo.TabIndex = 6;
             // 
             // lbl_autor_imie
             // 
             this.lbl_autor_imie.AutoSize = true;
             this.lbl_autor_imie.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_autor_imie.Location = new System.Drawing.Point(463, 83);
+            this.lbl_autor_imie.Location = new System.Drawing.Point(347, 67);
+            this.lbl_autor_imie.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_autor_imie.Name = "lbl_autor_imie";
-            this.lbl_autor_imie.Size = new System.Drawing.Size(114, 25);
+            this.lbl_autor_imie.Size = new System.Drawing.Size(93, 20);
             this.lbl_autor_imie.TabIndex = 7;
             this.lbl_autor_imie.Text = "Imię autora:";
             // 
             // txt_autor_imie
             // 
             this.txt_autor_imie.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_autor_imie.Location = new System.Drawing.Point(596, 80);
+            this.txt_autor_imie.Location = new System.Drawing.Point(447, 65);
+            this.txt_autor_imie.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_autor_imie.Name = "txt_autor_imie";
-            this.txt_autor_imie.Size = new System.Drawing.Size(165, 30);
+            this.txt_autor_imie.Size = new System.Drawing.Size(125, 26);
             this.txt_autor_imie.TabIndex = 8;
             // 
             // lbl_autor_nazwisko
             // 
             this.lbl_autor_nazwisko.AutoSize = true;
             this.lbl_autor_nazwisko.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_autor_nazwisko.Location = new System.Drawing.Point(781, 83);
+            this.lbl_autor_nazwisko.Location = new System.Drawing.Point(586, 67);
+            this.lbl_autor_nazwisko.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_autor_nazwisko.Name = "lbl_autor_nazwisko";
-            this.lbl_autor_nazwisko.Size = new System.Drawing.Size(162, 25);
+            this.lbl_autor_nazwisko.Size = new System.Drawing.Size(130, 20);
             this.lbl_autor_nazwisko.TabIndex = 9;
             this.lbl_autor_nazwisko.Text = "Nazwisko autora:";
             // 
             // txt_autor_nazwisko
             // 
             this.txt_autor_nazwisko.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_autor_nazwisko.Location = new System.Drawing.Point(949, 83);
+            this.txt_autor_nazwisko.Location = new System.Drawing.Point(712, 67);
+            this.txt_autor_nazwisko.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_autor_nazwisko.Name = "txt_autor_nazwisko";
-            this.txt_autor_nazwisko.Size = new System.Drawing.Size(194, 30);
+            this.txt_autor_nazwisko.Size = new System.Drawing.Size(146, 26);
             this.txt_autor_nazwisko.TabIndex = 10;
             // 
             // lbl_liczba_stron
             // 
             this.lbl_liczba_stron.AutoSize = true;
             this.lbl_liczba_stron.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_liczba_stron.Location = new System.Drawing.Point(22, 168);
+            this.lbl_liczba_stron.Location = new System.Drawing.Point(16, 136);
+            this.lbl_liczba_stron.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_liczba_stron.Name = "lbl_liczba_stron";
-            this.lbl_liczba_stron.Size = new System.Drawing.Size(123, 25);
+            this.lbl_liczba_stron.Size = new System.Drawing.Size(99, 20);
             this.lbl_liczba_stron.TabIndex = 11;
             this.lbl_liczba_stron.Text = "Liczba stron:";
             // 
             // txt_liczba_stron
             // 
             this.txt_liczba_stron.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_liczba_stron.Location = new System.Drawing.Point(165, 165);
+            this.txt_liczba_stron.Location = new System.Drawing.Point(124, 134);
+            this.txt_liczba_stron.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_liczba_stron.Name = "txt_liczba_stron";
-            this.txt_liczba_stron.Size = new System.Drawing.Size(264, 30);
+            this.txt_liczba_stron.Size = new System.Drawing.Size(199, 26);
             this.txt_liczba_stron.TabIndex = 12;
             // 
             // lbl_rok_wydania
             // 
             this.lbl_rok_wydania.AutoSize = true;
             this.lbl_rok_wydania.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_rok_wydania.Location = new System.Drawing.Point(22, 209);
+            this.lbl_rok_wydania.Location = new System.Drawing.Point(16, 170);
+            this.lbl_rok_wydania.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_rok_wydania.Name = "lbl_rok_wydania";
-            this.lbl_rok_wydania.Size = new System.Drawing.Size(129, 25);
+            this.lbl_rok_wydania.Size = new System.Drawing.Size(103, 20);
             this.lbl_rok_wydania.TabIndex = 13;
             this.lbl_rok_wydania.Text = "Rok wydania:";
             // 
             // txt_rok_wydania
             // 
             this.txt_rok_wydania.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_rok_wydania.Location = new System.Drawing.Point(165, 206);
+            this.txt_rok_wydania.Location = new System.Drawing.Point(124, 167);
+            this.txt_rok_wydania.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_rok_wydania.Name = "txt_rok_wydania";
-            this.txt_rok_wydania.Size = new System.Drawing.Size(264, 30);
+            this.txt_rok_wydania.Size = new System.Drawing.Size(199, 26);
             this.txt_rok_wydania.TabIndex = 14;
             // 
             // lbl_cena
             // 
             this.lbl_cena.AutoSize = true;
             this.lbl_cena.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_cena.Location = new System.Drawing.Point(22, 255);
+            this.lbl_cena.Location = new System.Drawing.Point(16, 207);
+            this.lbl_cena.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_cena.Name = "lbl_cena";
-            this.lbl_cena.Size = new System.Drawing.Size(66, 25);
+            this.lbl_cena.Size = new System.Drawing.Size(51, 20);
             this.lbl_cena.TabIndex = 15;
             this.lbl_cena.Text = "Cena:";
             // 
             // txt_cena
             // 
             this.txt_cena.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_cena.Location = new System.Drawing.Point(165, 252);
+            this.txt_cena.Location = new System.Drawing.Point(124, 205);
+            this.txt_cena.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_cena.Name = "txt_cena";
-            this.txt_cena.Size = new System.Drawing.Size(264, 30);
+            this.txt_cena.Size = new System.Drawing.Size(199, 26);
             this.txt_cena.TabIndex = 16;
             // 
             // lbl_liczba_sztuk
             // 
             this.lbl_liczba_sztuk.AutoSize = true;
             this.lbl_liczba_sztuk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_liczba_sztuk.Location = new System.Drawing.Point(22, 299);
+            this.lbl_liczba_sztuk.Location = new System.Drawing.Point(16, 243);
+            this.lbl_liczba_sztuk.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_liczba_sztuk.Name = "lbl_liczba_sztuk";
-            this.lbl_liczba_sztuk.Size = new System.Drawing.Size(126, 25);
+            this.lbl_liczba_sztuk.Size = new System.Drawing.Size(101, 20);
             this.lbl_liczba_sztuk.TabIndex = 17;
             this.lbl_liczba_sztuk.Text = "Liczba sztuk:";
             // 
             // txt_liczba_sztuk
             // 
             this.txt_liczba_sztuk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_liczba_sztuk.Location = new System.Drawing.Point(165, 299);
+            this.txt_liczba_sztuk.Location = new System.Drawing.Point(124, 243);
+            this.txt_liczba_sztuk.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_liczba_sztuk.Name = "txt_liczba_sztuk";
-            this.txt_liczba_sztuk.Size = new System.Drawing.Size(264, 30);
+            this.txt_liczba_sztuk.Size = new System.Drawing.Size(199, 26);
             this.txt_liczba_sztuk.TabIndex = 18;
             // 
             // lbl_opis
             // 
             this.lbl_opis.AutoSize = true;
             this.lbl_opis.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_opis.Location = new System.Drawing.Point(22, 345);
+            this.lbl_opis.Location = new System.Drawing.Point(16, 280);
+            this.lbl_opis.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_opis.Name = "lbl_opis";
-            this.lbl_opis.Size = new System.Drawing.Size(59, 25);
+            this.lbl_opis.Size = new System.Drawing.Size(45, 20);
             this.lbl_opis.TabIndex = 19;
             this.lbl_opis.Text = "Opis:";
             // 
             // txt_opis
             // 
             this.txt_opis.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_opis.Location = new System.Drawing.Point(87, 345);
+            this.txt_opis.Location = new System.Drawing.Point(65, 280);
+            this.txt_opis.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_opis.Name = "txt_opis";
-            this.txt_opis.Size = new System.Drawing.Size(365, 209);
+            this.txt_opis.Size = new System.Drawing.Size(275, 171);
             this.txt_opis.TabIndex = 20;
             this.txt_opis.Text = "";
             // 
@@ -274,9 +295,10 @@ namespace Biblioteka
             this.btn_anuluj.AutoSize = true;
             this.btn_anuluj.BackColor = System.Drawing.Color.LightCoral;
             this.btn_anuluj.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.btn_anuluj.Location = new System.Drawing.Point(8, 592);
+            this.btn_anuluj.Location = new System.Drawing.Point(6, 481);
+            this.btn_anuluj.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_anuluj.Name = "btn_anuluj";
-            this.btn_anuluj.Size = new System.Drawing.Size(282, 89);
+            this.btn_anuluj.Size = new System.Drawing.Size(212, 72);
             this.btn_anuluj.TabIndex = 21;
             this.btn_anuluj.Text = "ANULUJ";
             this.btn_anuluj.UseVisualStyleBackColor = false;
@@ -288,11 +310,12 @@ namespace Biblioteka
             this.btn_zapisz.AutoSize = true;
             this.btn_zapisz.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.btn_zapisz.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
-            this.btn_zapisz.Location = new System.Drawing.Point(882, 592);
+            this.btn_zapisz.Location = new System.Drawing.Point(662, 481);
+            this.btn_zapisz.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_zapisz.Name = "btn_zapisz";
-            this.btn_zapisz.Size = new System.Drawing.Size(282, 89);
+            this.btn_zapisz.Size = new System.Drawing.Size(212, 72);
             this.btn_zapisz.TabIndex = 22;
-            this.btn_zapisz.Text = "ZAPISZ KSIĄŻKĘ";
+            this.btn_zapisz.Text = "ZAPISZ";
             this.btn_zapisz.UseVisualStyleBackColor = false;
             this.btn_zapisz.Click += new System.EventHandler(this.btn_zapisz_Click);
             // 
@@ -303,9 +326,10 @@ namespace Biblioteka
             // chlb_autorzy
             // 
             this.chlb_autorzy.FormattingEnabled = true;
-            this.chlb_autorzy.Location = new System.Drawing.Point(468, 124);
+            this.chlb_autorzy.Location = new System.Drawing.Point(351, 101);
+            this.chlb_autorzy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chlb_autorzy.Name = "chlb_autorzy";
-            this.chlb_autorzy.Size = new System.Drawing.Size(675, 191);
+            this.chlb_autorzy.Size = new System.Drawing.Size(507, 154);
             this.chlb_autorzy.TabIndex = 23;
             // 
             // btn_add_author
@@ -313,9 +337,10 @@ namespace Biblioteka
             this.btn_add_author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_add_author.BackColor = System.Drawing.Color.LightBlue;
             this.btn_add_author.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_add_author.Location = new System.Drawing.Point(634, 336);
+            this.btn_add_author.Location = new System.Drawing.Point(476, 273);
+            this.btn_add_author.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_add_author.Name = "btn_add_author";
-            this.btn_add_author.Size = new System.Drawing.Size(160, 34);
+            this.btn_add_author.Size = new System.Drawing.Size(120, 28);
             this.btn_add_author.TabIndex = 24;
             this.btn_add_author.Text = "Dodaj";
             this.btn_add_author.UseVisualStyleBackColor = false;
@@ -326,9 +351,10 @@ namespace Biblioteka
             this.btn_search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_search.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search.Location = new System.Drawing.Point(468, 336);
+            this.btn_search.Location = new System.Drawing.Point(351, 273);
+            this.btn_search.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_search.Name = "btn_search";
-            this.btn_search.Size = new System.Drawing.Size(160, 34);
+            this.btn_search.Size = new System.Drawing.Size(120, 28);
             this.btn_search.TabIndex = 25;
             this.btn_search.Text = "Szukaj";
             this.btn_search.UseVisualStyleBackColor = false;
@@ -339,9 +365,10 @@ namespace Biblioteka
             this.btn_search_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_search_gatunek.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search_gatunek.Location = new System.Drawing.Point(480, 546);
+            this.btn_search_gatunek.Location = new System.Drawing.Point(360, 444);
+            this.btn_search_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_search_gatunek.Name = "btn_search_gatunek";
-            this.btn_search_gatunek.Size = new System.Drawing.Size(160, 34);
+            this.btn_search_gatunek.Size = new System.Drawing.Size(120, 28);
             this.btn_search_gatunek.TabIndex = 28;
             this.btn_search_gatunek.Text = "Szukaj";
             this.btn_search_gatunek.UseVisualStyleBackColor = false;
@@ -352,9 +379,10 @@ namespace Biblioteka
             this.btn_add_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_add_gatunek.BackColor = System.Drawing.Color.LightBlue;
             this.btn_add_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_add_gatunek.Location = new System.Drawing.Point(646, 546);
+            this.btn_add_gatunek.Location = new System.Drawing.Point(484, 444);
+            this.btn_add_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_add_gatunek.Name = "btn_add_gatunek";
-            this.btn_add_gatunek.Size = new System.Drawing.Size(160, 34);
+            this.btn_add_gatunek.Size = new System.Drawing.Size(120, 28);
             this.btn_add_gatunek.TabIndex = 27;
             this.btn_add_gatunek.Text = "Dodaj";
             this.btn_add_gatunek.UseVisualStyleBackColor = false;
@@ -363,9 +391,10 @@ namespace Biblioteka
             // chlb_gatunki
             // 
             this.chlb_gatunki.FormattingEnabled = true;
-            this.chlb_gatunki.Location = new System.Drawing.Point(480, 417);
+            this.chlb_gatunki.Location = new System.Drawing.Point(360, 339);
+            this.chlb_gatunki.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chlb_gatunki.Name = "chlb_gatunki";
-            this.chlb_gatunki.Size = new System.Drawing.Size(663, 123);
+            this.chlb_gatunki.Size = new System.Drawing.Size(498, 94);
             this.chlb_gatunki.TabIndex = 26;
             // 
             // btn_delete_autor
@@ -373,9 +402,10 @@ namespace Biblioteka
             this.btn_delete_autor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_delete_autor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btn_delete_autor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_delete_autor.Location = new System.Drawing.Point(983, 336);
+            this.btn_delete_autor.Location = new System.Drawing.Point(737, 273);
+            this.btn_delete_autor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_delete_autor.Name = "btn_delete_autor";
-            this.btn_delete_autor.Size = new System.Drawing.Size(160, 34);
+            this.btn_delete_autor.Size = new System.Drawing.Size(120, 28);
             this.btn_delete_autor.TabIndex = 30;
             this.btn_delete_autor.Text = "Usuń";
             this.btn_delete_autor.UseVisualStyleBackColor = false;
@@ -386,9 +416,10 @@ namespace Biblioteka
             this.btn_delete_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_delete_gatunek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btn_delete_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_delete_gatunek.Location = new System.Drawing.Point(983, 546);
+            this.btn_delete_gatunek.Location = new System.Drawing.Point(737, 444);
+            this.btn_delete_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_delete_gatunek.Name = "btn_delete_gatunek";
-            this.btn_delete_gatunek.Size = new System.Drawing.Size(160, 34);
+            this.btn_delete_gatunek.Size = new System.Drawing.Size(120, 28);
             this.btn_delete_gatunek.TabIndex = 31;
             this.btn_delete_gatunek.Text = "Usuń";
             this.btn_delete_gatunek.UseVisualStyleBackColor = false;
@@ -396,7 +427,7 @@ namespace Biblioteka
             // 
             // UCAddBook
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.btn_delete_gatunek);
@@ -430,9 +461,9 @@ namespace Biblioteka
             this.Controls.Add(this.txt_tytul);
             this.Controls.Add(this.lbl_tytul);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "UCAddBook";
-            this.Size = new System.Drawing.Size(1184, 684);
+            this.Size = new System.Drawing.Size(888, 556);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.error_add_book_form)).EndInit();
             this.ResumeLayout(false);
