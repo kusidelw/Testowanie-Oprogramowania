@@ -82,6 +82,12 @@ namespace Biblioteka
 
                     if (totalRecords == 0)
                     {
+                        MessageBox.Show(
+                            "Brak rejestracji spełniających podane kryteria",
+                            "Brak wyników",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+
                         if (dgv_audit.DataSource is DataTable dtEmpty)
                             dtEmpty.Clear();
                         AktualizujStronowanie();

@@ -22,11 +22,43 @@ namespace Biblioteka
         private System.Windows.Forms.FlowLayoutPanel panelBibliotekarz;
         private System.Windows.Forms.FlowLayoutPanel panelCzytelnik;
 
+        // Kontrolki tworzone leniwie (tylko gdy potrzebne) lub na żądanie
+        private UCAddUsers ucAddUsers;
+        private UCAddBook ucAddBook;
+        private UCShowUsers ucShowUsers;
+        private UCEditData ucEditData;
+        private UCShowUsersData ucShowUsersData;
+        private UCForgetUsers ucForgetUsers;
+        private UCFindForgottenUsers ucFindForgottenUsers;
+        private UCManagePermissions ucManagePermissions;
+        private UCUsersWithPermission ucUsersWithPermission;
+        private UCShowBooks ucShowBooks;
+        private UCBorrowBook ucBorrowBook;
+        private UCReturnBook ucReturnBook;
+        private UCCzytelnik ucCzytelnik;
+        private UCManager ucManager;
         private Button btn_audit_books;
 
         public Form1()
         {
+
             InitializeComponent();
+
+            // Inicjalizacja po InitializeComponent — bezpieczna kolejność
+            ucAddUsers = new UCAddUsers();
+            ucAddBook = new UCAddBook();
+            ucShowUsers = new UCShowUsers();
+            ucEditData = new UCEditData();
+            ucShowUsersData = new UCShowUsersData();
+            ucForgetUsers = new UCForgetUsers();
+            ucFindForgottenUsers = new UCFindForgottenUsers();
+            ucManagePermissions = new UCManagePermissions();
+            ucShowBooks = new UCShowBooks();
+            ucBorrowBook = new UCBorrowBook();
+            ucReturnBook = new UCReturnBook();
+            ucCzytelnik  = new UCCzytelnik();
+            ucManager    = new UCManager();
+
             BudujMenuAkordeonowe();
         }
 
@@ -145,7 +177,7 @@ namespace Biblioteka
             panelCzytelnik.SuspendLayout();
             var btnCzytelnikDemo = new Button { Text = "Przykładowy przycisk" };
             StylujPrzyciskMenu(btnCzytelnikDemo);
-            btnCzytelnikDemo.Click += (s, e) => PokazWidokZeStanem(new UCCzytelnik());
+            btnCzytelnikDemo.Click += (s, e) => PokazWidokZeStanem(ucCzytelnik);
             panelCzytelnik.Controls.Add(btnCzytelnikDemo);
             panelCzytelnik.ResumeLayout(false);
 
@@ -158,8 +190,8 @@ namespace Biblioteka
             btn_audit_books = new Button { Text = "Audyt książek" };
             StylujPrzyciskMenu(btn_show_books_manager);
             StylujPrzyciskMenu(btn_audit_books);
-            btn_show_books_manager.Click += (s, e) => PokazListeKsiazek();
-            btn_audit_books.Click += (s, e) => PokazWidokZeStanem(new UCManager { CurrentUserId = currentUserId });
+            btn_show_books_manager.Click += (s, e) => PokazWidokZeStanem(ucShowBooks);
+            btn_audit_books.Click += (s, e) => PokazWidokZeStanem(ucManager);
 
             panelManager.Controls.Add(btn_show_books_manager);
             panelManager.Controls.Add(btn_audit_books);
@@ -226,42 +258,55 @@ namespace Biblioteka
 
         private void btn_add_user_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCAddUsers());
+            PokazWidokZeStanem(ucAddUsers);
         }
 
         private void btn_add_book_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCAddBook { CurrentUserId = currentUserId });
+            if (ucAddBook != null)
+            {
+                ucAddBook.CurrentUserId = currentUserId;
+                ucAddBook.PrzygotujDoDodawaniaNowejKsiazki();
+            }
+
+            PokazWidokZeStanem(ucAddBook);
         }
 
         private void btn_show_books_Click(object sender, EventArgs e)
         {
-            PokazListeKsiazek();
+            PokazWidokZeStanem(ucShowBooks);
         }
 
         private void btn_borrow_book_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCBorrowBook { CurrentUserId = currentUserId });
+            if (ucBorrowBook != null)
+                ucBorrowBook.CurrentUserId = currentUserId;
+
+            PokazWidokZeStanem(ucBorrowBook);
         }
 
         private void btn_return_book_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCReturnBook());
+            PokazWidokZeStanem(ucReturnBook);
         }
 
         private void btn_show_users_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCShowUsers());
+            PokazWidokZeStanem(ucShowUsers);
         }
 
         private void btn_forget_users_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCForgetUsers { CurrentUserId = currentUserId });
+            // Przekaż ID aktualnie zalogowanego użytkownika 
+            if (ucForgetUsers != null)
+                ucForgetUsers.CurrentUserId = currentUserId;
+
+            PokazWidokZeStanem(ucForgetUsers);
         }
 
         private void btn_find_forgotten_users_Click(object sender, EventArgs e)
         {
-            PokazWidokZeStanem(new UCFindForgottenUsers());
+            PokazWidokZeStanem(ucFindForgottenUsers);
         }
 
         private void btn_manage_permissions_Click(object sender, EventArgs e)
@@ -279,51 +324,43 @@ namespace Biblioteka
 
         public void PrzejdzDoEdycji(int userId)
         {
-            var uc = new UCEditData();
-            PokazWidokZeStanem(uc);
-            uc.ZaladujDaneDoEdycji(userId);
+            PokazWidokZeStanem(ucEditData);
+            ucEditData.ZaladujDaneDoEdycji(userId);
         }
 
         public void PokazKarteUzytkownika(int userId)
         {
-            var uc = new UCShowUsersData();
-            PokazWidokZeStanem(uc);
-            uc.ZaladujDaneUzytkownika(userId);
+            PokazWidokZeStanem(ucShowUsersData);
+            ucShowUsersData.ZaladujDaneUzytkownika(userId);
         }
 
         public void WrocDoWyszukiwarki()
         {
-            PokazWidokZeStanem(new UCShowUsers());
+            // Nowa instancja — odświeżona lista użytkowników
+            ucShowUsers = new UCShowUsers();
+            PokazWidokZeStanem(ucShowUsers);
         }
 
         public void WrocDoListyKsiazek()
         {
-            PokazListeKsiazek();
+            PokazWidokZeStanem(ucShowBooks);
         }
 
         public void PokazZarzadzanieUprawnieniami()
         {
-            PokazWidokZeStanem(new UCManagePermissions());
+            PokazWidokZeStanem(ucManagePermissions);
         }
 
         public void PokazUzytkownikowZUprawnieniem(int permissionId, string permissionName)
         {
-            var uc = new UCUsersWithPermission();
-            uc.ZaladujDane(permissionId, permissionName);
-            PokazWidokZeStanem(uc);
+            ucUsersWithPermission = new UCUsersWithPermission();
+            ucUsersWithPermission.ZaladujDane(permissionId, permissionName);
+            PokazWidokZeStanem(ucUsersWithPermission);
         }
 
         public void PowrotDoListyUprawnien()
         {
-            PokazWidokZeStanem(new UCManagePermissions());
-        }
-
-        private void PokazListeKsiazek()
-        {
-            var uc = new UCShowBooks();
-            uc.CurrentUserId  = currentUserId;
-            uc.IsBibliotekarz = _role.Contains("Bibliotekarz");
-            PokazWidokZeStanem(uc);
+            PokazWidokZeStanem(ucManagePermissions);
         }
 
         // Ustawia sesję: ID użytkownika i jego role — ukrywa/pokazuje przyciski menu
@@ -331,6 +368,25 @@ namespace Biblioteka
         {
             currentUserId = userId;
             _role = role ?? new List<string>();
+
+            if (ucForgetUsers != null)
+                ucForgetUsers.CurrentUserId = currentUserId;
+
+            if (ucAddBook != null)
+                ucAddBook.CurrentUserId = currentUserId;
+
+            if (ucBorrowBook != null)
+                ucBorrowBook.CurrentUserId = currentUserId;
+
+            if (ucManager != null)
+                ucManager.CurrentUserId = currentUserId;
+
+            if (ucShowBooks != null)
+            {
+                ucShowBooks.CurrentUserId  = currentUserId;
+                ucShowBooks.IsBibliotekarz = _role.Contains("Bibliotekarz");
+            }
+
             AplikujRole();
         }
 

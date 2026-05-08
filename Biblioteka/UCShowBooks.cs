@@ -118,7 +118,7 @@ namespace Biblioteka
                         || !string.IsNullOrEmpty(searchStatus)))
                     {
                         MessageBox.Show(
-                            "Nie znaleziono książek spełniających podane kryteria.",
+                            "Nie znaleziono książek o podanych kryteriach",
                             "Brak wyników",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);

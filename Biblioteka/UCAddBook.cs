@@ -16,27 +16,38 @@ namespace Biblioteka
 
         public int? CurrentUserId { get; set; }
 
-        // Gdy ustawione — formularz działa w trybie "dołóż egzemplarze do istniejącej książki"
         public int? IstniejacaKsiazkaId { get; set; }
 
+        private bool CzyTrybDodawaniaEgzemplarzy => IstniejacaKsiazkaId.HasValue;
+
+        
         public UCAddBook()
         {
             InitializeComponent();
 
-            WyczyscFormularz();
             WczytajAutorowDoListy();
             WczytajGatunkiDoListy();
+            PrzygotujDoDodawaniaNowejKsiazki();
         }
 
-        // Tryb "dołóż egzemplarze" — wypełnia i blokuje pola tytuł/autor/gatunek
+        public void PrzygotujDoDodawaniaNowejKsiazki()
+        {
+            IstniejacaKsiazkaId = null;
+            WyczyscFormularz();
+            UstawTrybFormularza(czyDodawanieEgzemplarzy: false);
+        }
+
         public void ZaladujDaneIstniejacejKsiazki(int ksiazkaId)
         {
+            PrzygotujDoDodawaniaNowejKsiazki();
+            IstniejacaKsiazkaId = ksiazkaId;
+
             const string sql = @"
-                SELECT K.Tytul, G.Nazwa AS Gatunek, G.ID AS GatunekID,
-                       W.Nazwa AS Wydawnictwo
+                SELECT K.Tytul,
+                       G.Nazwa AS Gatunek,
+                       G.ID AS GatunekID
                 FROM KatalogKsiazek K
                 JOIN Gatunki     G ON G.ID = K.GatunekID
-                LEFT JOIN Wydawnictwa W ON W.ID = K.WydawnictwoID
                 WHERE K.ID = @ID;";
 
             const string sqlAutorzy = @"
@@ -59,8 +70,8 @@ namespace Biblioteka
                         {
                             if (reader.Read())
                             {
-                                txt_tytul.Text        = reader["Tytul"].ToString();
-    
+                                txt_tytul.Text = reader["Tytul"].ToString();
+                                gatunekId = (int)reader["GatunekID"];
                             }
                         }
                     }
@@ -96,24 +107,7 @@ namespace Biblioteka
                 return;
             }
 
-            // Zablokuj pola tylko do odczytu
-            txt_tytul.ReadOnly  = true;
-            txt_tytul.BackColor = System.Drawing.SystemColors.Control;
-
-            // Ukryj kontrolki do zarządzania autorami i gatunkami
-            chlb_autorzy.Enabled = false;
-            chlb_gatunki.Enabled = false;
-            txt_autor_imie.Visible     = false;
-            txt_autor_nazwisko.Visible = false;
-            btn_search.Visible         = false;
-            btn_add_author.Visible     = false;
-            btn_delete_autor.Visible   = false;
-            btn_search_gatunek.Visible = false;
-            btn_add_gatunek.Visible    = false;
-            btn_delete_gatunek.Visible = false;
-            txt_gatunek.Visible        = false;
-
-            lbl_naglowek.Text = "DODAWANIE EGZEMPLARZY";
+            UstawTrybFormularza(czyDodawanieEgzemplarzy: true);
         }
 
         private void WczytajAutorowDoListy(string imie = null, string nazwisko = null)
@@ -197,6 +191,11 @@ namespace Biblioteka
         }
         private void btn_zapisz_Click(object sender, EventArgs e)
         {
+            if (!CzyTrybDodawaniaEgzemplarzy && CzyKsiazkaIstnieje())
+            {
+                return;
+            }
+
             if (WalidujFormularz())
             {
                 ZapiszKsiazkeDoBazy();
@@ -217,13 +216,25 @@ namespace Biblioteka
         private bool WalidujFormularz()
         {
             bool isValid = true;
-            int liczbaStron;
-            int rokWydania;
             int liczbaSztuk;
-            decimal cena;
 
             error_add_book_form.Clear();
             ResetFieldColors();
+
+            if (CzyTrybDodawaniaEgzemplarzy)
+            {
+                if (!int.TryParse(txt_liczba_sztuk.Text.Trim(), out liczbaSztuk) || liczbaSztuk <= 0)
+                {
+                    OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być większa od 0");
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            int liczbaStron;
+            int rokWydania;
+            decimal cena;
 
             if (string.IsNullOrWhiteSpace(txt_tytul.Text))
             {
@@ -251,7 +262,7 @@ namespace Biblioteka
             {
                 if (chlb_gatunki.CheckedItems.Count == 0 || chlb_gatunki.CheckedItems.Count > 1)
                 {
-                    error_add_book_form.SetError(chlb_gatunki, "Wybierz dokładnie jeden gatunek.");
+                    error_add_book_form.SetError(chlb_gatunki, "Gatunek jest wymagany");
                     isValid = false;
                 }
 
@@ -284,7 +295,7 @@ namespace Biblioteka
 
             if (!int.TryParse(txt_liczba_sztuk.Text.Trim(), out liczbaSztuk) || liczbaSztuk <= 0)
             {
-                OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być liczbą większą od zera.");
+                OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być większa od 0");
                 isValid = false;
             }
 
@@ -415,7 +426,7 @@ namespace Biblioteka
                     transaction.Commit();
                 }
 
-                MessageBox.Show($"Dodano {liczbaSztuk} egzemplarz(y) do istniejącej pozycji.", "Sukces",
+                MessageBox.Show($"Pomyślnie zwiększono liczbę sztuk wybranej książki", "Sukces",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Form parentForm = this.FindForm();
@@ -428,6 +439,63 @@ namespace Biblioteka
                     try { transaction.Rollback(); } catch { }
                 MessageBox.Show("Błąd podczas dodawania egzemplarzy: " + ex.Message, "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private bool CzyKsiazkaIstnieje()
+        {
+            if (string.IsNullOrWhiteSpace(txt_tytul.Text))
+            {
+                OznaczBlad(txt_tytul, "Tytuł jest wymagany.");
+                return false;
+            }
+
+            if (chlb_autorzy.CheckedItems.Count == 0)
+            {
+                error_add_book_form.SetError(chlb_autorzy, "Wybierz co najmniej jednego autora.");
+                return false;
+            }
+
+            var autorzyIds = new List<int>();
+            foreach (Autor autor in chlb_autorzy.CheckedItems)
+                autorzyIds.Add(autor.ID);
+
+            var parametry = new System.Text.StringBuilder();
+            for (int i = 0; i < autorzyIds.Count; i++)
+                parametry.Append(i == 0 ? $"@A{i}" : $",@A{i}");
+
+            string sql = $@"SELECT TOP 1 K.ID FROM KatalogKsiazek K
+                JOIN KsiazkaKatalog_Autorzy KA ON KA.KsiazkaID = K.ID
+                WHERE K.Tytul = @Tytul AND KA.AutorID IN ({parametry});";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.Add("@Tytul", SqlDbType.NVarChar, 255).Value = txt_tytul.Text.Trim();
+                        for (int i = 0; i < autorzyIds.Count; i++)
+                            cmd.Parameters.Add($"@A{i}", SqlDbType.Int).Value = autorzyIds[i];
+
+                        object result = cmd.ExecuteScalar();
+                        if (result == null)
+                            return false;
+
+                        IstniejacaKsiazkaId = Convert.ToInt32(result);
+                        MessageBox.Show(
+                            "Książka o podanym tytule i autorze już istnieje. Użyj opcji dopisania do stanu.",
+                            "Duplikat", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd podczas sprawdzania duplikatu: " + ex.Message, "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
 
@@ -467,7 +535,7 @@ namespace Biblioteka
             {
                 var ctrl = stack.Pop();
                 if (ctrl is TextBoxBase tb)
-                    tb.BackColor = SystemColors.Window;
+                    tb.BackColor = tb.ReadOnly ? SystemColors.Control : SystemColors.Window;
                 foreach (Control child in ctrl.Controls)
                     stack.Push(child);
             }
@@ -475,6 +543,7 @@ namespace Biblioteka
 
         private void WyczyscFormularz()
         {
+            IstniejacaKsiazkaId = null;
             txt_tytul.Clear();
             txt_wydawnictwo.Clear();
             txt_liczba_stron.Clear();
@@ -496,6 +565,35 @@ namespace Biblioteka
             error_add_book_form.Clear();
         }
 
+        private void UstawTrybFormularza(bool czyDodawanieEgzemplarzy)
+        {
+            lbl_naglowek.Text = czyDodawanieEgzemplarzy ? "DODAWANIE EGZEMPLARZY" : "REJESTRACJA KSIĄŻEK";
+            btn_zapisz.Text = czyDodawanieEgzemplarzy ? "DODAJ EGZEMPLARZE" : "ZAPISZ";
+
+            UstawPoleTylkoDoOdczytu(txt_tytul, czyDodawanieEgzemplarzy);
+
+            chlb_autorzy.Enabled = !czyDodawanieEgzemplarzy;
+            chlb_gatunki.Enabled = !czyDodawanieEgzemplarzy;
+
+            txt_autor_imie.Visible = !czyDodawanieEgzemplarzy;
+            txt_autor_nazwisko.Visible = !czyDodawanieEgzemplarzy;
+            btn_search.Visible = !czyDodawanieEgzemplarzy;
+            btn_add_author.Visible = !czyDodawanieEgzemplarzy;
+            btn_delete_autor.Visible = !czyDodawanieEgzemplarzy;
+            btn_search_gatunek.Visible = !czyDodawanieEgzemplarzy;
+            btn_add_gatunek.Visible = !czyDodawanieEgzemplarzy;
+            btn_delete_gatunek.Visible = !czyDodawanieEgzemplarzy;
+            txt_gatunek.Visible = !czyDodawanieEgzemplarzy;
+
+            ResetFieldColors();
+        }
+
+        private void UstawPoleTylkoDoOdczytu(TextBoxBase pole, bool tylkoDoOdczytu)
+        {
+            pole.ReadOnly = tylkoDoOdczytu;
+            pole.BackColor = tylkoDoOdczytu ? SystemColors.Control : SystemColors.Window;
+        }
+
 
         private void btn_search_Click(object sender, EventArgs e)
         {
@@ -507,9 +605,22 @@ namespace Biblioteka
             var imieAutora     = txt_autor_imie.Text.Trim();
             var nazwiskoAutora = txt_autor_nazwisko.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(imieAutora) || string.IsNullOrWhiteSpace(nazwiskoAutora))
+            error_add_book_form.SetError(txt_autor_imie, "");
+            error_add_book_form.SetError(txt_autor_nazwisko, "");
+            txt_autor_imie.BackColor = SystemColors.Window;
+            txt_autor_nazwisko.BackColor = SystemColors.Window;
+
+            bool brakImienia = string.IsNullOrWhiteSpace(imieAutora);
+            bool brakNazwiska = string.IsNullOrWhiteSpace(nazwiskoAutora);
+
+            if (brakImienia || brakNazwiska)
             {
-                MessageBox.Show("Podaj imię i nazwisko autora.", "Walidacja", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (brakImienia)
+                    OznaczBlad(txt_autor_imie, "Imię autora jest wymagane");
+
+                if (brakNazwiska)
+                    OznaczBlad(txt_autor_nazwisko, "Nazwisko autora jest wymagane");
+
                 return;
             }
 
