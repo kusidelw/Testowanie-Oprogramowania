@@ -78,6 +78,7 @@ namespace Biblioteka
             this.txt_filter_tytul.Size = new System.Drawing.Size(220, 27);
             this.txt_filter_tytul.TabIndex = 2;
             this.txt_filter_tytul.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_filter_KeyDown);
+            this.txt_filter_tytul.TextChanged += new System.EventHandler(this.txt_filter_TextChanged);
             // 
             // lbl_filter_autor
             // 
@@ -97,6 +98,7 @@ namespace Biblioteka
             this.txt_filter_autor.Size = new System.Drawing.Size(220, 27);
             this.txt_filter_autor.TabIndex = 4;
             this.txt_filter_autor.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_filter_KeyDown);
+            this.txt_filter_autor.TextChanged += new System.EventHandler(this.txt_filter_TextChanged);
             // 
             // lbl_filter_gatunek
             // 
@@ -116,6 +118,7 @@ namespace Biblioteka
             this.txt_filter_gatunek.Size = new System.Drawing.Size(220, 27);
             this.txt_filter_gatunek.TabIndex = 6;
             this.txt_filter_gatunek.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_filter_KeyDown);
+            this.txt_filter_gatunek.TextChanged += new System.EventHandler(this.txt_filter_TextChanged);
             // 
             // lbl_filter_wyd
             // 
@@ -135,6 +138,7 @@ namespace Biblioteka
             this.txt_filter_wyd.Size = new System.Drawing.Size(220, 27);
             this.txt_filter_wyd.TabIndex = 8;
             this.txt_filter_wyd.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_filter_KeyDown);
+            this.txt_filter_wyd.TextChanged += new System.EventHandler(this.txt_filter_TextChanged);
             // 
             // lbl_filter_osoba
             // 
@@ -154,6 +158,7 @@ namespace Biblioteka
             this.txt_filter_osoba.Size = new System.Drawing.Size(220, 27);
             this.txt_filter_osoba.TabIndex = 10;
             this.txt_filter_osoba.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_filter_KeyDown);
+            this.txt_filter_osoba.TextChanged += new System.EventHandler(this.txt_filter_TextChanged);
             // 
             // dtp_data_od
             // 
@@ -164,6 +169,7 @@ namespace Biblioteka
             this.dtp_data_od.Name = "dtp_data_od";
             this.dtp_data_od.Size = new System.Drawing.Size(185, 27);
             this.dtp_data_od.TabIndex = 12;
+            this.dtp_data_od.ValueChanged += new System.EventHandler(this.dtp_data_ValueChanged);
             // 
             // dtp_data_do
             // 
@@ -174,6 +180,7 @@ namespace Biblioteka
             this.dtp_data_do.Name = "dtp_data_do";
             this.dtp_data_do.Size = new System.Drawing.Size(185, 27);
             this.dtp_data_do.TabIndex = 14;
+            this.dtp_data_do.ValueChanged += new System.EventHandler(this.dtp_data_ValueChanged);
             // 
             // chk_data_od
             // 
