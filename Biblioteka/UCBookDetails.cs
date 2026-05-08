@@ -75,6 +75,7 @@ namespace Biblioteka
                                 lbl_rok_wydania_ksiazki.Text = reader["RokWydania"].ToString();
                                 lbl_cena_ksiazki.Text        = $"{reader["Cena"]:0.00} zł";
                                 lbl_liczba_sztuk_ksiazki.Text = reader["LiczbaSztuk"].ToString();
+                                lbl_id_ksiazki.Text          = _ksiazkaId.ToString();
                                 txt_opis.Text = reader["Opis"].ToString();
                          
 

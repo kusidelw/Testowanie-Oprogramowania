@@ -96,7 +96,7 @@ namespace Biblioteka
 
                     string sqlData = $@"
                         SELECT
-                            E.ID                                                                        AS [ID egz.],
+                            E.ID                                                                        AS [ID Rejestracji],
                             K.Tytul                                                                     AS [Tytuł],
                             ISNULL(G.Nazwa, '')                                                         AS [Gatunek],
                             ISNULL(W.Nazwa, '')                                                         AS [Wydawnictwo],
@@ -131,8 +131,7 @@ namespace Biblioteka
                         dgv_audit.DataSource = dt;
                     }
 
-                    if (dgv_audit.Columns["ID egz."] != null)
-                        dgv_audit.Columns["ID egz."].Visible = false;
+                    // kolumna ID Rejestracji jest widoczna zgodnie ze specyfikacją PRZ_REJ_MAN_1
 
                     AktualizujStronowanie();
                 }

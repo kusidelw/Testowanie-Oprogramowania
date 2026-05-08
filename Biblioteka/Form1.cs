@@ -187,7 +187,7 @@ namespace Biblioteka
             panelManager.SuspendLayout();
 
             var btn_show_books_manager = new Button { Text = "Przegląd książek" };
-            btn_audit_books = new Button { Text = "Audyt książek" };
+            btn_audit_books = new Button { Text = "Lista rejestracji książek" };
             StylujPrzyciskMenu(btn_show_books_manager);
             StylujPrzyciskMenu(btn_audit_books);
             btn_show_books_manager.Click += (s, e) => PokazWidokZeStanem(ucShowBooks);

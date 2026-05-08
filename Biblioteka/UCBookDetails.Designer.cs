@@ -43,6 +43,8 @@ namespace Biblioteka
             this.lbl_tytul = new System.Windows.Forms.Label();
             this.lbl_szczegoly_ksiazki = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lbl_id = new System.Windows.Forms.Label();
+            this.lbl_id_ksiazki = new System.Windows.Forms.Label();
             this.lbl_rok_wydania_ksiazki = new System.Windows.Forms.Label();
             this.lbl_liczba_stron_ksiazki = new System.Windows.Forms.Label();
             this.lbl_wydawnictwo_ksiazki = new System.Windows.Forms.Label();
@@ -263,6 +265,24 @@ namespace Biblioteka
             this.lbl_gatunek_ksiazki.TabIndex = 67;
             this.lbl_gatunek_ksiazki.Text = "kryminał";
             // 
+            // lbl_id
+            // 
+            this.lbl_id.AutoSize = true;
+            this.lbl_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_id.Location = new System.Drawing.Point(589, 197);
+            this.lbl_id.Name = "lbl_id";
+            this.lbl_id.TabIndex = 71;
+            this.lbl_id.Text = "ID Systemowe:";
+            // 
+            // lbl_id_ksiazki
+            // 
+            this.lbl_id_ksiazki.AutoSize = true;
+            this.lbl_id_ksiazki.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_id_ksiazki.Location = new System.Drawing.Point(718, 197);
+            this.lbl_id_ksiazki.Name = "lbl_id_ksiazki";
+            this.lbl_id_ksiazki.TabIndex = 72;
+            this.lbl_id_ksiazki.Text = "";
+            // 
             // dgv_autorzy
             // 
             this.dgv_autorzy.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -279,6 +299,8 @@ namespace Biblioteka
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
             this.Controls.Add(this.dgv_autorzy);
+            this.Controls.Add(this.lbl_id_ksiazki);
+            this.Controls.Add(this.lbl_id);
             this.Controls.Add(this.lbl_liczba_sztuk_ksiazki);
             this.Controls.Add(this.lbl_cena_ksiazki);
             this.Controls.Add(this.lbl_gatunek_ksiazki);
@@ -331,5 +353,7 @@ namespace Biblioteka
         private System.Windows.Forms.Label lbl_cena_ksiazki;
         private System.Windows.Forms.Label lbl_gatunek_ksiazki;
         private System.Windows.Forms.DataGridView dgv_autorzy;
+        private System.Windows.Forms.Label lbl_id;
+        private System.Windows.Forms.Label lbl_id_ksiazki;
     }
 }
