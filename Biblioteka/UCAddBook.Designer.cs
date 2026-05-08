@@ -315,7 +315,7 @@ namespace Biblioteka
             this.btn_zapisz.Name = "btn_zapisz";
             this.btn_zapisz.Size = new System.Drawing.Size(212, 72);
             this.btn_zapisz.TabIndex = 22;
-            this.btn_zapisz.Text = "ZAPISZ";
+            this.btn_zapisz.Text = "Zapisz";
             this.btn_zapisz.UseVisualStyleBackColor = false;
             this.btn_zapisz.Click += new System.EventHandler(this.btn_zapisz_Click);
             // 

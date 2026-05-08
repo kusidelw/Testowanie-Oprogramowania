@@ -18,7 +18,11 @@ namespace Biblioteka
 
         public int? IstniejacaKsiazkaId { get; set; }
 
-        private bool CzyTrybDodawaniaEgzemplarzy => IstniejacaKsiazkaId.HasValue;
+        private enum TrybFormularza { Dodawanie, DodajEgzemplarze, Edycja }
+        private TrybFormularza _tryb = TrybFormularza.Dodawanie;
+
+        private bool CzyTrybDodawaniaEgzemplarzy => _tryb == TrybFormularza.DodajEgzemplarze;
+        private bool CzyTrybEdycji               => _tryb == TrybFormularza.Edycja;
 
         
         public UCAddBook()
@@ -33,8 +37,9 @@ namespace Biblioteka
         public void PrzygotujDoDodawaniaNowejKsiazki()
         {
             IstniejacaKsiazkaId = null;
+            _tryb = TrybFormularza.Dodawanie;
             WyczyscFormularz();
-            UstawTrybFormularza(czyDodawanieEgzemplarzy: false);
+            UstawTrybFormularza(TrybFormularza.Dodawanie);
         }
 
         public void ZaladujDaneIstniejacejKsiazki(int ksiazkaId)
@@ -107,7 +112,83 @@ namespace Biblioteka
                 return;
             }
 
-            UstawTrybFormularza(czyDodawanieEgzemplarzy: true);
+            UstawTrybFormularza(TrybFormularza.DodajEgzemplarze);
+        }
+
+        public void ZaladujDoEdycji(int ksiazkaId)
+        {
+            PrzygotujDoDodawaniaNowejKsiazki();
+            IstniejacaKsiazkaId = ksiazkaId;
+
+            const string sql = @"
+                SELECT K.Tytul, W.Nazwa AS Wydawnictwo, G.Nazwa AS Gatunek, G.ID AS GatunekID,
+                       K.LiczbaStron, K.RokWydania, K.Cena, K.Opis
+                FROM KatalogKsiazek K
+                JOIN Gatunki     G ON G.ID = K.GatunekID
+                JOIN Wydawnictwa W ON W.ID = K.WydawnictwoID
+                WHERE K.ID = @ID;";
+
+            const string sqlAutorzy = @"
+                SELECT A.ID, A.Imie, A.Nazwisko
+                FROM Autorzy A
+                JOIN KsiazkaKatalog_Autorzy KA ON KA.AutorID = A.ID
+                WHERE KA.KsiazkaID = @ID;";
+
+            int gatunekId = -1;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ksiazkaId);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                txt_tytul.Text        = reader["Tytul"].ToString();
+                                txt_wydawnictwo.Text  = reader["Wydawnictwo"].ToString();
+                                txt_liczba_stron.Text = reader["LiczbaStron"].ToString();
+                                txt_rok_wydania.Text  = reader["RokWydania"].ToString();
+                                txt_cena.Text         = ((decimal)reader["Cena"]).ToString(CultureInfo.InvariantCulture);
+                                txt_opis.Text         = reader["Opis"].ToString();
+                                gatunekId             = (int)reader["GatunekID"];
+                            }
+                        }
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(sqlAutorzy, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ID", ksiazkaId);
+                        var autorzyIds = new System.Collections.Generic.List<int>();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                            while (reader.Read())
+                                autorzyIds.Add((int)reader["ID"]);
+
+                        for (int i = 0; i < chlb_autorzy.Items.Count; i++)
+                        {
+                            var autor = (Autor)chlb_autorzy.Items[i];
+                            chlb_autorzy.SetItemChecked(i, autorzyIds.Contains(autor.ID));
+                        }
+                    }
+
+                    for (int i = 0; i < chlb_gatunki.Items.Count; i++)
+                    {
+                        var gatunek = (Gatunek)chlb_gatunki.Items[i];
+                        chlb_gatunki.SetItemChecked(i, gatunek.ID == gatunekId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd wczytywania danych książki: " + ex.Message, "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            UstawTrybFormularza(TrybFormularza.Edycja);
         }
 
         private void WczytajAutorowDoListy(string imie = null, string nazwisko = null)
@@ -209,7 +290,10 @@ namespace Biblioteka
             Form parentForm = this.FindForm();
             if (parentForm is Form1 mainForm)
             {
-                mainForm.PowrotDoMenuGlownego();
+                if (CzyTrybEdycji)
+                    mainForm.WrocDoListyKsiazek();
+                else
+                    mainForm.PowrotDoMenuGlownego();
             }
         }
 
@@ -223,7 +307,13 @@ namespace Biblioteka
 
             if (CzyTrybDodawaniaEgzemplarzy)
             {
-                if (!int.TryParse(txt_liczba_sztuk.Text.Trim(), out liczbaSztuk) || liczbaSztuk <= 0)
+                string sztukiText = txt_liczba_sztuk.Text.Trim();
+                if (string.IsNullOrEmpty(sztukiText) || !int.TryParse(sztukiText, out liczbaSztuk))
+                {
+                    OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być liczbą większą od zera");
+                    isValid = false;
+                }
+                else if (liczbaSztuk <= 0)
                 {
                     OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być większa od 0");
                     isValid = false;
@@ -238,7 +328,7 @@ namespace Biblioteka
 
             if (string.IsNullOrWhiteSpace(txt_tytul.Text))
             {
-                OznaczBlad(txt_tytul, "Tytuł jest wymagany.");
+                OznaczBlad(txt_tytul, "Tytuł jest wymagany");
                 isValid = false;
             }
             else if (txt_tytul.Text.Trim().Length > 255)
@@ -249,7 +339,7 @@ namespace Biblioteka
 
             if (string.IsNullOrWhiteSpace(txt_wydawnictwo.Text))
             {
-                OznaczBlad(txt_wydawnictwo, "Wydawnictwo jest wymagane.");
+                OznaczBlad(txt_wydawnictwo, "Wydawnictwo jest wymagane");
                 isValid = false;
             }
             else if (txt_wydawnictwo.Text.Trim().Length > 100)
@@ -258,7 +348,7 @@ namespace Biblioteka
                 isValid = false;
             }
 
-            if (IstniejacaKsiazkaId == null)
+            if (!CzyTrybDodawaniaEgzemplarzy)
             {
                 if (chlb_gatunki.CheckedItems.Count == 0 || chlb_gatunki.CheckedItems.Count > 1)
                 {
@@ -275,7 +365,7 @@ namespace Biblioteka
 
             if (!int.TryParse(txt_liczba_stron.Text.Trim(), out liczbaStron) || liczbaStron <= 0)
             {
-                OznaczBlad(txt_liczba_stron, "Liczba stron musi być liczbą większą od zera.");
+                OznaczBlad(txt_liczba_stron, "Liczba stron musi być liczbą większą od zera");
                 isValid = false;
             }
 
@@ -283,25 +373,34 @@ namespace Biblioteka
                 rokWydania < 1450 ||
                 rokWydania > DateTime.Now.Year + 1)
             {
-                OznaczBlad(txt_rok_wydania, "Podaj poprawny rok wydania.");
+                OznaczBlad(txt_rok_wydania, "Podaj poprawny rok wydania");
                 isValid = false;
             }
 
             if (!decimal.TryParse(txt_cena.Text.Trim(), out cena) || cena <= 0)
             {
-                OznaczBlad(txt_cena, "Cena musi być liczbą większą od zera.");
+                OznaczBlad(txt_cena, "Cena musi być liczbą większą od zera");
                 isValid = false;
             }
 
-            if (!int.TryParse(txt_liczba_sztuk.Text.Trim(), out liczbaSztuk) || liczbaSztuk <= 0)
+            if (!CzyTrybEdycji)
             {
-                OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być większa od 0");
-                isValid = false;
+                string sztukiText = txt_liczba_sztuk.Text.Trim();
+                if (string.IsNullOrEmpty(sztukiText) || !int.TryParse(sztukiText, out liczbaSztuk))
+                {
+                    OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być liczbą większą od zera");
+                    isValid = false;
+                }
+                else if (liczbaSztuk <= 0)
+                {
+                    OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być większa od 0");
+                    isValid = false;
+                }
             }
 
             if (string.IsNullOrWhiteSpace(txt_opis.Text))
             {
-                OznaczBlad(txt_opis, "Opis jest wymagany.");
+                OznaczBlad(txt_opis, "Opis jest wymagany");
                 isValid = false;
             }
 
@@ -316,9 +415,15 @@ namespace Biblioteka
                 return;
             }
 
-            if (IstniejacaKsiazkaId.HasValue)
+            if (CzyTrybDodawaniaEgzemplarzy)
             {
                 DodajEgzemplarzeDoIstniejacejKsiazki();
+                return;
+            }
+
+            if (CzyTrybEdycji)
+            {
+                AktualizujKsiazkeDoBazy();
                 return;
             }
 
@@ -387,7 +492,7 @@ namespace Biblioteka
                 }
 
                 WyczyscFormularz();
-                MessageBox.Show("Dodano książkę.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Dodano książkę", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -485,7 +590,7 @@ namespace Biblioteka
 
                         IstniejacaKsiazkaId = Convert.ToInt32(result);
                         MessageBox.Show(
-                            "Książka o podanym tytule i autorze już istnieje. Użyj opcji dopisania do stanu.",
+                            "Książka o podanym tytule i autorze już istnieje. Użyj opcji dopisania do stanu",
                             "Duplikat", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return true;
                     }
@@ -565,25 +670,45 @@ namespace Biblioteka
             error_add_book_form.Clear();
         }
 
-        private void UstawTrybFormularza(bool czyDodawanieEgzemplarzy)
+        private void UstawTrybFormularza(TrybFormularza tryb)
         {
-            lbl_naglowek.Text = czyDodawanieEgzemplarzy ? "DODAWANIE EGZEMPLARZY" : "REJESTRACJA KSIĄŻEK";
-            btn_zapisz.Text = czyDodawanieEgzemplarzy ? "DODAJ EGZEMPLARZE" : "ZAPISZ";
+            _tryb = tryb;
+            bool czyEgzemplarze = tryb == TrybFormularza.DodajEgzemplarze;
+            bool czyEdycja      = tryb == TrybFormularza.Edycja;
 
-            UstawPoleTylkoDoOdczytu(txt_tytul, czyDodawanieEgzemplarzy);
+            switch (tryb)
+            {
+                case TrybFormularza.Dodawanie:
+                    lbl_naglowek.Text = "REJESTRACJA KSIĄŻEK";
+                    btn_zapisz.Text   = "Zapisz";
+                    break;
+                case TrybFormularza.DodajEgzemplarze:
+                    lbl_naglowek.Text = "DODAWANIE EGZEMPLARZY";
+                    btn_zapisz.Text   = "Zapisz";
+                    break;
+                case TrybFormularza.Edycja:
+                    lbl_naglowek.Text = "EDYCJA KSIĄŻKI";
+                    btn_zapisz.Text   = "Zapisz";
+                    break;
+            }
 
-            chlb_autorzy.Enabled = !czyDodawanieEgzemplarzy;
-            chlb_gatunki.Enabled = !czyDodawanieEgzemplarzy;
+            UstawPoleTylkoDoOdczytu(txt_tytul, czyEgzemplarze);
 
-            txt_autor_imie.Visible = !czyDodawanieEgzemplarzy;
-            txt_autor_nazwisko.Visible = !czyDodawanieEgzemplarzy;
-            btn_search.Visible = !czyDodawanieEgzemplarzy;
-            btn_add_author.Visible = !czyDodawanieEgzemplarzy;
-            btn_delete_autor.Visible = !czyDodawanieEgzemplarzy;
-            btn_search_gatunek.Visible = !czyDodawanieEgzemplarzy;
-            btn_add_gatunek.Visible = !czyDodawanieEgzemplarzy;
-            btn_delete_gatunek.Visible = !czyDodawanieEgzemplarzy;
-            txt_gatunek.Visible = !czyDodawanieEgzemplarzy;
+            chlb_autorzy.Enabled = !czyEgzemplarze;
+            chlb_gatunki.Enabled = !czyEgzemplarze;
+
+            txt_autor_imie.Visible      = !czyEgzemplarze;
+            txt_autor_nazwisko.Visible  = !czyEgzemplarze;
+            btn_search.Visible          = !czyEgzemplarze;
+            btn_add_author.Visible      = !czyEgzemplarze;
+            btn_delete_autor.Visible    = !czyEgzemplarze;
+            btn_search_gatunek.Visible  = !czyEgzemplarze;
+            btn_add_gatunek.Visible     = !czyEgzemplarze;
+            btn_delete_gatunek.Visible  = !czyEgzemplarze;
+            txt_gatunek.Visible         = !czyEgzemplarze;
+
+            lbl_liczba_sztuk.Visible = !czyEdycja;
+            txt_liczba_sztuk.Visible = !czyEdycja;
 
             ResetFieldColors();
         }
@@ -796,6 +921,73 @@ namespace Biblioteka
             catch (Exception ex)
             {
                 MessageBox.Show("Błąd podczas usuwania gatunku: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void AktualizujKsiazkeDoBazy()
+        {
+            var gatunek    = (Gatunek)chlb_gatunki.CheckedItems[0];
+            int liczbaStron = int.Parse(txt_liczba_stron.Text.Trim());
+            int rokWydania  = int.Parse(txt_rok_wydania.Text.Trim());
+            decimal cena    = decimal.Parse(txt_cena.Text.Trim());
+
+            SqlTransaction transaction = null;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    transaction = conn.BeginTransaction();
+
+                    int wydawnictwoId = PobierzLubDodajWydawnictwo(conn, transaction, txt_wydawnictwo.Text.Trim());
+
+                    const string sqlUpdate = @"
+                        UPDATE KatalogKsiazek
+                        SET Tytul=@Tytul, GatunekID=@GatunekID, WydawnictwoID=@WydawnictwoID,
+                            LiczbaStron=@LiczbaStron, RokWydania=@RokWydania, Cena=@Cena, Opis=@Opis
+                        WHERE ID=@ID;";
+
+                    using (SqlCommand cmd = new SqlCommand(sqlUpdate, conn, transaction))
+                    {
+                        cmd.Parameters.Add("@Tytul",         SqlDbType.NVarChar, 255).Value = txt_tytul.Text.Trim();
+                        cmd.Parameters.Add("@GatunekID",     SqlDbType.Int).Value = gatunek.ID;
+                        cmd.Parameters.Add("@WydawnictwoID", SqlDbType.Int).Value = wydawnictwoId;
+                        cmd.Parameters.Add("@LiczbaStron",   SqlDbType.Int).Value = liczbaStron;
+                        cmd.Parameters.Add("@RokWydania",    SqlDbType.Int).Value = rokWydania;
+                        cmd.Parameters.Add("@Cena",          SqlDbType.Decimal).Value = cena;
+                        cmd.Parameters.Add("@Opis",          SqlDbType.NVarChar, -1).Value = txt_opis.Text.Trim();
+                        cmd.Parameters.Add("@ID",            SqlDbType.Int).Value = IstniejacaKsiazkaId.Value;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    const string sqlDelAutorzy = "DELETE FROM KsiazkaKatalog_Autorzy WHERE KsiazkaID=@KsiazkaID;";
+                    using (SqlCommand cmd = new SqlCommand(sqlDelAutorzy, conn, transaction))
+                    {
+                        cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = IstniejacaKsiazkaId.Value;
+                        cmd.ExecuteNonQuery();
+                    }
+
+                    const string sqlAutor = "INSERT INTO KsiazkaKatalog_Autorzy (KsiazkaID, AutorID) VALUES (@KsiazkaID, @AutorID);";
+                    foreach (Autor autor in chlb_autorzy.CheckedItems)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(sqlAutor, conn, transaction))
+                        {
+                            cmd.Parameters.Add("@KsiazkaID", SqlDbType.Int).Value = IstniejacaKsiazkaId.Value;
+                            cmd.Parameters.Add("@AutorID",   SqlDbType.Int).Value = autor.ID;
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+
+                MessageBox.Show("Zmiany zostały zapisane", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                if (transaction?.Connection?.State == ConnectionState.Open)
+                    try { transaction.Rollback(); } catch { }
+                MessageBox.Show("Błąd podczas aktualizacji książki: " + ex.Message, "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

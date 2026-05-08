@@ -110,16 +110,16 @@ namespace Biblioteka
                     string sqlData = ctePartie + @"
                         SELECT
                             P.IDRejestracji                                                              AS [ID Rejestracji],
-                            CONVERT(NVARCHAR(19), P.DataRejestracji, 120)                               AS [Data rejestracji],
+                            CONVERT(NVARCHAR(19), P.DataRejestracji, 120)                               AS [Data i godzina],
                             U.Imie + ' ' + U.Nazwisko                                                   AS [Osoba rejestrująca],
-                            K.Tytul                                                                      AS [Tytuł],
+                            K.Tytul                                                                      AS [Tytuł książki],
                             ISNULL((SELECT STUFF((
                                 SELECT ', ' + A2.Imie + ' ' + A2.Nazwisko
                                 FROM KsiazkaKatalog_Autorzy KA2
                                 JOIN Autorzy A2 ON KA2.AutorID = A2.ID
                                 WHERE KA2.KsiazkaID = K.ID
                                 ORDER BY A2.Nazwisko
-                                FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)'),1,2,'')), '')          AS [Autorzy],
+                                FOR XML PATH(''), TYPE).value('.','NVARCHAR(MAX)'),1,2,'')), '')          AS [Autor],
                             ISNULL(G.Nazwa, '')                                                          AS [Gatunek],
                             ISNULL(W.Nazwa, '')                                                          AS [Wydawnictwo],
                             P.LiczbaSztuk                                                                AS [Liczba dodanych sztuk],

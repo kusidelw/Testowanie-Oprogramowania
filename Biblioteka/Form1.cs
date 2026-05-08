@@ -346,6 +346,13 @@ namespace Biblioteka
             PokazWidokZeStanem(ucShowBooks);
         }
 
+        public void OtworzEdycjeKsiazki(int ksiazkaId)
+        {
+            ucAddBook.CurrentUserId = currentUserId;
+            ucAddBook.ZaladujDoEdycji(ksiazkaId);
+            PokazWidokZeStanem(ucAddBook);
+        }
+
         public void PokazZarzadzanieUprawnieniami()
         {
             PokazWidokZeStanem(ucManagePermissions);

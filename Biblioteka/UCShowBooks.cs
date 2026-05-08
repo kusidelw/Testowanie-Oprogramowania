@@ -281,7 +281,7 @@ namespace Biblioteka
             int wybraneId = Convert.ToInt32(dgv_books_list.SelectedRows[0].Cells["ID"].Value);
             Form parentForm = this.FindForm();
             if (parentForm is Form1 mainForm)
-                mainForm.PokazWidokZeStanem(new UCBookDetails(wybraneId));
+                mainForm.PokazWidokZeStanem(new UCBookDetails(wybraneId) { IsBibliotekarz = _isBibliotekarz });
         }
 
         private void dgv_books_list_SelectionChanged(object sender, EventArgs e)
