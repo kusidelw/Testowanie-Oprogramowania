@@ -47,6 +47,8 @@ namespace Biblioteka
             dgv_books_list.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgv_books_list.MultiSelect = false;
             dgv_books_list.RowHeadersVisible = false;
+
+            dgv_books_list.DataSource = null;
         }
 
         private void InicjalizujStatusy()
@@ -77,6 +79,7 @@ namespace Biblioteka
 
         private void WczytajKsiążki()
         {
+            dgv_books_list.DataSource = null;
             try
             {
                 using (SqlConnection conn = new SqlConnection(ConnStr))

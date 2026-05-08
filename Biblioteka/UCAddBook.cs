@@ -31,7 +31,13 @@ namespace Biblioteka
         // Tryb "dołóż egzemplarze" — wypełnia i blokuje pola tytuł/autor/gatunek
         public void ZaladujDaneIstniejacejKsiazki(int ksiazkaId)
         {
-            const string sql = "SELECT Tytul, GatunekID FROM KatalogKsiazek WHERE ID = @ID;";
+            const string sql = @"
+                SELECT K.Tytul, G.Nazwa AS Gatunek, G.ID AS GatunekID,
+                       W.Nazwa AS Wydawnictwo
+                FROM KatalogKsiazek K
+                JOIN Gatunki     G ON G.ID = K.GatunekID
+                LEFT JOIN Wydawnictwa W ON W.ID = K.WydawnictwoID
+                WHERE K.ID = @ID;";
 
             const string sqlAutorzy = @"
                 SELECT A.ID, A.Imie, A.Nazwisko
@@ -53,8 +59,8 @@ namespace Biblioteka
                         {
                             if (reader.Read())
                             {
-                                txt_tytul.Text = reader["Tytul"].ToString();
-                                gatunekId      = (int)reader["GatunekID"];
+                                txt_tytul.Text        = reader["Tytul"].ToString();
+    
                             }
                         }
                     }
@@ -97,25 +103,15 @@ namespace Biblioteka
             // Ukryj kontrolki do zarządzania autorami i gatunkami
             chlb_autorzy.Enabled = false;
             chlb_gatunki.Enabled = false;
-
-            lbl_autor_imie.Text = "Autorzy";
             txt_autor_imie.Visible     = false;
-
-            lbl_autor_nazwisko.Visible = false;
             txt_autor_nazwisko.Visible = false;
             btn_search.Visible         = false;
             btn_add_author.Visible     = false;
             btn_delete_autor.Visible   = false;
-
-            lbl_gatunek.Text = "Gatunek";
             btn_search_gatunek.Visible = false;
             btn_add_gatunek.Visible    = false;
             btn_delete_gatunek.Visible = false;
             txt_gatunek.Visible        = false;
-
-            
-            
-           
 
             lbl_naglowek.Text = "DODAWANIE EGZEMPLARZY";
         }
@@ -240,18 +236,15 @@ namespace Biblioteka
                 isValid = false;
             }
 
-            if (IstniejacaKsiazkaId == null)
+            if (string.IsNullOrWhiteSpace(txt_wydawnictwo.Text))
             {
-                if (string.IsNullOrWhiteSpace(txt_wydawnictwo.Text))
-                {
-                    OznaczBlad(txt_wydawnictwo, "Wydawnictwo jest wymagane.");
-                    isValid = false;
-                }
-                else if (txt_wydawnictwo.Text.Trim().Length > 100)
-                {
-                    OznaczBlad(txt_wydawnictwo, "Wydawnictwo może mieć maksymalnie 100 znaków.");
-                    isValid = false;
-                }
+                OznaczBlad(txt_wydawnictwo, "Wydawnictwo jest wymagane.");
+                isValid = false;
+            }
+            else if (txt_wydawnictwo.Text.Trim().Length > 100)
+            {
+                OznaczBlad(txt_wydawnictwo, "Wydawnictwo może mieć maksymalnie 100 znaków.");
+                isValid = false;
             }
 
             if (IstniejacaKsiazkaId == null)
@@ -269,38 +262,35 @@ namespace Biblioteka
                 }
             }
 
-            if (IstniejacaKsiazkaId == null)
+            if (!int.TryParse(txt_liczba_stron.Text.Trim(), out liczbaStron) || liczbaStron <= 0)
             {
-                if (!int.TryParse(txt_liczba_stron.Text.Trim(), out liczbaStron) || liczbaStron <= 0)
-                {
-                    OznaczBlad(txt_liczba_stron, "Liczba stron musi być liczbą większą od zera.");
-                    isValid = false;
-                }
+                OznaczBlad(txt_liczba_stron, "Liczba stron musi być liczbą większą od zera.");
+                isValid = false;
+            }
 
-                if (!int.TryParse(txt_rok_wydania.Text.Trim(), out rokWydania) ||
-                    rokWydania < 1450 ||
-                    rokWydania > DateTime.Now.Year + 1)
-                {
-                    OznaczBlad(txt_rok_wydania, "Podaj poprawny rok wydania.");
-                    isValid = false;
-                }
+            if (!int.TryParse(txt_rok_wydania.Text.Trim(), out rokWydania) ||
+                rokWydania < 1450 ||
+                rokWydania > DateTime.Now.Year + 1)
+            {
+                OznaczBlad(txt_rok_wydania, "Podaj poprawny rok wydania.");
+                isValid = false;
+            }
 
-                if (!decimal.TryParse(txt_cena.Text.Trim(), out cena) || cena <= 0)
-                {
-                    OznaczBlad(txt_cena, "Cena musi być liczbą większą od zera.");
-                    isValid = false;
-                }
-
-                if (string.IsNullOrWhiteSpace(txt_opis.Text))
-                {
-                    OznaczBlad(txt_opis, "Opis jest wymagany.");
-                    isValid = false;
-                }
+            if (!decimal.TryParse(txt_cena.Text.Trim(), out cena) || cena <= 0)
+            {
+                OznaczBlad(txt_cena, "Cena musi być liczbą większą od zera.");
+                isValid = false;
             }
 
             if (!int.TryParse(txt_liczba_sztuk.Text.Trim(), out liczbaSztuk) || liczbaSztuk <= 0)
             {
                 OznaczBlad(txt_liczba_sztuk, "Liczba sztuk musi być liczbą większą od zera.");
+                isValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txt_opis.Text))
+            {
+                OznaczBlad(txt_opis, "Opis jest wymagany.");
                 isValid = false;
             }
 
