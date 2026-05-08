@@ -1,11 +1,12 @@
+using Biblioteka.Models;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
-using Biblioteka.Models;
 
 namespace Biblioteka
 {
@@ -294,6 +295,12 @@ namespace Biblioteka
                 isValid = false;
             }
 
+            if (string.IsNullOrWhiteSpace(txt_opis.Text))
+            {
+                OznaczBlad(txt_opis, "Opis jest wymagany.");
+                isValid = false;
+            }
+
             return isValid;
         }
 
@@ -460,50 +467,40 @@ namespace Biblioteka
 
         private void ResetFieldColors()
         {
-            ResetFieldColors(this.Controls);
-        }
+            var stack = new Stack<Control>();
+            foreach (Control c in this.Controls) stack.Push(c);
 
-        private void ResetFieldColors(Control.ControlCollection controls)
-        {
-            foreach (Control ctrl in controls)
+            while (stack.Count > 0)
             {
-                if (ctrl is TextBox || ctrl is RichTextBox)
-                {
-                    ctrl.BackColor = SystemColors.Window;
-                }
-
-                if (ctrl.HasChildren)
-                {
-                    ResetFieldColors(ctrl.Controls);
-                }
+                var ctrl = stack.Pop();
+                if (ctrl is TextBoxBase tb)
+                    tb.BackColor = SystemColors.Window;
+                foreach (Control child in ctrl.Controls)
+                    stack.Push(child);
             }
         }
 
         private void WyczyscFormularz()
         {
-            WyczyscKontrolki(this.Controls);
+            txt_tytul.Clear();
+            txt_wydawnictwo.Clear();
+            txt_liczba_stron.Clear();
+            txt_rok_wydania.Clear();
+            txt_cena.Clear();
+            txt_liczba_sztuk.Clear();
+            txt_opis.Clear();
+            txt_autor_imie.Clear();
+            txt_autor_nazwisko.Clear();
+            txt_gatunek.Clear();
+
+            for (int i = 0; i < chlb_autorzy.Items.Count; i++)
+                chlb_autorzy.SetItemChecked(i, false);
+
+            for (int i = 0; i < chlb_gatunki.Items.Count; i++)
+                chlb_gatunki.SetItemChecked(i, false);
+
             ResetFieldColors();
             error_add_book_form.Clear();
-        }
-
-        private void WyczyscKontrolki(Control.ControlCollection controls)
-        {
-            foreach (Control ctrl in controls)
-            {
-                if (ctrl is TextBox textBox)
-                {
-                    textBox.Clear();
-                }
-                else if (ctrl is RichTextBox richTextBox)
-                {
-                    richTextBox.Clear();
-                }
-
-                if (ctrl.HasChildren)
-                {
-                    WyczyscKontrolki(ctrl.Controls);
-                }
-            }
         }
 
 
