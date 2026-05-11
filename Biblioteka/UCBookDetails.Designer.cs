@@ -52,7 +52,7 @@ namespace Biblioteka
             this.txt_tytul = new System.Windows.Forms.TextBox();
             this.lbl_liczba_sztuk_ksiazki = new System.Windows.Forms.Label();
             this.txt_cena = new System.Windows.Forms.TextBox();
-            this.txt_gatunek = new System.Windows.Forms.TextBox();
+            this.cb_gatunek = new System.Windows.Forms.ComboBox();
             this.dgv_autorzy = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.error_add_book_form)).BeginInit();
             this.panel1.SuspendLayout();
@@ -265,14 +265,16 @@ namespace Biblioteka
             this.txt_cena.TabIndex = 68;
             this.txt_cena.ReadOnly = true;
             // 
-            // txt_gatunek
+            // cb_gatunek
             // 
-            this.txt_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_gatunek.Location = new System.Drawing.Point(718, 150);
-            this.txt_gatunek.Name = "txt_gatunek";
-            this.txt_gatunek.Size = new System.Drawing.Size(250, 30);
-            this.txt_gatunek.TabIndex = 67;
-            this.txt_gatunek.ReadOnly = true;
+            this.cb_gatunek.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_gatunek.Enabled = false;
+            this.cb_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.cb_gatunek.FormattingEnabled = true;
+            this.cb_gatunek.Location = new System.Drawing.Point(718, 150);
+            this.cb_gatunek.Name = "cb_gatunek";
+            this.cb_gatunek.Size = new System.Drawing.Size(250, 31);
+            this.cb_gatunek.TabIndex = 67;
             // 
             // lbl_id
             // 
@@ -313,7 +315,7 @@ namespace Biblioteka
             this.Controls.Add(this.lbl_id);
             this.Controls.Add(this.lbl_liczba_sztuk_ksiazki);
             this.Controls.Add(this.txt_cena);
-            this.Controls.Add(this.txt_gatunek);
+            this.Controls.Add(this.cb_gatunek);
             this.Controls.Add(this.txt_rok_wydania);
             this.Controls.Add(this.txt_liczba_stron);
             this.Controls.Add(this.txt_wydawnictwo);
@@ -362,7 +364,7 @@ namespace Biblioteka
         private System.Windows.Forms.TextBox txt_tytul;
         private System.Windows.Forms.Label lbl_liczba_sztuk_ksiazki;
         private System.Windows.Forms.TextBox txt_cena;
-        private System.Windows.Forms.TextBox txt_gatunek;
+        private System.Windows.Forms.ComboBox cb_gatunek;
         private System.Windows.Forms.DataGridView dgv_autorzy;
         private System.Windows.Forms.Label lbl_id;
         private System.Windows.Forms.Label lbl_id_ksiazki;

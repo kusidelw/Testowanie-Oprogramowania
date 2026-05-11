@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Biblioteka
@@ -11,12 +13,18 @@ namespace Biblioteka
     {
         private readonly string ConnStr = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
         private readonly int _ksiazkaId;
+        private readonly KsiazkaRepository _repo;
+        private System.Windows.Forms.TextBoxBase[] _polaEdytowalne;
 
         public UCBookDetails(int ksiazkaId)
         {
             InitializeComponent();
             _ksiazkaId = ksiazkaId;
+            _repo = new KsiazkaRepository(ConnStr);
+            _polaEdytowalne = new System.Windows.Forms.TextBoxBase[] { txt_tytul, txt_wydawnictwo,
+                                       txt_liczba_stron, txt_rok_wydania, txt_cena, txt_opis };
             KonfigurujDGV();
+            ZaladujGatunki();
             WczytajSzczegoly();
         }
 
@@ -24,25 +32,31 @@ namespace Biblioteka
         {
             set
             {
-                bool editable = value;
-                txt_tytul.ReadOnly        = !editable;
-                txt_wydawnictwo.ReadOnly  = !editable;
-                txt_liczba_stron.ReadOnly = !editable;
-                txt_rok_wydania.ReadOnly  = !editable;
-                txt_cena.ReadOnly         = !editable;
-                txt_gatunek.ReadOnly      = !editable;
-                txt_opis.ReadOnly         = !editable;
+                Color bg = value ? SystemColors.Window : SystemColors.Control;
+                foreach (var txt in _polaEdytowalne)
+                {
+                    txt.ReadOnly  = !value;
+                    txt.BackColor = bg;
+                }
+                cb_gatunek.Enabled   = value;
+                cb_gatunek.BackColor = bg;
+                btn_zapisz.Visible = value;
+            }
+        }
 
-                Color bg = editable ? SystemColors.Window : SystemColors.Control;
-                txt_tytul.BackColor        = bg;
-                txt_wydawnictwo.BackColor  = bg;
-                txt_liczba_stron.BackColor = bg;
-                txt_rok_wydania.BackColor  = bg;
-                txt_cena.BackColor         = bg;
-                txt_gatunek.BackColor      = bg;
-                txt_opis.BackColor         = bg;
-
-                btn_zapisz.Visible = editable;
+        private void ZaladujGatunki()
+        {
+            try
+            {
+                var gatunki = _repo.PobierzGatunki("");
+                cb_gatunek.DataSource    = gatunki;
+                cb_gatunek.DisplayMember = "Nazwa";
+                cb_gatunek.ValueMember   = "ID";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Błąd ładowania gatunków:\n{ex.Message}", "Błąd",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -97,7 +111,7 @@ namespace Biblioteka
                             {
                                 txt_tytul.Text             = reader["Tytul"].ToString();
                                 txt_wydawnictwo.Text       = reader["Wydawnictwo"].ToString();
-                                txt_gatunek.Text           = reader["Gatunek"].ToString();
+                                cb_gatunek.Text            = reader["Gatunek"].ToString();
                                 txt_liczba_stron.Text      = reader["LiczbaStron"].ToString();
                                 txt_rok_wydania.Text       = reader["RokWydania"].ToString();
                                 txt_cena.Text              = $"{reader["Cena"]:0.00}";
@@ -131,118 +145,122 @@ namespace Biblioteka
             }
         }
 
+        private bool WalidujFormularz()
+        {
+            bool isValid = true;
+            error_add_book_form.Clear();
+            ResetFieldColors();
+
+            if (string.IsNullOrWhiteSpace(txt_tytul.Text))
+                { OznaczBlad(txt_tytul, "Tytuł jest wymagany"); isValid = false; }
+
+            if (string.IsNullOrWhiteSpace(txt_wydawnictwo.Text))
+                { OznaczBlad(txt_wydawnictwo, "Wydawnictwo jest wymagane"); isValid = false; }
+
+            if (cb_gatunek.SelectedItem == null)
+                { error_add_book_form.SetError(cb_gatunek, "Należy wybrać dokładnie jeden gatunek"); isValid = false; }
+
+            if (!int.TryParse(txt_liczba_stron.Text.Trim(), out int _liczbaStron) || _liczbaStron <= 0)
+                { OznaczBlad(txt_liczba_stron, "Liczba stron musi być liczbą większą od zera"); isValid = false; }
+
+            if (!int.TryParse(txt_rok_wydania.Text.Trim(), out int _rokWydania)
+                || _rokWydania < 1 || _rokWydania > DateTime.Now.Year)
+                { OznaczBlad(txt_rok_wydania, "Podaj poprawny rok wydania"); isValid = false; }
+
+            if (!decimal.TryParse(txt_cena.Text.Trim(), out decimal _cena) || _cena <= 0)
+                { OznaczBlad(txt_cena, "Cena musi być liczbą większą od zera"); isValid = false; }
+
+            if (string.IsNullOrWhiteSpace(txt_opis.Text))
+                { OznaczBlad(txt_opis, "Opis jest wymagany"); isValid = false; }
+
+            return isValid;
+        }
+
+        private void OznaczBlad(Control ctrl, string msg)
+        {
+            ctrl.BackColor = Color.MistyRose;
+            error_add_book_form.SetError(ctrl, msg);
+        }
+
+        private void ResetFieldColors()
+        {
+            var stack = new Stack<Control>();
+            foreach (Control c in this.Controls) stack.Push(c);
+            while (stack.Count > 0)
+            {
+                var ctrl = stack.Pop();
+                if (ctrl is System.Windows.Forms.TextBoxBase tb)
+                    tb.BackColor = tb.ReadOnly ? SystemColors.Control : SystemColors.Window;
+                foreach (Control child in ctrl.Controls) stack.Push(child);
+            }
+        }
+
         private void btn_zapisz_Click(object sender, EventArgs e)
         {
-            string tytul        = txt_tytul.Text.Trim();
-            string wydawnictwo  = txt_wydawnictwo.Text.Trim();
-            string gatunek      = txt_gatunek.Text.Trim();
-            string liczbaStronStr = txt_liczba_stron.Text.Trim();
-            string rokWydaniaStr  = txt_rok_wydania.Text.Trim();
-            string cenaStr        = txt_cena.Text.Trim().Replace(',', '.');
-            string opis           = txt_opis.Text.Trim();
+            if (!WalidujFormularz()) return;
 
-            if (string.IsNullOrEmpty(tytul))
-            { MessageBox.Show("Tytuł jest wymagany.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(gatunek))
-            { MessageBox.Show("Gatunek jest wymagany", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(wydawnictwo))
-            { MessageBox.Show("Wydawnictwo jest wymagane.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (!int.TryParse(liczbaStronStr, out int liczbaStron) || liczbaStron <= 0)
-            { MessageBox.Show("Liczba stron musi być liczbą większą od zera.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (!int.TryParse(rokWydaniaStr, out int rokWydania) || rokWydania < 1 || rokWydania > DateTime.Now.Year)
-            { MessageBox.Show("Podaj poprawny rok wydania.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (!decimal.TryParse(cenaStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal cena) || cena <= 0)
-            { MessageBox.Show("Cena musi być liczbą większą od zera.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
-            if (string.IsNullOrEmpty(opis))
-            { MessageBox.Show("Opis jest wymagany.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning); return; }
+            string  tytul       = txt_tytul.Text.Trim();
+            string  wydawnictwo = txt_wydawnictwo.Text.Trim();
+            string  opis        = txt_opis.Text.Trim();
+            int     liczbaStron = int.Parse(txt_liczba_stron.Text.Trim());
+            int     rokWydania  = int.Parse(txt_rok_wydania.Text.Trim());
+            decimal cena        = decimal.Parse(txt_cena.Text.Trim().Replace(',', '.'),
+                                      System.Globalization.NumberStyles.Any,
+                                      System.Globalization.CultureInfo.InvariantCulture);
+            int gatunekId = ((Models.Gatunek)cb_gatunek.SelectedItem).ID;
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(ConnStr))
+                using (var conn = new SqlConnection(ConnStr))
                 {
                     conn.Open();
-                    using (SqlTransaction transaction = conn.BeginTransaction())
+                    using (var tran = conn.BeginTransaction())
                     {
-                        try
-                        {
-                            // Pobierz ID gatunku
-                            int gatunekId;
-                            using (SqlCommand cmd = new SqlCommand(
-                                "SELECT ID FROM Gatunki WHERE Nazwa = @Nazwa", conn, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@Nazwa", gatunek);
-                                object result = cmd.ExecuteScalar();
-                                if (result == null)
-                                {
-                                    MessageBox.Show("Podany gatunek nie istnieje w słowniku.", "Błąd",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    transaction.Rollback();
-                                    return;
-                                }
-                                gatunekId = (int)result;
-                            }
+                        int wydawnictwoId = _repo.PobierzLubDodajWydawnictwo(conn, tran, wydawnictwo);
 
-                            int wydawnictwoId = PobierzLubDodajWydawnictwo(conn, transaction, wydawnictwo);
+                        ZaktualizujKsiazke(conn, tran, tytul, wydawnictwoId, gatunekId,
+                            liczbaStron, rokWydania, cena, opis);
 
-                            using (SqlCommand cmd = new SqlCommand(@"
-                                UPDATE KatalogKsiazek
-                                SET Tytul          = @Tytul,
-                                    WydawnictwoID  = @WydawnictwoID,
-                                    GatunekID      = @GatunekID,
-                                    LiczbaStron    = @LiczbaStron,
-                                    RokWydania     = @RokWydania,
-                                    Cena           = @Cena,
-                                    Opis           = @Opis
-                                WHERE ID = @KsiazkaID", conn, transaction))
-                            {
-                                cmd.Parameters.AddWithValue("@Tytul",         tytul);
-                                cmd.Parameters.AddWithValue("@WydawnictwoID", wydawnictwoId);
-                                cmd.Parameters.AddWithValue("@GatunekID",     gatunekId);
-                                cmd.Parameters.AddWithValue("@LiczbaStron",   liczbaStron);
-                                cmd.Parameters.AddWithValue("@RokWydania",    rokWydania);
-                                cmd.Parameters.AddWithValue("@Cena",          cena);
-                                cmd.Parameters.AddWithValue("@Opis",          opis);
-                                cmd.Parameters.AddWithValue("@KsiazkaID",     _ksiazkaId);
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            transaction.Commit();
-                            MessageBox.Show("Zmiany zostały zapisane", "Sukces",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            WczytajSzczegoly();
-                        }
-                        catch (Exception ex)
-                        {
-                            if (transaction?.Connection?.State == ConnectionState.Open)
-                                transaction.Rollback();
-                            MessageBox.Show($"Błąd zapisu:\n{ex.Message}", "Błąd",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        tran.Commit();
                     }
                 }
+                MessageBox.Show("Zmiany zostały zapisane.", "Sukces",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                WczytajSzczegoly();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Błąd połączenia:\n{ex.Message}", "Błąd",
+                MessageBox.Show("Błąd podczas aktualizacji książki: " + ex.Message, "Błąd",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private int PobierzLubDodajWydawnictwo(SqlConnection conn, SqlTransaction transaction, string nazwa)
+        private void ZaktualizujKsiazke(SqlConnection conn, SqlTransaction tran,
+            string tytul, int wydawnictwoId, int gatunekId,
+            int liczbaStron, int rokWydania, decimal cena, string opis)
         {
-            using (SqlCommand cmd = new SqlCommand(
-                "SELECT ID FROM Wydawnictwa WHERE Nazwa = @Nazwa", conn, transaction))
-            {
-                cmd.Parameters.AddWithValue("@Nazwa", nazwa);
-                object result = cmd.ExecuteScalar();
-                if (result != null) return (int)result;
-            }
+            const string sql = @"
+                UPDATE KatalogKsiazek
+                SET Tytul         = @Tytul,
+                    WydawnictwoID = @WydawnictwoID,
+                    GatunekID     = @GatunekID,
+                    LiczbaStron   = @LiczbaStron,
+                    RokWydania    = @RokWydania,
+                    Cena          = @Cena,
+                    Opis          = @Opis
+                WHERE ID = @KsiazkaID";
 
-            using (SqlCommand cmd = new SqlCommand(
-                "INSERT INTO Wydawnictwa (Nazwa) OUTPUT INSERTED.ID VALUES (@Nazwa)", conn, transaction))
+            using (SqlCommand cmd = new SqlCommand(sql, conn, tran))
             {
-                cmd.Parameters.AddWithValue("@Nazwa", nazwa);
-                return (int)cmd.ExecuteScalar();
+                cmd.Parameters.Add("@Tytul",         SqlDbType.NVarChar, 255).Value = tytul;
+                cmd.Parameters.Add("@WydawnictwoID", SqlDbType.Int).Value     = wydawnictwoId;
+                cmd.Parameters.Add("@GatunekID",     SqlDbType.Int).Value     = gatunekId;
+                cmd.Parameters.Add("@LiczbaStron",   SqlDbType.Int).Value     = liczbaStron;
+                cmd.Parameters.Add("@RokWydania",    SqlDbType.Int).Value     = rokWydania;
+                cmd.Parameters.Add("@Cena",          SqlDbType.Decimal).Value = cena;
+                cmd.Parameters.Add("@Opis",          SqlDbType.NVarChar, -1).Value = opis;
+                cmd.Parameters.Add("@KsiazkaID",     SqlDbType.Int).Value     = _ksiazkaId;
+                cmd.ExecuteNonQuery();
             }
         }
 
