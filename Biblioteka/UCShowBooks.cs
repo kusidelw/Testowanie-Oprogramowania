@@ -11,16 +11,8 @@ namespace Biblioteka
         private readonly string ConnStr = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
         public int? CurrentUserId { get; set; }
 
-        private bool _isBibliotekarz = false;
-        public bool IsBibliotekarz
-        {
-            get => _isBibliotekarz;
-            set
-            {
-                _isBibliotekarz = value;
-                btn_dodaj_nowy_egzemplarz.Visible = value;
-            }
-        }
+        private readonly bool _czyBibliotekarz;
+        private bool _zawieszAutoSearch = false;
 
         private int currentPage = 1;
         private int pageSize = 20;
@@ -31,12 +23,40 @@ namespace Biblioteka
         private string searchWydawnictwo = "";
         private string searchStatus = "";
 
+        // ── KONSTRUKTORY ────────────────────────────────────────────────────────
+
+        // Konstruktor dla Bibliotekarza (widzi: btn_dodaj_nowy_egzemplarz, btn_details)
         public UCShowBooks()
         {
+            _czyBibliotekarz = true;
             InitializeComponent();
             KonfigurujDGV();
             InicjalizujStatusy();
-            WczytajKsiążki();
+            KonfigurujWidocznoscPrzyciskow();
+            PodepnijZdarzeniaTextChanged();
+            this.VisibleChanged += (s, e) => { if (this.Visible) WczytajKsiążki(pokazKomunikatBrakuWynikow: false); };
+            WczytajKsiążki(pokazKomunikatBrakuWynikow: false);
+        }
+
+        // Konstruktor dla Managera (ukrywa: btn_dodaj_nowy_egzemplarz, btn_details)
+        public UCShowBooks(bool czyManager)
+        {
+            _czyBibliotekarz = false;
+            InitializeComponent();
+            KonfigurujDGV();
+            InicjalizujStatusy();
+            KonfigurujWidocznoscPrzyciskow();
+            PodepnijZdarzeniaTextChanged();
+            this.VisibleChanged += (s, e) => { if (this.Visible) WczytajKsiążki(pokazKomunikatBrakuWynikow: false); };
+            WczytajKsiążki(pokazKomunikatBrakuWynikow: false);
+        }
+
+        // ── KONFIGURACJA TRYBU ──────────────────────────────────────────────────
+
+        private void KonfigurujWidocznoscPrzyciskow()
+        {
+            btn_dodaj_nowy_egzemplarz.Visible = _czyBibliotekarz;
+            btn_details.Visible               = _czyBibliotekarz;
         }
 
         private void KonfigurujDGV()
@@ -77,7 +97,7 @@ namespace Biblioteka
             cbm_status.SelectedIndex = 0;
         }
 
-        private void WczytajKsiążki()
+        private void WczytajKsiążki(bool pokazKomunikatBrakuWynikow = true)
         {
             dgv_books_list.DataSource = null;
             try
@@ -113,15 +133,20 @@ namespace Biblioteka
                         totalRecords = (int)cmd.ExecuteScalar();
                     }
 
-                    if (totalRecords == 0 && (!string.IsNullOrEmpty(searchTytul) || !string.IsNullOrEmpty(searchAutor)
+                    bool aktywnyFiltr = !string.IsNullOrEmpty(searchTytul) || !string.IsNullOrEmpty(searchAutor)
                         || !string.IsNullOrEmpty(searchGatunek) || !string.IsNullOrEmpty(searchWydawnictwo)
-                        || !string.IsNullOrEmpty(searchStatus)))
+                        || !string.IsNullOrEmpty(searchStatus);
+
+                    if (totalRecords == 0 && aktywnyFiltr)
                     {
-                        MessageBox.Show(
-                            "Nie znaleziono książek o podanych kryteriach",
-                            "Brak wyników",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
+                        if (pokazKomunikatBrakuWynikow)
+                        {
+                            MessageBox.Show(
+                                "Brak książek spełniających podane kryteria.",
+                                "Brak wyników",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                        }
 
                         if (dgv_books_list.DataSource is DataTable dt)
                             dt.Clear();
@@ -226,6 +251,65 @@ namespace Biblioteka
 
         // ── WYSZUKIWANIE ──────────────────────────────────────────────────────────
 
+        private void PodepnijZdarzeniaTextChanged()
+        {
+            txt_search_tytul.TextChanged += (s, e) =>
+            {
+                if (_zawieszAutoSearch) return;
+                string tekst = txt_search_tytul.Text.Trim();
+                if (tekst.Length >= 3 || tekst.Length == 0)
+                {
+                    searchTytul = tekst;
+                    currentPage = 1;
+                    WczytajKsiążki();
+                }
+            };
+
+            txt_search_autor.TextChanged += (s, e) =>
+            {
+                if (_zawieszAutoSearch) return;
+                string tekst = txt_search_autor.Text.Trim();
+                if (tekst.Length >= 3 || tekst.Length == 0)
+                {
+                    searchAutor = tekst;
+                    currentPage = 1;
+                    WczytajKsiążki();
+                }
+            };
+
+            txt_search_gatunek.TextChanged += (s, e) =>
+            {
+                if (_zawieszAutoSearch) return;
+                string tekst = txt_search_gatunek.Text.Trim();
+                if (tekst.Length >= 3 || tekst.Length == 0)
+                {
+                    searchGatunek = tekst;
+                    currentPage = 1;
+                    WczytajKsiążki();
+                }
+            };
+
+            txt_search_wydawnictwo.TextChanged += (s, e) =>
+            {
+                if (_zawieszAutoSearch) return;
+                string tekst = txt_search_wydawnictwo.Text.Trim();
+                if (tekst.Length >= 3 || tekst.Length == 0)
+                {
+                    searchWydawnictwo = tekst;
+                    currentPage = 1;
+                    WczytajKsiążki();
+                }
+            };
+
+            cbm_status.SelectedIndexChanged += (s, e) =>
+            {
+                if (_zawieszAutoSearch) return;
+                searchStatus = cbm_status.SelectedIndex <= 0 ? "" : cbm_status.SelectedItem.ToString();
+                currentPage = 1;
+                WczytajKsiążki();
+            };
+        }
+
         private void btn_search_Click(object sender, EventArgs e)
         {
             searchTytul        = txt_search_tytul.Text.Trim();
@@ -239,11 +323,14 @@ namespace Biblioteka
 
         private void btn_clear_filters_Click(object sender, EventArgs e)
         {
+            _zawieszAutoSearch = true;
             txt_search_tytul.Clear();
             txt_search_autor.Clear();
             txt_search_gatunek.Clear();
             txt_search_wydawnictwo.Clear();
             cbm_status.SelectedIndex = 0;
+            _zawieszAutoSearch = false;
+
             searchTytul       = "";
             searchAutor       = "";
             searchGatunek     = "";
@@ -259,7 +346,7 @@ namespace Biblioteka
             if (currentPage > 1)
             {
                 currentPage--;
-                WczytajKsiążki();
+                WczytajKsiążki(pokazKomunikatBrakuWynikow: false);
             }
         }
 
@@ -268,7 +355,7 @@ namespace Biblioteka
             if (currentPage < totalPages)
             {
                 currentPage++;
-                WczytajKsiążki();
+                WczytajKsiążki(pokazKomunikatBrakuWynikow: false);
             }
         }
 
@@ -281,7 +368,7 @@ namespace Biblioteka
             int wybraneId = Convert.ToInt32(dgv_books_list.SelectedRows[0].Cells["ID"].Value);
             Form parentForm = this.FindForm();
             if (parentForm is Biblioteka mainForm)
-                mainForm.PokazWidokZeStanem(new UCBookDetails(wybraneId) { IsBibliotekarz = _isBibliotekarz });
+                mainForm.PokazWidokZeStanem(new UCBookDetails(wybraneId) { IsBibliotekarz = _czyBibliotekarz });
         }
 
         private void dgv_books_list_SelectionChanged(object sender, EventArgs e)

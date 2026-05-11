@@ -32,6 +32,7 @@ namespace Biblioteka
         private UCManagePermissions ucManagePermissions;
         private UCUsersWithPermission ucUsersWithPermission;
         private UCShowBooks ucShowBooks;
+        private UCShowBooks ucShowBooksManager;
         private UCBorrowBook ucBorrowBook;
         private UCReturnBook ucReturnBook;
         private UCCzytelnik ucCzytelnik;
@@ -52,6 +53,7 @@ namespace Biblioteka
             ucFindForgottenUsers = new UCFindForgottenUsers();
             ucManagePermissions = new UCManagePermissions();
             ucShowBooks = new UCShowBooks();
+            ucShowBooksManager = new UCShowBooks(czyManager: true);
             ucBorrowBook = new UCBorrowBook();
             ucReturnBook = new UCReturnBook();
             ucCzytelnik  = new UCCzytelnik();
@@ -188,7 +190,7 @@ namespace Biblioteka
             btn_audit_books = new Button { Text = "Lista rejestracji książek" };
             StylujPrzyciskMenu(btn_show_books_manager);
             StylujPrzyciskMenu(btn_audit_books);
-            btn_show_books_manager.Click += (s, e) => PokazWidokZeStanem(ucShowBooks);
+            btn_show_books_manager.Click += (s, e) => PokazWidokZeStanem(ucShowBooksManager);
             btn_audit_books.Click += (s, e) => PokazWidokZeStanem(ucManager);
 
             panelManager.Controls.Add(btn_show_books_manager);
@@ -376,10 +378,10 @@ namespace Biblioteka
                 ucManager.CurrentUserId = currentUserId;
 
             if (ucShowBooks != null)
-            {
-                ucShowBooks.CurrentUserId  = currentUserId;
-                ucShowBooks.IsBibliotekarz = _role.Contains("Bibliotekarz");
-            }
+                ucShowBooks.CurrentUserId = currentUserId;
+
+            if (ucShowBooksManager != null)
+                ucShowBooksManager.CurrentUserId = currentUserId;
 
             AplikujRole();
         }
