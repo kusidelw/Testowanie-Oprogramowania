@@ -306,11 +306,7 @@ namespace Biblioteka
             Form parentForm = this.FindForm();
             if (!(parentForm is Biblioteka mainForm)) return;
 
-            var formularz = new UCAddBook();
-            formularz.CurrentUserId       = CurrentUserId;
-            formularz.IstniejacaKsiazkaId = wybranaKsiazkaId;
-            formularz.ZaladujDaneIstniejacejKsiazki(wybranaKsiazkaId);
-
+            var formularz = new UCAddBook(wybranaKsiazkaId, false) { CurrentUserId = CurrentUserId };
             mainForm.PokazWidokZeStanem(formularz);
         }
     }

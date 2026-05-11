@@ -24,7 +24,6 @@ namespace Biblioteka
 
         // Kontrolki tworzone leniwie (tylko gdy potrzebne) lub na żądanie
         private UCAddUsers ucAddUsers;
-        private UCAddBook ucAddBook;
         private UCShowUsers ucShowUsers;
         private UCEditData ucEditData;
         private UCShowUsersData ucShowUsersData;
@@ -46,7 +45,6 @@ namespace Biblioteka
 
             // Inicjalizacja po InitializeComponent — bezpieczna kolejność
             ucAddUsers = new UCAddUsers();
-            ucAddBook = new UCAddBook();
             ucShowUsers = new UCShowUsers();
             ucEditData = new UCEditData();
             ucShowUsersData = new UCShowUsersData();
@@ -263,13 +261,7 @@ namespace Biblioteka
 
         private void btn_add_book_Click(object sender, EventArgs e)
         {
-            if (ucAddBook != null)
-            {
-                ucAddBook.CurrentUserId = currentUserId;
-                ucAddBook.PrzygotujDoDodawaniaNowejKsiazki();
-            }
-
-            PokazWidokZeStanem(ucAddBook);
+            PokazWidokZeStanem(new UCAddBook { CurrentUserId = currentUserId });
         }
 
         private void btn_show_books_Click(object sender, EventArgs e)
@@ -348,9 +340,7 @@ namespace Biblioteka
 
         public void OtworzEdycjeKsiazki(int ksiazkaId)
         {
-            ucAddBook.CurrentUserId = currentUserId;
-            ucAddBook.ZaladujDoEdycji(ksiazkaId);
-            PokazWidokZeStanem(ucAddBook);
+            PokazWidokZeStanem(new UCAddBook(ksiazkaId, true) { CurrentUserId = currentUserId });
         }
 
         public void PokazZarzadzanieUprawnieniami()
@@ -378,9 +368,6 @@ namespace Biblioteka
 
             if (ucForgetUsers != null)
                 ucForgetUsers.CurrentUserId = currentUserId;
-
-            if (ucAddBook != null)
-                ucAddBook.CurrentUserId = currentUserId;
 
             if (ucBorrowBook != null)
                 ucBorrowBook.CurrentUserId = currentUserId;

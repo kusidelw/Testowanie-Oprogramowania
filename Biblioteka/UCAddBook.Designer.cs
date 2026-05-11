@@ -33,14 +33,8 @@ namespace Biblioteka
             this.lbl_naglowek = new System.Windows.Forms.Label();
             this.lbl_tytul = new System.Windows.Forms.Label();
             this.txt_tytul = new System.Windows.Forms.TextBox();
-            this.lbl_gatunek = new System.Windows.Forms.Label();
-            this.txt_gatunek = new System.Windows.Forms.TextBox();
             this.lbl_wydawnictwo = new System.Windows.Forms.Label();
             this.txt_wydawnictwo = new System.Windows.Forms.TextBox();
-            this.lbl_autor_imie = new System.Windows.Forms.Label();
-            this.txt_autor_imie = new System.Windows.Forms.TextBox();
-            this.lbl_autor_nazwisko = new System.Windows.Forms.Label();
-            this.txt_autor_nazwisko = new System.Windows.Forms.TextBox();
             this.lbl_liczba_stron = new System.Windows.Forms.Label();
             this.txt_liczba_stron = new System.Windows.Forms.TextBox();
             this.lbl_rok_wydania = new System.Windows.Forms.Label();
@@ -54,15 +48,28 @@ namespace Biblioteka
             this.btn_anuluj = new System.Windows.Forms.Button();
             this.btn_zapisz = new System.Windows.Forms.Button();
             this.error_add_book_form = new System.Windows.Forms.ErrorProvider(this.components);
+            // panele grupujące sekcje po prawej stronie
+            this.panel_autorzy = new System.Windows.Forms.Panel();
+            this.panel_gatunki = new System.Windows.Forms.Panel();
+            // kontrolki wewnątrz panel_autorzy
+            this.lbl_autor_imie = new System.Windows.Forms.Label();
+            this.txt_autor_imie = new System.Windows.Forms.TextBox();
+            this.lbl_autor_nazwisko = new System.Windows.Forms.Label();
+            this.txt_autor_nazwisko = new System.Windows.Forms.TextBox();
             this.chlb_autorzy = new System.Windows.Forms.CheckedListBox();
-            this.btn_add_author = new System.Windows.Forms.Button();
             this.btn_search = new System.Windows.Forms.Button();
+            this.btn_add_author = new System.Windows.Forms.Button();
+            this.btn_delete_autor = new System.Windows.Forms.Button();
+            // kontrolki wewnątrz panel_gatunki
+            this.lbl_gatunek = new System.Windows.Forms.Label();
+            this.txt_gatunek = new System.Windows.Forms.TextBox();
+            this.chlb_gatunki = new System.Windows.Forms.CheckedListBox();
             this.btn_search_gatunek = new System.Windows.Forms.Button();
             this.btn_add_gatunek = new System.Windows.Forms.Button();
-            this.chlb_gatunki = new System.Windows.Forms.CheckedListBox();
-            this.btn_delete_autor = new System.Windows.Forms.Button();
             this.btn_delete_gatunek = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
+            this.panel_autorzy.SuspendLayout();
+            this.panel_gatunki.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.error_add_book_form)).BeginInit();
             this.SuspendLayout();
             // 
@@ -108,25 +115,25 @@ namespace Biblioteka
             this.txt_tytul.Size = new System.Drawing.Size(199, 26);
             this.txt_tytul.TabIndex = 2;
             // 
-            // lbl_gatunek
+            // lbl_gatunek (wewnątrz panel_gatunki — koordynaty względem panelu)
             // 
             this.lbl_gatunek.AutoSize = true;
             this.lbl_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_gatunek.Location = new System.Drawing.Point(356, 312);
+            this.lbl_gatunek.Location = new System.Drawing.Point(2, 12);
             this.lbl_gatunek.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_gatunek.Name = "lbl_gatunek";
             this.lbl_gatunek.Size = new System.Drawing.Size(75, 20);
-            this.lbl_gatunek.TabIndex = 3;
+            this.lbl_gatunek.TabIndex = 0;
             this.lbl_gatunek.Text = "Gatunek:";
             // 
-            // txt_gatunek
+            // txt_gatunek (wewnątrz panel_gatunki)
             // 
             this.txt_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_gatunek.Location = new System.Drawing.Point(464, 310);
+            this.txt_gatunek.Location = new System.Drawing.Point(118, 10);
             this.txt_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_gatunek.Name = "txt_gatunek";
             this.txt_gatunek.Size = new System.Drawing.Size(199, 26);
-            this.txt_gatunek.TabIndex = 4;
+            this.txt_gatunek.TabIndex = 1;
             // 
             // lbl_wydawnictwo
             // 
@@ -148,45 +155,45 @@ namespace Biblioteka
             this.txt_wydawnictwo.Size = new System.Drawing.Size(199, 26);
             this.txt_wydawnictwo.TabIndex = 6;
             // 
-            // lbl_autor_imie
+            // lbl_autor_imie (wewnątrz panel_autorzy — koordynaty względem panelu)
             // 
             this.lbl_autor_imie.AutoSize = true;
             this.lbl_autor_imie.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_autor_imie.Location = new System.Drawing.Point(347, 67);
+            this.lbl_autor_imie.Location = new System.Drawing.Point(0, 12);
             this.lbl_autor_imie.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_autor_imie.Name = "lbl_autor_imie";
             this.lbl_autor_imie.Size = new System.Drawing.Size(93, 20);
-            this.lbl_autor_imie.TabIndex = 7;
+            this.lbl_autor_imie.TabIndex = 0;
             this.lbl_autor_imie.Text = "Imię autora:";
             // 
-            // txt_autor_imie
+            // txt_autor_imie (wewnątrz panel_autorzy)
             // 
             this.txt_autor_imie.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_autor_imie.Location = new System.Drawing.Point(447, 65);
+            this.txt_autor_imie.Location = new System.Drawing.Point(100, 10);
             this.txt_autor_imie.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_autor_imie.Name = "txt_autor_imie";
             this.txt_autor_imie.Size = new System.Drawing.Size(125, 26);
-            this.txt_autor_imie.TabIndex = 8;
+            this.txt_autor_imie.TabIndex = 1;
             // 
-            // lbl_autor_nazwisko
+            // lbl_autor_nazwisko (wewnątrz panel_autorzy)
             // 
             this.lbl_autor_nazwisko.AutoSize = true;
             this.lbl_autor_nazwisko.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.lbl_autor_nazwisko.Location = new System.Drawing.Point(586, 67);
+            this.lbl_autor_nazwisko.Location = new System.Drawing.Point(239, 12);
             this.lbl_autor_nazwisko.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lbl_autor_nazwisko.Name = "lbl_autor_nazwisko";
             this.lbl_autor_nazwisko.Size = new System.Drawing.Size(130, 20);
-            this.lbl_autor_nazwisko.TabIndex = 9;
+            this.lbl_autor_nazwisko.TabIndex = 2;
             this.lbl_autor_nazwisko.Text = "Nazwisko autora:";
             // 
-            // txt_autor_nazwisko
+            // txt_autor_nazwisko (wewnątrz panel_autorzy)
             // 
             this.txt_autor_nazwisko.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.txt_autor_nazwisko.Location = new System.Drawing.Point(712, 67);
+            this.txt_autor_nazwisko.Location = new System.Drawing.Point(375, 10);
             this.txt_autor_nazwisko.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_autor_nazwisko.Name = "txt_autor_nazwisko";
-            this.txt_autor_nazwisko.Size = new System.Drawing.Size(146, 26);
-            this.txt_autor_nazwisko.TabIndex = 10;
+            this.txt_autor_nazwisko.Size = new System.Drawing.Size(158, 26);
+            this.txt_autor_nazwisko.TabIndex = 3;
             // 
             // lbl_liczba_stron
             // 
@@ -323,121 +330,161 @@ namespace Biblioteka
             // 
             this.error_add_book_form.ContainerControl = this;
             // 
-            // chlb_autorzy
+            // chlb_autorzy (wewnątrz panel_autorzy — wypełnia środek panelu)
             // 
+            this.chlb_autorzy.Anchor = ((System.Windows.Forms.AnchorStyles)(
+                (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom |
+                 System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chlb_autorzy.FormattingEnabled = true;
-            this.chlb_autorzy.Location = new System.Drawing.Point(351, 101);
+            this.chlb_autorzy.Location = new System.Drawing.Point(0, 38);
             this.chlb_autorzy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chlb_autorzy.Name = "chlb_autorzy";
-            this.chlb_autorzy.Size = new System.Drawing.Size(507, 154);
-            this.chlb_autorzy.TabIndex = 23;
+            this.chlb_autorzy.Size = new System.Drawing.Size(533, 155);
+            this.chlb_autorzy.TabIndex = 4;
             // 
-            // btn_add_author
+            // btn_add_author (wewnątrz panel_autorzy — zakotwiczony do dołu panelu)
             // 
             this.btn_add_author.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_add_author.BackColor = System.Drawing.Color.LightBlue;
             this.btn_add_author.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_add_author.Location = new System.Drawing.Point(476, 273);
+            this.btn_add_author.Location = new System.Drawing.Point(125, 197);
             this.btn_add_author.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_add_author.Name = "btn_add_author";
             this.btn_add_author.Size = new System.Drawing.Size(120, 28);
-            this.btn_add_author.TabIndex = 24;
+            this.btn_add_author.TabIndex = 6;
             this.btn_add_author.Text = "Dodaj";
             this.btn_add_author.UseVisualStyleBackColor = false;
             this.btn_add_author.Click += new System.EventHandler(this.btn_add_author_Click);
             // 
             // btn_search
             // 
+            // btn_search (wewnątrz panel_autorzy — zakotwiczony do dołu panelu)
+            // 
             this.btn_search.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_search.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search.Location = new System.Drawing.Point(351, 273);
+            this.btn_search.Location = new System.Drawing.Point(0, 197);
             this.btn_search.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(120, 28);
-            this.btn_search.TabIndex = 25;
+            this.btn_search.TabIndex = 5;
             this.btn_search.Text = "Szukaj";
             this.btn_search.UseVisualStyleBackColor = false;
             this.btn_search.Click += new System.EventHandler(this.btn_search_Click);
             // 
-            // btn_search_gatunek
+            // btn_search_gatunek (wewnątrz panel_gatunki — zakotwiczony do dołu panelu)
             // 
             this.btn_search_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_search_gatunek.BackColor = System.Drawing.Color.LightBlue;
             this.btn_search_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_search_gatunek.Location = new System.Drawing.Point(360, 444);
+            this.btn_search_gatunek.Location = new System.Drawing.Point(0, 133);
             this.btn_search_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_search_gatunek.Name = "btn_search_gatunek";
             this.btn_search_gatunek.Size = new System.Drawing.Size(120, 28);
-            this.btn_search_gatunek.TabIndex = 28;
+            this.btn_search_gatunek.TabIndex = 3;
             this.btn_search_gatunek.Text = "Szukaj";
             this.btn_search_gatunek.UseVisualStyleBackColor = false;
             this.btn_search_gatunek.Click += new System.EventHandler(this.btn_search_gatunek_Click);
             // 
-            // btn_add_gatunek
+            // btn_add_gatunek (wewnątrz panel_gatunki — zakotwiczony do dołu panelu)
             // 
             this.btn_add_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btn_add_gatunek.BackColor = System.Drawing.Color.LightBlue;
             this.btn_add_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_add_gatunek.Location = new System.Drawing.Point(484, 444);
+            this.btn_add_gatunek.Location = new System.Drawing.Point(125, 133);
             this.btn_add_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_add_gatunek.Name = "btn_add_gatunek";
             this.btn_add_gatunek.Size = new System.Drawing.Size(120, 28);
-            this.btn_add_gatunek.TabIndex = 27;
+            this.btn_add_gatunek.TabIndex = 4;
             this.btn_add_gatunek.Text = "Dodaj";
             this.btn_add_gatunek.UseVisualStyleBackColor = false;
             this.btn_add_gatunek.Click += new System.EventHandler(this.btn_add_gatunek_Click);
             // 
-            // chlb_gatunki
+            // chlb_gatunki (wewnątrz panel_gatunki — wypełnia środek panelu)
             // 
+            this.chlb_gatunki.Anchor = ((System.Windows.Forms.AnchorStyles)(
+                (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom |
+                 System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.chlb_gatunki.FormattingEnabled = true;
-            this.chlb_gatunki.Location = new System.Drawing.Point(360, 339);
+            this.chlb_gatunki.Location = new System.Drawing.Point(0, 38);
             this.chlb_gatunki.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chlb_gatunki.Name = "chlb_gatunki";
-            this.chlb_gatunki.Size = new System.Drawing.Size(498, 94);
-            this.chlb_gatunki.TabIndex = 26;
+            this.chlb_gatunki.Size = new System.Drawing.Size(533, 90);
+            this.chlb_gatunki.TabIndex = 2;
             // 
-            // btn_delete_autor
+            // btn_delete_autor (wewnątrz panel_autorzy — zakotwiczony prawy dół panelu)
             // 
-            this.btn_delete_autor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btn_delete_autor.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_delete_autor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btn_delete_autor.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_delete_autor.Location = new System.Drawing.Point(737, 273);
+            this.btn_delete_autor.Location = new System.Drawing.Point(411, 197);
             this.btn_delete_autor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_delete_autor.Name = "btn_delete_autor";
             this.btn_delete_autor.Size = new System.Drawing.Size(120, 28);
-            this.btn_delete_autor.TabIndex = 30;
+            this.btn_delete_autor.TabIndex = 7;
             this.btn_delete_autor.Text = "Usuń";
             this.btn_delete_autor.UseVisualStyleBackColor = false;
             this.btn_delete_autor.Click += new System.EventHandler(this.btn_delete_autor_Click);
             // 
-            // btn_delete_gatunek
+            // btn_delete_gatunek (wewnątrz panel_gatunki — zakotwiczony prawy dół panelu)
             // 
-            this.btn_delete_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btn_delete_gatunek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_delete_gatunek.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.btn_delete_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_delete_gatunek.Location = new System.Drawing.Point(737, 444);
+            this.btn_delete_gatunek.Location = new System.Drawing.Point(411, 133);
             this.btn_delete_gatunek.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_delete_gatunek.Name = "btn_delete_gatunek";
             this.btn_delete_gatunek.Size = new System.Drawing.Size(120, 28);
-            this.btn_delete_gatunek.TabIndex = 31;
+            this.btn_delete_gatunek.TabIndex = 5;
             this.btn_delete_gatunek.Text = "Usuń";
             this.btn_delete_gatunek.UseVisualStyleBackColor = false;
             this.btn_delete_gatunek.Click += new System.EventHandler(this.btn_delete_gatunek_Click);
+            // 
+            // panel_autorzy — sekcja autorów
+            // 
+            this.panel_autorzy.Anchor = ((System.Windows.Forms.AnchorStyles)(
+                (System.Windows.Forms.AnchorStyles.Top |
+                 System.Windows.Forms.AnchorStyles.Left |
+                 System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_autorzy.Controls.Add(this.btn_delete_autor);
+            this.panel_autorzy.Controls.Add(this.btn_add_author);
+            this.panel_autorzy.Controls.Add(this.btn_search);
+            this.panel_autorzy.Controls.Add(this.chlb_autorzy);
+            this.panel_autorzy.Controls.Add(this.txt_autor_nazwisko);
+            this.panel_autorzy.Controls.Add(this.lbl_autor_nazwisko);
+            this.panel_autorzy.Controls.Add(this.txt_autor_imie);
+            this.panel_autorzy.Controls.Add(this.lbl_autor_imie);
+            this.panel_autorzy.Location = new System.Drawing.Point(347, 55);
+            this.panel_autorzy.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel_autorzy.Name = "panel_autorzy";
+            this.panel_autorzy.Size = new System.Drawing.Size(537, 230);
+            this.panel_autorzy.TabIndex = 40;
+            // 
+            // panel_gatunki — sekcja gatunków
+            // 
+            this.panel_gatunki.Anchor = ((System.Windows.Forms.AnchorStyles)(
+                (System.Windows.Forms.AnchorStyles.Top |
+                 System.Windows.Forms.AnchorStyles.Left |
+                 System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_gatunki.Controls.Add(this.btn_delete_gatunek);
+            this.panel_gatunki.Controls.Add(this.btn_add_gatunek);
+            this.panel_gatunki.Controls.Add(this.btn_search_gatunek);
+            this.panel_gatunki.Controls.Add(this.chlb_gatunki);
+            this.panel_gatunki.Controls.Add(this.txt_gatunek);
+            this.panel_gatunki.Controls.Add(this.lbl_gatunek);
+            this.panel_gatunki.Location = new System.Drawing.Point(347, 295);
+            this.panel_gatunki.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel_gatunki.Name = "panel_gatunki";
+            this.panel_gatunki.Size = new System.Drawing.Size(537, 168);
+            this.panel_gatunki.TabIndex = 41;
             // 
             // UCAddBook
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.Controls.Add(this.btn_delete_gatunek);
-            this.Controls.Add(this.btn_delete_autor);
-            this.Controls.Add(this.btn_search_gatunek);
-            this.Controls.Add(this.btn_add_gatunek);
-            this.Controls.Add(this.chlb_gatunki);
-            this.Controls.Add(this.btn_search);
-            this.Controls.Add(this.btn_add_author);
-            this.Controls.Add(this.chlb_autorzy);
+            this.Controls.Add(this.panel_gatunki);
+            this.Controls.Add(this.panel_autorzy);
             this.Controls.Add(this.btn_zapisz);
             this.Controls.Add(this.btn_anuluj);
             this.Controls.Add(this.txt_opis);
@@ -450,14 +497,8 @@ namespace Biblioteka
             this.Controls.Add(this.lbl_rok_wydania);
             this.Controls.Add(this.txt_liczba_stron);
             this.Controls.Add(this.lbl_liczba_stron);
-            this.Controls.Add(this.txt_autor_nazwisko);
-            this.Controls.Add(this.lbl_autor_nazwisko);
-            this.Controls.Add(this.txt_autor_imie);
-            this.Controls.Add(this.lbl_autor_imie);
             this.Controls.Add(this.txt_wydawnictwo);
             this.Controls.Add(this.lbl_wydawnictwo);
-            this.Controls.Add(this.txt_gatunek);
-            this.Controls.Add(this.lbl_gatunek);
             this.Controls.Add(this.txt_tytul);
             this.Controls.Add(this.lbl_tytul);
             this.Controls.Add(this.panel1);
@@ -465,6 +506,10 @@ namespace Biblioteka
             this.Name = "UCAddBook";
             this.Size = new System.Drawing.Size(888, 556);
             this.panel1.ResumeLayout(false);
+            this.panel_autorzy.ResumeLayout(false);
+            this.panel_autorzy.PerformLayout();
+            this.panel_gatunki.ResumeLayout(false);
+            this.panel_gatunki.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.error_add_book_form)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -477,14 +522,8 @@ namespace Biblioteka
         private System.Windows.Forms.Label lbl_naglowek;
         private System.Windows.Forms.Label lbl_tytul;
         private System.Windows.Forms.TextBox txt_tytul;
-        private System.Windows.Forms.Label lbl_gatunek;
-        private System.Windows.Forms.TextBox txt_gatunek;
         private System.Windows.Forms.Label lbl_wydawnictwo;
         private System.Windows.Forms.TextBox txt_wydawnictwo;
-        private System.Windows.Forms.Label lbl_autor_imie;
-        private System.Windows.Forms.TextBox txt_autor_imie;
-        private System.Windows.Forms.Label lbl_autor_nazwisko;
-        private System.Windows.Forms.TextBox txt_autor_nazwisko;
         private System.Windows.Forms.Label lbl_liczba_stron;
         private System.Windows.Forms.TextBox txt_liczba_stron;
         private System.Windows.Forms.Label lbl_rok_wydania;
@@ -498,13 +537,21 @@ namespace Biblioteka
         private System.Windows.Forms.Button btn_anuluj;
         private System.Windows.Forms.Button btn_zapisz;
         private System.Windows.Forms.ErrorProvider error_add_book_form;
+        private System.Windows.Forms.Panel panel_autorzy;
+        private System.Windows.Forms.Label lbl_autor_imie;
+        private System.Windows.Forms.TextBox txt_autor_imie;
+        private System.Windows.Forms.Label lbl_autor_nazwisko;
+        private System.Windows.Forms.TextBox txt_autor_nazwisko;
         private System.Windows.Forms.CheckedListBox chlb_autorzy;
         private System.Windows.Forms.Button btn_search;
         private System.Windows.Forms.Button btn_add_author;
+        private System.Windows.Forms.Button btn_delete_autor;
+        private System.Windows.Forms.Panel panel_gatunki;
+        private System.Windows.Forms.Label lbl_gatunek;
+        private System.Windows.Forms.TextBox txt_gatunek;
+        private System.Windows.Forms.CheckedListBox chlb_gatunki;
         private System.Windows.Forms.Button btn_search_gatunek;
         private System.Windows.Forms.Button btn_add_gatunek;
-        private System.Windows.Forms.CheckedListBox chlb_gatunki;
-        private System.Windows.Forms.Button btn_delete_autor;
         private System.Windows.Forms.Button btn_delete_gatunek;
     }
 }

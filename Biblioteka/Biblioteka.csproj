@@ -61,7 +61,9 @@
     <Compile Include="login1.Designer.cs">
       <DependentUpon>login1.cs</DependentUpon>
     </Compile>
+    <Compile Include="KsiazkaRepository.cs" />
     <Compile Include="Models\Autor.cs" />
+    <Compile Include="Models\DaneKsiazki.cs" />
     <Compile Include="Models\Gatunek.cs" />
     <Compile Include="Models\Uprawnienie.cs" />
     <Compile Include="Models\UzytkownikListItem.cs" />
