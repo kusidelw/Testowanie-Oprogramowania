@@ -306,7 +306,7 @@ namespace Biblioteka
         private void btn_anuluj_Click(object sender, EventArgs e)
         {
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
                 mainForm.PowrotDoMenuGlownego();
         }
 

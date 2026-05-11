@@ -34,7 +34,7 @@ namespace Biblioteka
             WyczyscFormularz();
 
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
             {
                 mainForm.PowrotDoMenuGlownego(); // Powrót do menu
             }

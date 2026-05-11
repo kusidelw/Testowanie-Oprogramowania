@@ -91,7 +91,7 @@ namespace Biblioteka
             int userId = (int)dgv_forgotten_users.Rows[e.RowIndex].Cells["ID"].Value;
 
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
             {
                 mainForm.PokazKarteUzytkownika(userId);
             }

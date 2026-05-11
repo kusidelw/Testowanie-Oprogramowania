@@ -249,7 +249,7 @@ namespace Biblioteka
         private void btn_wroc_Click(object sender, EventArgs e)
         {
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
                 mainForm.WrocDoListyKsiazek();
         }
     }

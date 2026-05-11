@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace Biblioteka
 {
-    public partial class Form1 : Form
+    public partial class Biblioteka : Form
     {
         // ID zalogowanego użytkownika 
         private int? currentUserId;
@@ -39,7 +39,7 @@ namespace Biblioteka
         private UCManager ucManager;
         private Button btn_audit_books;
 
-        public Form1()
+        public Biblioteka()
         {
 
             InitializeComponent();

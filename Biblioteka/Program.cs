@@ -26,7 +26,7 @@ namespace Biblioteka
                     role = loginForm.ZalogowaneRole;
                 }
 
-                using (Form1 mainForm = new Form1())
+                using (Biblioteka mainForm = new Biblioteka())
                 {
                     mainForm.SetSession(userId, role);
                     mainForm.ShowDialog();

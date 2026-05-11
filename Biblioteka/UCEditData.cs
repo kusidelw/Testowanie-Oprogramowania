@@ -190,7 +190,7 @@ namespace Biblioteka
 
         private void WrocDoWidokuShowUsers()
         {
-            var form1 = this.ParentForm as Form1;
+            var form1 = this.ParentForm as Biblioteka;
             if (form1 != null)
             {
                 //wracamy do użytkownika, którego właśnie edytowaliśmy

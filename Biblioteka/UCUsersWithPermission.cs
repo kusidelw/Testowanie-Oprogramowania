@@ -319,7 +319,7 @@ namespace Biblioteka
         private void PrzejdzDoKartyUzytkownika(int userId)
         {
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
             {
                 mainForm.PokazKarteUzytkownika(userId);
             }

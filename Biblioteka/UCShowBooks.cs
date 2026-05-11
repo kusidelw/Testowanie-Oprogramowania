@@ -280,7 +280,7 @@ namespace Biblioteka
 
             int wybraneId = Convert.ToInt32(dgv_books_list.SelectedRows[0].Cells["ID"].Value);
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
                 mainForm.PokazWidokZeStanem(new UCBookDetails(wybraneId) { IsBibliotekarz = _isBibliotekarz });
         }
 
@@ -304,7 +304,7 @@ namespace Biblioteka
             int wybranaKsiazkaId = Convert.ToInt32(dgv_books_list.SelectedRows[0].Cells["ID"].Value);
 
             Form parentForm = this.FindForm();
-            if (!(parentForm is Form1 mainForm)) return;
+            if (!(parentForm is Biblioteka mainForm)) return;
 
             var formularz = new UCAddBook();
             formularz.CurrentUserId       = CurrentUserId;

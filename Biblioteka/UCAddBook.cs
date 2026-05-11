@@ -288,7 +288,7 @@ namespace Biblioteka
             WyczyscFormularz();
 
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
             {
                 if (CzyTrybEdycji)
                     mainForm.WrocDoListyKsiazek();
@@ -535,7 +535,7 @@ namespace Biblioteka
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 Form parentForm = this.FindForm();
-                if (parentForm is Form1 mainForm)
+                if (parentForm is Biblioteka mainForm)
                     mainForm.PowrotDoMenuGlownego();
             }
             catch (Exception ex)

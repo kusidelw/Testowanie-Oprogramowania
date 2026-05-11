@@ -185,7 +185,7 @@ namespace Biblioteka
             int userId = Convert.ToInt32(dgv_users_list.Rows[e.RowIndex].Cells["ID"].Value);
 
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
                 mainForm.PokazKarteUzytkownika(userId);
         }
     }
