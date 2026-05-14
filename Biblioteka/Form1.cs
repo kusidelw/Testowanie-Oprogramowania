@@ -37,7 +37,9 @@ namespace Biblioteka
         private UCReturnBook ucReturnBook;
         private UCCzytelnik ucCzytelnik;
         private UCManager ucManager;
+        private UCBorrowedBooksList ucBorrowedBooksList;
         private Button btn_audit_books;
+       
 
         public Biblioteka()
         {
@@ -58,6 +60,7 @@ namespace Biblioteka
             ucReturnBook = new UCReturnBook();
             ucCzytelnik  = new UCCzytelnik();
             ucManager    = new UCManager();
+            ucBorrowedBooksList = new UCBorrowedBooksList();
 
             BudujMenuAkordeonowe();
         }
@@ -188,13 +191,18 @@ namespace Biblioteka
 
             var btn_show_books_manager = new Button { Text = "Przegląd książek" };
             btn_audit_books = new Button { Text = "Lista rejestracji książek" };
+            var btn_borrow_book_manager = new Button { Text = "Wypożyczenia" };
+
             StylujPrzyciskMenu(btn_show_books_manager);
             StylujPrzyciskMenu(btn_audit_books);
+            StylujPrzyciskMenu(btn_borrow_book_manager);
             btn_show_books_manager.Click += (s, e) => PokazWidokZeStanem(ucShowBooksManager);
             btn_audit_books.Click += (s, e) => PokazWidokZeStanem(ucManager);
+            btn_borrow_book_manager.Click += btn_borrow_book_Click;
 
             panelManager.Controls.Add(btn_show_books_manager);
             panelManager.Controls.Add(btn_audit_books);
+            panelManager.Controls.Add(btn_borrow_book_manager);
             panelManager.ResumeLayout(false);
 
             // ── 5. Zdarzenia przełączania sekcji ──────────────────────────────────
@@ -243,6 +251,24 @@ namespace Biblioteka
 
         public void PokazWidokZeStanem(UserControl widok)
         {
+            if (MainPanel.Controls.Count > 0 && MainPanel.Controls[0] == ucBorrowBook && widok != ucBorrowBook)
+            {
+                // SPRAWDZENIE: Czy jesteśmy w "Nowym wypożyczeniu" i próbujemy kliknąć cokolwiek innego w menu?
+                if (!ucBorrowBook.PominPotwierdzenie)
+                {
+                    DialogResult wynik = MessageBox.Show(
+                        "Wprowadzane dane nie zostały zapisane. Czy na pewno chcesz opuścić ten widok?",
+                        "Anulowanie",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning);
+
+                    if (wynik == DialogResult.No)
+                    {
+                        return; 
+                    }
+                }
+            }
+
             MainPanel.Controls.Clear();
             widok.Dock = DockStyle.Fill;
             MainPanel.Controls.Add(widok);
@@ -273,10 +299,15 @@ namespace Biblioteka
 
         private void btn_borrow_book_Click(object sender, EventArgs e)
         {
-            if (ucBorrowBook != null)
-                ucBorrowBook.CurrentUserId = currentUserId;
+          
+            if (ucBorrowedBooksList != null)
+            {
+                ucBorrowedBooksList.CurrentUserId = currentUserId;
+                ucBorrowedBooksList.UstawUprawnienia(_role);
+                ucBorrowedBooksList.WczytajDane(1); //odswieżenie danych przy każdym otwarciu
+            }
 
-            PokazWidokZeStanem(ucBorrowBook);
+            PokazWidokZeStanem(ucBorrowedBooksList);
         }
 
         private void btn_return_book_Click(object sender, EventArgs e)
@@ -362,6 +393,29 @@ namespace Biblioteka
             PokazWidokZeStanem(ucManagePermissions);
         }
 
+        public void OtworzNoweWypozyczenie()
+        {
+            if (ucBorrowBook != null)
+            {
+                ucBorrowBook.CurrentUserId = currentUserId;
+                ucBorrowBook.PominPotwierdzenie = false; 
+                ucBorrowBook.WyczyscFormularz();         
+            }
+
+            PokazWidokZeStanem(ucBorrowBook);
+
+        }
+        public void OtworzListeWypozyczen()
+        {
+            if (ucBorrowedBooksList != null)
+            {
+                ucBorrowedBooksList.CurrentUserId = currentUserId;
+                ucBorrowedBooksList.UstawUprawnienia(_role);
+                ucBorrowedBooksList.WczytajDane(1); // Pobierze świeże dane z bazy!
+            }
+            PokazWidokZeStanem(ucBorrowedBooksList);
+        }
+
         // Ustawia sesję: ID użytkownika i jego role — ukrywa/pokazuje przyciski menu
         public void SetSession(int userId, List<string> role)
         {
@@ -382,6 +436,12 @@ namespace Biblioteka
 
             if (ucShowBooksManager != null)
                 ucShowBooksManager.CurrentUserId = currentUserId;
+
+            if (ucBorrowedBooksList != null)
+            {
+                ucBorrowedBooksList.CurrentUserId = currentUserId;
+                ucBorrowedBooksList.UstawUprawnienia(_role); 
+            }
 
             AplikujRole();
         }

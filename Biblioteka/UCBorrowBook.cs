@@ -13,11 +13,14 @@ namespace Biblioteka
         private readonly string ConnStr = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
 
         public int? CurrentUserId { get; set; }
+        private bool isCalculatingDate = false;
 
-        // Model pomocniczy dla CheckedListBox — ToString() jest używane jako tekst wyświetlany
+        public bool PominPotwierdzenie { get; set; } = false;
+
+        // Model pomocniczy dla listy egzemplarzy
         private class EgzemplarzItem
         {
-            public int    ID   { get; set; }
+            public int ID { get; set; }
             public string Opis { get; set; }
             public override string ToString() => Opis;
         }
@@ -26,17 +29,49 @@ namespace Biblioteka
         {
             InitializeComponent();
             KonfigurujDGV();
-            this.VisibleChanged += (s, e) => { if (this.Visible) WczytajDane(); };
+
+            // Pkt 6: Blokada edycji daty wypożyczenia 
+            dtp_borrow_date.Enabled = false;
+
+            nup_borrow_period.Minimum = 1;
+            nup_borrow_period.Maximum = 365;
+
+            // Zdarzenia do przeliczania dat w obie strony
+            nup_borrow_period.ValueChanged += Nup_borrow_period_ValueChanged;
+            dtp_return_date.ValueChanged += Dtp_return_date_ValueChanged;
+        }
+
+        // Resetuje formularz do stanu początkowego
+        public void WyczyscFormularz()
+        {
+            isCalculatingDate = true;
+            dtp_borrow_date.Value = DateTime.Today;
+            nup_borrow_period.Value = 14;
+            dtp_return_date.Value = SprawdzDniWolne(DateTime.Today.AddDays(14));
+            isCalculatingDate = false;
+
+            txtSzukajCzytelnika.Text = "";
+            txtSzukajEgzemplarza.Text = "";
+
+            WczytajDane();
+
+            if (dgvCzytelnicy.Rows.Count > 0)
+                dgvCzytelnicy.ClearSelection();
+
+            for (int i = 0; i < chlbEgzemplarze.Items.Count; i++)
+            {
+                chlbEgzemplarze.SetItemChecked(i, false);
+            }
         }
 
         private void KonfigurujDGV()
         {
-            dgvCzytelnicy.ReadOnly                = true;
-            dgvCzytelnicy.AllowUserToAddRows      = false;
-            dgvCzytelnicy.AutoSizeColumnsMode     = DataGridViewAutoSizeColumnsMode.Fill;
-            dgvCzytelnicy.SelectionMode           = DataGridViewSelectionMode.FullRowSelect;
-            dgvCzytelnicy.MultiSelect             = false;
-            dgvCzytelnicy.RowHeadersVisible       = false;
+            dgvCzytelnicy.ReadOnly = true;
+            dgvCzytelnicy.AllowUserToAddRows = false;
+            dgvCzytelnicy.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvCzytelnicy.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvCzytelnicy.MultiSelect = false;
+            dgvCzytelnicy.RowHeadersVisible = false;
         }
 
         private void WczytajDane()
@@ -44,6 +79,137 @@ namespace Biblioteka
             WczytajCzytelnikow(txtSzukajCzytelnika.Text.Trim());
             WczytajEgzemplarze(txtSzukajEgzemplarza.Text.Trim());
         }
+
+        // ─── WYLICZANIE DAT I WEEKENDÓW (SCENARIUSZE A1, E2, E3) ──────────────
+        private void Nup_borrow_period_ValueChanged(object sender, EventArgs e)
+        {
+            if (isCalculatingDate) return;
+            isCalculatingDate = true;
+
+            DateTime nowaData = dtp_borrow_date.Value.AddDays((double)nup_borrow_period.Value);
+            dtp_return_date.Value = SprawdzDniWolne(nowaData); // Sprawdzamy weekendy i święta (E3)
+
+            isCalculatingDate = false;
+        }
+
+        private void Dtp_return_date_ValueChanged(object sender, EventArgs e)
+        {
+            if (isCalculatingDate) return;
+
+            // SCENARIUSZ E2: Data zwrotu z przeszłości lub dzisiaj
+            if (dtp_return_date.Value.Date <= DateTime.Today)
+            {
+                MessageBox.Show("Data oczekiwanego zwrotu nie może być wcześniejsza niż jutro!", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                isCalculatingDate = true;
+
+                dtp_return_date.Value = SprawdzDniWolne(DateTime.Today.AddDays(1)); // Cofnij na bezpieczną datę 
+                nup_borrow_period.Value = 1;
+
+                isCalculatingDate = false;
+                return;
+            }
+
+            isCalculatingDate = true;
+            DateTime bezpiecznaData = SprawdzDniWolne(dtp_return_date.Value);
+
+            if (bezpiecznaData != dtp_return_date.Value)
+            {
+                dtp_return_date.Value = bezpiecznaData;
+            }
+
+            // Przeliczenie różnicy dni
+            int dniRoznicy = (int)(dtp_return_date.Value.Date - dtp_borrow_date.Value.Date).TotalDays;
+
+            if (dniRoznicy > nup_borrow_period.Maximum) dniRoznicy = (int)nup_borrow_period.Maximum;
+            if (dniRoznicy < nup_borrow_period.Minimum) dniRoznicy = (int)nup_borrow_period.Minimum;
+
+            nup_borrow_period.Value = dniRoznicy;
+            isCalculatingDate = false;
+        }
+
+        // SCENARIUSZ E3: Sprawdzanie weekendów i świąt stałych w Polsce
+        private DateTime SprawdzDniWolne(DateTime data)
+        {
+            bool przesunieto = false;
+
+            // Dopóki data wypada w dzień wolny, przesuwamy o 1 dzień do przodu
+            while (CzyDzienWolny(data))
+            {
+                data = data.AddDays(1);
+                przesunieto = true;
+            }
+
+            if (przesunieto)
+            {
+                MessageBox.Show($"Uwaga: Termin zwrotu przypada w dzień wolny. Data została przesunięta na {data:dd.MM.yyyy}",
+                                "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            return data;
+        }
+
+        private bool CzyDzienWolny(DateTime data)
+        {
+            // Weekendy (Sobota, Niedziela)
+            if (data.DayOfWeek == DayOfWeek.Saturday || data.DayOfWeek == DayOfWeek.Sunday)
+                return true;
+
+            int d = data.Day;
+            int m = data.Month;
+            int r = data.Year;
+
+            // Święta stałe w Polsce
+            if ((d == 1 && m == 1) ||   // Nowy Rok
+                (d == 6 && m == 1) ||   // Trzech Króli
+                (d == 1 && m == 5) ||   // Święto Pracy
+                (d == 3 && m == 5) ||   // Święto Konstytucji 3 Maja
+                (d == 15 && m == 8) ||  // Wniebowzięcie NMP
+                (d == 1 && m == 11) ||  // Wszystkich Świętych
+                (d == 11 && m == 11) || // Święto Niepodległości
+                (d == 25 && m == 12) || // Boże Narodzenie (1. dzień)
+                (d == 26 && m == 12))   // Boże Narodzenie (2. dzień)
+            {
+                return true;
+            }
+
+            // Święta ruchome
+            DateTime wielkanoc = PobierzWielkanoc(r);
+            DateTime poniedzialekWielkanocny = wielkanoc.AddDays(1);
+            DateTime bozeCialo = wielkanoc.AddDays(60); // Boże Ciało to zawsze 60 dni po Wielkanocy
+            DateTime zieloneSwiatki = wielkanoc.AddDays(49);
+
+            if (data.Date == wielkanoc.Date ||
+                data.Date == poniedzialekWielkanocny.Date ||
+                data.Date == bozeCialo.Date ||
+                data.Date == zieloneSwiatki.Date)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // Algorytm matematyczny wyliczający datę Wielkanocy dla danego roku
+        private DateTime PobierzWielkanoc(int rok)
+        {
+            int a = rok % 19;
+            int b = rok / 100;
+            int c = rok % 100;
+            int d = b / 4;
+            int e = b % 4;
+            int f = (b + 8) / 25;
+            int g = (b - f + 1) / 3;
+            int h = (19 * a + b - d - g + 15) % 30;
+            int i = c / 4;
+            int k = c % 4;
+            int l = (32 + 2 * e + 2 * i - h - k) % 7;
+            int m = (a + 11 * h + 22 * l) / 451;
+            int miesiac = (h + l - 7 * m + 114) / 31;
+            int dzien = ((h + l - 7 * m + 114) % 31) + 1;
+
+            return new DateTime(rok, miesiac, dzien);
+        }
+
+        // ─── WYSZUKIWANIE CZYTELNIKÓW I KSIĄŻEK ──────────────
 
         private void WczytajCzytelnikow(string filtr)
         {
@@ -55,10 +221,9 @@ namespace Biblioteka
                     conn.Open();
                     const string sql = @"
                         SELECT ID, Imie, Nazwisko, PESEL
-                        FROM   Uzytkownicy
-                        WHERE  CzyZablokowany = 0
-                          AND  CzyZapomniany  = 0
-                          AND  (Nazwisko LIKE @Filtr OR PESEL LIKE @Filtr)
+                        FROM Uzytkownicy
+                        WHERE CzyZablokowany = 0 AND CzyZapomniany = 0
+                          AND (Nazwisko LIKE @Filtr OR Imie LIKE @Filtr)
                         ORDER BY Nazwisko, Imie";
 
                     DataTable dt = new DataTable();
@@ -67,18 +232,16 @@ namespace Biblioteka
                         cmd.Parameters.Add("@Filtr", SqlDbType.NVarChar).Value = wzorzec;
                         new SqlDataAdapter(cmd).Fill(dt);
                     }
-
                     dgvCzytelnicy.DataSource = dt;
                 }
 
-                if (dgvCzytelnicy.Columns.Contains("ID"))
-                    dgvCzytelnicy.Columns["ID"].Visible = false;
+                if (dgvCzytelnicy.Columns.Contains("ID")) dgvCzytelnicy.Columns["ID"].Visible = false;
+
+                // Zdejmujemy ukryte domyślne zaznaczenie po każdym wyszukiwaniu
+                if (dgvCzytelnicy.Rows.Count > 0)
+                    dgvCzytelnicy.ClearSelection();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Błąd wczytywania czytelników: " + ex.Message,
-                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show("Błąd wczytywania: " + ex.Message); }
         }
 
         private void WczytajEgzemplarze(string filtr)
@@ -92,11 +255,16 @@ namespace Biblioteka
                 {
                     conn.Open();
                     const string sql = @"
-                        SELECT e.ID, k.Tytul
-                        FROM   Egzemplarze e
-                        JOIN   KatalogKsiazek k ON e.KsiazkaID = k.ID
-                        WHERE  e.Status = 'Dostepna'
-                          AND  k.Tytul LIKE @Filtr
+                        SELECT e.ID, ISNULL(aut.AutorN, '') + k.Tytul AS TytulWyswietlany
+                        FROM Egzemplarze e
+                        JOIN KatalogKsiazek k ON e.KsiazkaID = k.ID
+                        OUTER APPLY (
+                            SELECT TOP 1 a.Imie + ' ' + a.Nazwisko + ' - ' AS AutorN
+                            FROM KsiazkaKatalog_Autorzy kka
+                            JOIN Autorzy a ON kka.AutorID = a.ID
+                            WHERE kka.KsiazkaID = k.ID
+                        ) aut
+                        WHERE e.Status = 'Dostepna' AND (k.Tytul LIKE @Filtr)
                         ORDER BY k.Tytul, e.ID";
 
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -106,68 +274,40 @@ namespace Biblioteka
                         {
                             while (reader.Read())
                             {
-                                lista.Add(new EgzemplarzItem
-                                {
-                                    ID   = reader.GetInt32(0),
-                                    Opis = string.Format("{0} (Egz. #{1})", reader.GetString(1), reader.GetInt32(0))
-                                });
+                                lista.Add(new EgzemplarzItem { ID = reader.GetInt32(0), Opis = $"{reader.GetString(1)} (Egz. #{reader.GetInt32(0)})" });
                             }
                         }
                     }
                 }
-
                 chlbEgzemplarze.Items.Clear();
-                foreach (var item in lista)
-                    chlbEgzemplarze.Items.Add(item);
+                foreach (var item in lista) chlbEgzemplarze.Items.Add(item);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Błąd wczytywania egzemplarzy: " + ex.Message,
-                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            catch (Exception ex) { MessageBox.Show("Błąd wczytywania: " + ex.Message); }
         }
 
-        // ── Obsługa wyszukiwania ─────────────────────────────────────────────────
+        private void txtSzukajCzytelnika_TextChanged(object sender, EventArgs e) => WczytajCzytelnikow(txtSzukajCzytelnika.Text.Trim());
+        private void txtSzukajEgzemplarza_TextChanged(object sender, EventArgs e) => WczytajEgzemplarze(txtSzukajEgzemplarza.Text.Trim());
+        private void btnSzukajCzytelnika_Click(object sender, EventArgs e) => WczytajCzytelnikow(txtSzukajCzytelnika.Text.Trim());
+        private void btnSzukajEgzemplarza_Click(object sender, EventArgs e) => WczytajEgzemplarze(txtSzukajEgzemplarza.Text.Trim());
 
-        private void txtSzukajCzytelnika_TextChanged(object sender, EventArgs e)
-            => WczytajCzytelnikow(txtSzukajCzytelnika.Text.Trim());
 
-        private void txtSzukajEgzemplarza_TextChanged(object sender, EventArgs e)
-            => WczytajEgzemplarze(txtSzukajEgzemplarza.Text.Trim());
-
-        private void btnSzukajCzytelnika_Click(object sender, EventArgs e)
-            => WczytajCzytelnikow(txtSzukajCzytelnika.Text.Trim());
-
-        private void btnSzukajEgzemplarza_Click(object sender, EventArgs e)
-            => WczytajEgzemplarze(txtSzukajEgzemplarza.Text.Trim());
-
-        // ── Wypożyczenie ─────────────────────────────────────────────────────────
-
+        // ─── ZAPIS WYPOŻYCZENIA ──────────────
         private void btnWypozycz_Click(object sender, EventArgs e)
         {
-            if (!CurrentUserId.HasValue)
+            if (!CurrentUserId.HasValue) return;
+
+            // SCENARIUSZ E5: Brak wybranego czytelnika lub książki
+            if (dgvCzytelnicy.SelectedRows.Count != 1 || chlbEgzemplarze.CheckedItems.Count == 0)
             {
-                MessageBox.Show("Brak informacji o zalogowanym bibliotekarzu.",
-                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Błąd: Nie można zarejestrować wypożyczenia. Należy wybrać czytelnika oraz co najmniej jedną książkę",
+                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (dgvCzytelnicy.SelectedRows.Count != 1)
-            {
-                MessageBox.Show("Wybierz dokładnie jednego czytelnika z listy.",
-                    "Walidacja", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (chlbEgzemplarze.CheckedItems.Count == 0)
-            {
-                MessageBox.Show("Zaznacz co najmniej jeden egzemplarz do wypożyczenia.",
-                    "Walidacja", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            int czytelnikId    = Convert.ToInt32(dgvCzytelnicy.SelectedRows[0].Cells["ID"].Value);
+            int czytelnikId = Convert.ToInt32(dgvCzytelnicy.SelectedRows[0].Cells["ID"].Value);
             int bibliotekarzId = CurrentUserId.Value;
+            int okresDni = (int)nup_borrow_period.Value;
+            DateTime oczekiwanaData = dtp_return_date.Value.Date;
 
             SqlTransaction transakcja = null;
             try
@@ -177,49 +317,44 @@ namespace Biblioteka
                     conn.Open();
                     transakcja = conn.BeginTransaction();
 
-                    // 1. INSERT nagłówka wypożyczenia
+                    // Zapis nagłówka wypożyczenia
                     const string sqlWypozyczenie = @"
-                        INSERT INTO Wypozyczenia
-                            (CzytelnikID, BibliotekarzID, DataWypozyczenia, OczekiwanaDataZwrotu, Status)
-                        VALUES
-                            (@CzytelnikID, @BibliotekarzID, GETDATE(), DATEADD(day, 14, GETDATE()), 'Nowe');
+                        INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+                        VALUES (@C, @B, GETDATE(), @Okres, @DataZ, 'Nowe');
                         SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
                     int noweWypozyczenieId;
                     using (SqlCommand cmd = new SqlCommand(sqlWypozyczenie, conn, transakcja))
                     {
-                        cmd.Parameters.Add("@CzytelnikID",    SqlDbType.Int).Value = czytelnikId;
-                        cmd.Parameters.Add("@BibliotekarzID", SqlDbType.Int).Value = bibliotekarzId;
+                        cmd.Parameters.AddWithValue("@C", czytelnikId);
+                        cmd.Parameters.AddWithValue("@B", bibliotekarzId);
+                        cmd.Parameters.AddWithValue("@Okres", okresDni);
+                        cmd.Parameters.AddWithValue("@DataZ", oczekiwanaData);
                         noweWypozyczenieId = (int)cmd.ExecuteScalar();
                     }
 
-                    // 2. Dla każdego zaznaczonego egzemplarza: INSERT pozycji + UPDATE statusu
+                    // Zapis pozycji i zmiana statusu
                     foreach (EgzemplarzItem item in chlbEgzemplarze.CheckedItems)
                     {
-                        using (SqlCommand cmd = new SqlCommand(
-                            "INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WID, @EID);",
-                            conn, transakcja))
+                        using (SqlCommand cmd = new SqlCommand("INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WID, @EID);", conn, transakcja))
                         {
-                            cmd.Parameters.Add("@WID", SqlDbType.Int).Value = noweWypozyczenieId;
-                            cmd.Parameters.Add("@EID", SqlDbType.Int).Value = item.ID;
+                            cmd.Parameters.AddWithValue("@WID", noweWypozyczenieId);
+                            cmd.Parameters.AddWithValue("@EID", item.ID);
                             cmd.ExecuteNonQuery();
                         }
 
                         int zaktualizowane;
-                        using (SqlCommand cmd = new SqlCommand(
-                            "UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EID AND Status = 'Dostepna';",
-                            conn, transakcja))
+                        using (SqlCommand cmd = new SqlCommand("UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EID AND Status = 'Dostepna';", conn, transakcja))
                         {
-                            cmd.Parameters.Add("@EID", SqlDbType.Int).Value = item.ID;
+                            cmd.Parameters.AddWithValue("@EID", item.ID);
                             zaktualizowane = cmd.ExecuteNonQuery();
                         }
 
+                        // SCENARIUSZ E1: Ktoś inny właśnie wypożyczył
                         if (zaktualizowane == 0)
                         {
                             transakcja.Rollback();
-                            MessageBox.Show(
-                                string.Format("Egzemplarz #{0} nie jest już dostępny. Odśwież listę i spróbuj ponownie.", item.ID),
-                                "Egzemplarz niedostępny", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show("Błąd: Wybrana książka jest już wypożyczona innej osobie", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             WczytajDane();
                             return;
                         }
@@ -228,27 +363,39 @@ namespace Biblioteka
                     transakcja.Commit();
                 }
 
-                MessageBox.Show(
-                    string.Format("Wypożyczenie zarejestrowane pomyślnie ({0} egz.).", chlbEgzemplarze.CheckedItems.Count),
-                    "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                WczytajDane();
+                // SCENARIUSZ GŁÓWNY
+                MessageBox.Show("Pomyślnie zarejestrowano wypożyczenie", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Zapis pomyślny 
+                PominPotwierdzenie = true;
+                WrocDoListyWypozyczen();
             }
             catch (Exception ex)
             {
-                if (transakcja != null)
-                {
-                    try { transakcja.Rollback(); } catch { }
-                }
-                MessageBox.Show("Błąd podczas rejestrowania wypożyczenia: " + ex.Message,
-                    "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (transakcja != null) try { transakcja.Rollback(); } catch { }
+                MessageBox.Show("Wystąpił błąd: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        // ─── ANULOWANIE I POWRÓT ──────────────
         private void btn_anuluj_Click(object sender, EventArgs e)
+        {
+            DialogResult wynik = MessageBox.Show("Czy na pewno chcesz anulować rejestrację wypożyczenia? Zmiany nie zostaną zapisane.",
+                                                 "Anuluj wypożyczenie", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (wynik == DialogResult.Yes)
+            {
+                PominPotwierdzenie = true; // Zgoda na powrót 
+                WrocDoListyWypozyczen();
+            }
+        }
+
+        private void WrocDoListyWypozyczen()
         {
             Form parentForm = this.FindForm();
             if (parentForm is Biblioteka mainForm)
-                mainForm.PowrotDoMenuGlownego();
+            {
+                mainForm.OtworzListeWypozyczen();
+            }
         }
     }
 }

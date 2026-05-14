@@ -48,7 +48,7 @@
             this.lbl_forget_users.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold);
             this.lbl_forget_users.Location = new System.Drawing.Point(-5, 11);
             this.lbl_forget_users.Name = "lbl_forget_users";
-            this.lbl_forget_users.Size = new System.Drawing.Size(1248, 44);
+            this.lbl_forget_users.Size = new System.Drawing.Size(1248, 33);
             this.lbl_forget_users.TabIndex = 0;
             this.lbl_forget_users.Text = "ZAPOMNIJ UŻYTKOWNIKA";
             this.lbl_forget_users.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

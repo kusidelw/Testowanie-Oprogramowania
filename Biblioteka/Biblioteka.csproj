@@ -88,6 +88,12 @@
     <Compile Include="UCBorrowBook.Designer.cs">
       <DependentUpon>UCBorrowBook.cs</DependentUpon>
     </Compile>
+    <Compile Include="UCBorrowedBooksList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCBorrowedBooksList.Designer.cs">
+      <DependentUpon>UCBorrowedBooksList.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCReturnBook.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -202,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCBorrowBook.resx">
       <DependentUpon>UCBorrowBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCBorrowedBooksList.resx">
+      <DependentUpon>UCBorrowedBooksList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCManager.resx">
       <DependentUpon>UCManager.cs</DependentUpon>
