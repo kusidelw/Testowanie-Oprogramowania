@@ -50,6 +50,7 @@
             this.btn_next_page = new System.Windows.Forms.Button();
             this.btn_add_new_rental = new System.Windows.Forms.Button();
             this.btn_extend_time = new System.Windows.Forms.Button();
+            this.btn_return = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.gb_search_filters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_rentals)).BeginInit();
@@ -177,7 +178,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
-            this.label3.Location = new System.Drawing.Point(519, 40);
+            this.label3.Location = new System.Drawing.Point(521, 39);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(69, 20);
             this.label3.TabIndex = 7;
@@ -186,7 +187,7 @@
             // cb_status
             // 
             this.cb_status.FormattingEnabled = true;
-            this.cb_status.Location = new System.Drawing.Point(523, 63);
+            this.cb_status.Location = new System.Drawing.Point(525, 62);
             this.cb_status.Name = "cb_status";
             this.cb_status.Size = new System.Drawing.Size(235, 28);
             this.cb_status.TabIndex = 6;
@@ -241,7 +242,7 @@
             this.dgv_rentals.RowHeadersWidth = 51;
             this.dgv_rentals.RowTemplate.Height = 24;
             this.dgv_rentals.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv_rentals.Size = new System.Drawing.Size(1227, 428);
+            this.dgv_rentals.Size = new System.Drawing.Size(1227, 467);
             this.dgv_rentals.TabIndex = 21;
             // 
             // btn_prev_page
@@ -249,7 +250,7 @@
             this.btn_prev_page.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_prev_page.BackColor = System.Drawing.Color.LightBlue;
             this.btn_prev_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
-            this.btn_prev_page.Location = new System.Drawing.Point(396, 694);
+            this.btn_prev_page.Location = new System.Drawing.Point(391, 714);
             this.btn_prev_page.Name = "btn_prev_page";
             this.btn_prev_page.Size = new System.Drawing.Size(137, 31);
             this.btn_prev_page.TabIndex = 24;
@@ -262,7 +263,7 @@
             this.lbl_page_info.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.lbl_page_info.AutoSize = true;
             this.lbl_page_info.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
-            this.lbl_page_info.Location = new System.Drawing.Point(561, 699);
+            this.lbl_page_info.Location = new System.Drawing.Point(556, 719);
             this.lbl_page_info.Name = "lbl_page_info";
             this.lbl_page_info.Size = new System.Drawing.Size(114, 20);
             this.lbl_page_info.TabIndex = 25;
@@ -274,7 +275,7 @@
             this.btn_next_page.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btn_next_page.BackColor = System.Drawing.Color.LightBlue;
             this.btn_next_page.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold);
-            this.btn_next_page.Location = new System.Drawing.Point(706, 694);
+            this.btn_next_page.Location = new System.Drawing.Point(701, 714);
             this.btn_next_page.Name = "btn_next_page";
             this.btn_next_page.Size = new System.Drawing.Size(137, 31);
             this.btn_next_page.TabIndex = 26;
@@ -288,7 +289,7 @@
             this.btn_add_new_rental.BackColor = System.Drawing.Color.LightGreen;
             this.btn_add_new_rental.Enabled = false;
             this.btn_add_new_rental.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_add_new_rental.Location = new System.Drawing.Point(45, 687);
+            this.btn_add_new_rental.Location = new System.Drawing.Point(22, 766);
             this.btn_add_new_rental.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_add_new_rental.Name = "btn_add_new_rental";
             this.btn_add_new_rental.Size = new System.Drawing.Size(227, 45);
@@ -300,23 +301,39 @@
             // btn_extend_time
             // 
             this.btn_extend_time.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_extend_time.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_extend_time.BackColor = System.Drawing.Color.Khaki;
             this.btn_extend_time.Enabled = false;
             this.btn_extend_time.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_extend_time.Location = new System.Drawing.Point(948, 687);
+            this.btn_extend_time.Location = new System.Drawing.Point(508, 766);
             this.btn_extend_time.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_extend_time.Name = "btn_extend_time";
             this.btn_extend_time.Size = new System.Drawing.Size(244, 45);
             this.btn_extend_time.TabIndex = 28;
-            this.btn_extend_time.Text = "Przedłuż wypozyczenie";
+            this.btn_extend_time.Text = "Przedłuż wypożyczenie";
             this.btn_extend_time.UseVisualStyleBackColor = false;
             this.btn_extend_time.Click += new System.EventHandler(this.btn_extend_time_Click);
+            // 
+            // btn_return
+            // 
+            this.btn_return.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_return.BackColor = System.Drawing.Color.Tomato;
+            this.btn_return.Enabled = false;
+            this.btn_return.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_return.Location = new System.Drawing.Point(1017, 766);
+            this.btn_return.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_return.Name = "btn_return";
+            this.btn_return.Size = new System.Drawing.Size(206, 45);
+            this.btn_return.TabIndex = 29;
+            this.btn_return.Text = "Zarejestruj zwrot";
+            this.btn_return.UseVisualStyleBackColor = false;
+            this.btn_return.Click += new System.EventHandler(this.btn_return_Click);
             // 
             // UCBorrowedBooksList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Controls.Add(this.btn_return);
             this.Controls.Add(this.btn_extend_time);
             this.Controls.Add(this.btn_add_new_rental);
             this.Controls.Add(this.btn_prev_page);
@@ -327,7 +344,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lbl_forget_users);
             this.Name = "UCBorrowedBooksList";
-            this.Size = new System.Drawing.Size(1237, 774);
+            this.Size = new System.Drawing.Size(1237, 836);
             this.panel1.ResumeLayout(false);
             this.gb_search_filters.ResumeLayout(false);
             this.gb_search_filters.PerformLayout();
@@ -361,5 +378,6 @@
         private System.Windows.Forms.Button btn_next_page;
         private System.Windows.Forms.Button btn_add_new_rental;
         private System.Windows.Forms.Button btn_extend_time;
+        private System.Windows.Forms.Button btn_return;
     }
 }

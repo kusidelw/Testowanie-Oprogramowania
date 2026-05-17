@@ -13,8 +13,8 @@ namespace Biblioteka
 
         public int? CurrentUserId { get; set; }
         private int currentPage = 1;
-        private int totalPages = 1; 
-        private const int pageSize = 15;
+        private int totalPages = 1;
+        private const int pageSize = 10;
 
         public UCBorrowedBooksList()
         {
@@ -27,8 +27,9 @@ namespace Biblioteka
             dtp_date_to.Checked = false;
 
             cb_status.Items.Clear();
-            cb_status.Items.AddRange(new string[] { "Wszystkie", "Nowe", "Przedłużone", "Zakończone" });
+            cb_status.Items.AddRange(new string[] { "Wszystkie", "Nowe", "Przedluzone", "Zakonczone" });
             cb_status.SelectedIndex = 0;
+
         }
 
         public void UstawUprawnienia(List<string> role)
@@ -40,6 +41,7 @@ namespace Biblioteka
             // Tylko Bibliotekarz może klikać akcje
             btn_add_new_rental.Enabled = jestBibliotekarz;
             btn_extend_time.Enabled = jestBibliotekarz;
+            btn_return.Enabled = jestBibliotekarz;
         }
 
         public void WczytajDane(int page = 1)
@@ -57,14 +59,13 @@ namespace Biblioteka
                     string whereClause = " WHERE 1=1";
                     bool czyUzytoFiltrow = false; // czy użyto filtrów dla komunikatu E1
 
-                    if(!string.IsNullOrWhiteSpace(txb_reader.Text))
+                    if (!string.IsNullOrWhiteSpace(txb_reader.Text))
                     {
                         czyUzytoFiltrow = true;
                         whereClause += " AND (c.Imie = @reader OR c.Nazwisko = @reader OR c.Imie + ' ' + c.Nazwisko = @reader)";
                         cmd.Parameters.AddWithValue("@reader", txb_reader.Text.Trim());
                     }
 
-                    // Filtrowanie po BIBLIOTEKARZU - DOKŁADNE dopasowanie
                     if (!string.IsNullOrWhiteSpace(txb_librarian.Text))
                     {
                         czyUzytoFiltrow = true;
@@ -106,7 +107,7 @@ namespace Biblioteka
                     if (totalPages == 0) totalPages = 1;
                     if (currentPage > totalPages) currentPage = totalPages;
 
-                    // Główne zapytanie z paginacją
+                    // Główne zapytanie z paginacją 
                     string sql = @"
                         SELECT 
                             w.ID,
@@ -123,7 +124,7 @@ namespace Biblioteka
                             c.Telefon AS [Nr Telefonu],
                     
                             (
-                                SELECT STRING_AGG(ISNULL(aut.AutorN, '') + kk.Tytul, ', ')
+                                SELECT STRING_AGG(ISNULL(aut.AutorN, '') + kk.Tytul, CHAR(13) + CHAR(10))
                                 FROM PozycjeWypozyczenia pw2
                                 JOIN Egzemplarze eg2 ON pw2.EgzemplarzID = eg2.ID
                                 JOIN KatalogKsiazek kk ON eg2.KsiazkaID = kk.ID
@@ -139,7 +140,7 @@ namespace Biblioteka
                             b.Imie + ' ' + b.Nazwisko AS Bibliotekarz,
                             w.DataWypozyczenia AS [Data Wypożyczenia],
                             w.OczekiwanaDataZwrotu AS [Termin Zwrotu],
-                            CAST(w.OkresWypozyczeniaDni AS VARCHAR) + ' dni' AS [Okres],
+                            CAST(DATEDIFF(day, w.DataWypozyczenia, w.OczekiwanaDataZwrotu) AS VARCHAR) + ' dni' AS [Okres],
                             w.Status
                         FROM Wypozyczenia w
                         JOIN Uzytkownicy c ON w.CzytelnikID = c.ID
@@ -159,13 +160,15 @@ namespace Biblioteka
 
                     dgv_rentals.DataSource = dt;
 
-                    // Poprawa wyglądu DataGridView i paginacja
+                    // Poprawa wyglądu i paginacja
                     if (dgv_rentals.Columns.Contains("ID"))
                         dgv_rentals.Columns["ID"].Visible = false;
 
                     dgv_rentals.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-                    // OLUMNY KRÓTKIE - dopasowujemy idealnie do zawartości 
+                    dgv_rentals.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+                    // KOLUMNY KRÓTKIE - dopasowujemy idealnie do zawartości 
                     if (dgv_rentals.Columns.Contains("Nr Telefonu"))
                         dgv_rentals.Columns["Nr Telefonu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
@@ -195,13 +198,19 @@ namespace Biblioteka
 
                     // KOLUMNY DŁUGIE
                     if (dgv_rentals.Columns.Contains("Książka"))
-                        dgv_rentals.Columns["Książka"].FillWeight = 250; 
+                    {
+                        dgv_rentals.Columns["Książka"].FillWeight = 250;
+                        dgv_rentals.Columns["Książka"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    }
 
                     if (dgv_rentals.Columns.Contains("Adres"))
-                        dgv_rentals.Columns["Adres"].FillWeight = 180; 
+                    {
+                        dgv_rentals.Columns["Adres"].FillWeight = 180;
+                        dgv_rentals.Columns["Adres"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    }
 
                     if (dgv_rentals.Columns.Contains("Czytelnik"))
-                        dgv_rentals.Columns["Czytelnik"].FillWeight = 100; 
+                        dgv_rentals.Columns["Czytelnik"].FillWeight = 100;
 
                     if (dgv_rentals.Columns.Contains("Bibliotekarz"))
                         dgv_rentals.Columns["Bibliotekarz"].FillWeight = 100;
@@ -236,7 +245,7 @@ namespace Biblioteka
                 if (dtp_date_from.Value.Date > dtp_date_to.Value.Date)
                 {
                     MessageBox.Show("Data 'do' nie może być wcześniejsza niż data 'od'!", "Błąd walidacji", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return; 
+                    return;
                 }
             }
 
@@ -263,7 +272,34 @@ namespace Biblioteka
 
         private void btn_extend_time_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Funkcjonalność przedłużania (PRZ_PRZEDL_1) w trakcie przygotowania.", "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // SCENARIUSZ E2: Brak wybrania rekordu do przedłużenia
+            if (dgv_rentals.SelectedRows.Count != 1)
+            {
+                MessageBox.Show("Błąd: Proszę najpierw zaznaczyć na liście wypożyczenie, które ma zostać przedłużone",
+                                "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Pobieramy ID wybranego wypożyczenia
+            int wypozyczenieId = Convert.ToInt32(dgv_rentals.SelectedRows[0].Cells["ID"].Value);
+            string status = dgv_rentals.SelectedRows[0].Cells["Status"].Value.ToString();
+
+            // Blokujemy przedłużenie jeśli status to "Zakonczone"
+            if (status == "Zakonczone" || status == "Zakończone")
+            {
+                MessageBox.Show("Błąd: Nie można przedłużyć wypożyczenia, które zostało już zakończone (książki zwrócone).",
+                                "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Wywołujemy nowy formularz przedłużania 
+            using (PrzedluzWypozyczenie form = new PrzedluzWypozyczenie(wypozyczenieId))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    WczytajDane(currentPage);
+                }
+            }
         }
 
         // Paginator 
@@ -280,6 +316,37 @@ namespace Biblioteka
         private void cb_status_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btn_return_Click(object sender, EventArgs e)
+        {
+            if (dgv_rentals.SelectedRows.Count != 1)
+            {
+                MessageBox.Show("Błąd: Proszę najpierw zaznaczyć na liście wypożyczenie, które chcesz zwrócić.",
+                                "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Pobieramy ID i sprawdzamy status
+            int wypozyczenieId = Convert.ToInt32(dgv_rentals.SelectedRows[0].Cells["ID"].Value);
+            string status = dgv_rentals.SelectedRows[0].Cells["Status"].Value.ToString();
+
+            // Zabezpieczenie przed zwracaniem czegoś co już oddano
+            if (status == "Zakonczone" || status == "Zakończone")
+            {
+                MessageBox.Show("Błąd: To wypożyczenie zostało już zakończone.",
+                                "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Otwieramy okienko zwrotu
+            using (ZwrotWypozyczenia form = new ZwrotWypozyczenia(wypozyczenieId))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    WczytajDane(currentPage); // Odświeżamy listę 
+                }
+            }
         }
     }
 }
