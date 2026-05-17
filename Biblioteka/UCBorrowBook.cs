@@ -106,7 +106,7 @@ namespace Biblioteka
             // SCENARIUSZ E2: Data zwrotu z przeszłości lub dzisiaj
             if (dtp_return_date.Value.Date <= DateTime.Today)
             {
-                MessageBox.Show("Data oczekiwanego zwrotu nie może być wcześniejsza niż jutro!", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Data oczekiwanego zwrotu nie może być wcześniejsza niż jutrzejsza.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 isCalculatingDate = true;
 
                 dtp_return_date.Value = SprawdzDniWolne(DateTime.Today.AddDays(1)); // Cofnij na bezpieczną datę 

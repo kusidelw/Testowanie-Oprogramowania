@@ -141,7 +141,7 @@ namespace Biblioteka
                 using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
                     conn.Open();
-                    // Aktualizujemy datę, status oraz wyliczony łączny okres
+                    // Aktualizujemy datę status oraz wyliczony łączny okres
                     string sql = @"
                         UPDATE Wypozyczenia 
                         SET OczekiwanaDataZwrotu = @NowaData, 

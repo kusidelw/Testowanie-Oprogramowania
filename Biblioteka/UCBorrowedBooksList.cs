@@ -339,7 +339,6 @@ namespace Biblioteka
                 return;
             }
 
-            // Otwieramy okienko zwrotu
             using (ZwrotWypozyczenia form = new ZwrotWypozyczenia(wypozyczenieId))
             {
                 if (form.ShowDialog() == DialogResult.OK)

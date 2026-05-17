@@ -35,12 +35,12 @@
             this.btn_find_forgotten_users = new System.Windows.Forms.Button();
             this.btn_forget_users = new System.Windows.Forms.Button();
             this.btn_show_users = new System.Windows.Forms.Button();
-            this.btn_return_book = new System.Windows.Forms.Button();
             this.btn_borrow_book = new System.Windows.Forms.Button();
             this.btn_show_books = new System.Windows.Forms.Button();
             this.btn_add_book = new System.Windows.Forms.Button();
             this.btn_add_user = new System.Windows.Forms.Button();
             this.MainPanel = new System.Windows.Forms.Panel();
+            this.btn_return_book = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,18 +139,6 @@
             this.btn_show_users.UseVisualStyleBackColor = true;
             this.btn_show_users.Click += new System.EventHandler(this.btn_show_users_Click);
             // 
-            // btn_return_book
-            // 
-            this.btn_return_book.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_return_book.Location = new System.Drawing.Point(0, 284);
-            this.btn_return_book.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_return_book.Name = "btn_return_book";
-            this.btn_return_book.Size = new System.Drawing.Size(300, 70);
-            this.btn_return_book.TabIndex = 14;
-            this.btn_return_book.Text = "Zwroty";
-            this.btn_return_book.UseVisualStyleBackColor = true;
-            this.btn_return_book.Click += new System.EventHandler(this.btn_return_book_Click);
-            // 
             // btn_borrow_book
             // 
             this.btn_borrow_book.Dock = System.Windows.Forms.DockStyle.Top;
@@ -209,6 +197,18 @@
             this.MainPanel.Size = new System.Drawing.Size(1159, 784);
             this.MainPanel.TabIndex = 1;
             // 
+            // btn_return_book
+            // 
+            this.btn_return_book.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_return_book.Location = new System.Drawing.Point(0, 284);
+            this.btn_return_book.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_return_book.Name = "btn_return_book";
+            this.btn_return_book.Size = new System.Drawing.Size(300, 70);
+            this.btn_return_book.TabIndex = 14;
+            this.btn_return_book.Text = "Zwroty";
+            this.btn_return_book.UseVisualStyleBackColor = true;
+            this.btn_return_book.Click += new System.EventHandler(this.btn_return_book_Click);
+            // 
             // Biblioteka
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -238,8 +238,8 @@
         private System.Windows.Forms.Button btn_add_book;
         private System.Windows.Forms.Button btn_show_books;
         private System.Windows.Forms.Button btn_borrow_book;
-        private System.Windows.Forms.Button btn_return_book;
         private System.Windows.Forms.Button btn_logout;
+        private System.Windows.Forms.Button btn_return_book;
     }
 }
 

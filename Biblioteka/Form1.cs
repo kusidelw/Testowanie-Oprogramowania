@@ -167,7 +167,7 @@ namespace Biblioteka
             btnKatBibliotekarz = UtworzNaglowek("Bibliotekarz");
             panelBibliotekarz = UtworzPodPanel();
             panelBibliotekarz.SuspendLayout();
-            foreach (var btn in new[] { btn_show_books, btn_add_book, btn_borrow_book, btn_return_book })
+            foreach (var btn in new[] { btn_show_books, btn_add_book, btn_borrow_book})
             {
                 StylujPrzyciskMenu(btn);
                 panelBibliotekarz.Controls.Add(btn);
