@@ -46,22 +46,19 @@ namespace Biblioteka
         {
             isCalculatingDate = true;
             dtp_borrow_date.Value = DateTime.Today;
-            nup_borrow_period.Value = 14;
-            dtp_return_date.Value = SprawdzDniWolne(DateTime.Today.AddDays(14));
+
+            DateTime wyliczonaData = SprawdzDniWolne(DateTime.Today.AddDays(14));
+            dtp_return_date.Value = wyliczonaData;
+            nup_borrow_period.Value = (int)(wyliczonaData - DateTime.Today).TotalDays;
+
             isCalculatingDate = false;
 
             txtSzukajCzytelnika.Text = "";
             txtSzukajEgzemplarza.Text = "";
-
             WczytajDane();
 
-            if (dgvCzytelnicy.Rows.Count > 0)
-                dgvCzytelnicy.ClearSelection();
-
-            for (int i = 0; i < chlbEgzemplarze.Items.Count; i++)
-            {
-                chlbEgzemplarze.SetItemChecked(i, false);
-            }
+            if (dgvCzytelnicy.Rows.Count > 0) dgvCzytelnicy.ClearSelection();
+            for (int i = 0; i < chlbEgzemplarze.Items.Count; i++) chlbEgzemplarze.SetItemChecked(i, false);
         }
 
         private void KonfigurujDGV()
@@ -87,7 +84,17 @@ namespace Biblioteka
             isCalculatingDate = true;
 
             DateTime nowaData = dtp_borrow_date.Value.AddDays((double)nup_borrow_period.Value);
-            dtp_return_date.Value = SprawdzDniWolne(nowaData); // Sprawdzamy weekendy i święta (E3)
+
+            DateTime bezpiecznaData = SprawdzDniWolne(nowaData);
+
+            dtp_return_date.Value = bezpiecznaData;
+
+            int faktyczneDni = (int)(bezpiecznaData.Date - dtp_borrow_date.Value.Date).TotalDays;
+
+            if (nup_borrow_period.Value != faktyczneDni)
+            {
+                nup_borrow_period.Value = faktyczneDni;
+            }
 
             isCalculatingDate = false;
         }
@@ -127,7 +134,7 @@ namespace Biblioteka
             isCalculatingDate = false;
         }
 
-        // SCENARIUSZ E3: Sprawdzanie weekendów i świąt stałych w Polsce
+        // ENARIUSZ E3: Sprawdzanie weekendów i świąt stałych w Polsce
         private DateTime SprawdzDniWolne(DateTime data)
         {
             bool przesunieto = false;
@@ -220,11 +227,23 @@ namespace Biblioteka
                 {
                     conn.Open();
                     const string sql = @"
-                        SELECT ID, Imie, Nazwisko, PESEL
-                        FROM Uzytkownicy
-                        WHERE CzyZablokowany = 0 AND CzyZapomniany = 0
-                          AND (Nazwisko LIKE @Filtr OR Imie LIKE @Filtr)
-                        ORDER BY Nazwisko, Imie";
+                        SELECT 
+                            u.ID, 
+                            u.Imie, 
+                            u.Nazwisko, 
+                            km.Miejscowosc + 
+                            CASE 
+                                WHEN u.Ulica IS NOT NULL AND u.Ulica <> '' THEN ', ' + u.Ulica + ' ' 
+                                ELSE ' ' 
+                            END + 
+                            u.NumerPosesji + 
+                            ISNULL('/' + u.NumerLokalu, '') AS Adres,
+                            u.Telefon AS [Nr Telefonu]
+                        FROM Uzytkownicy u
+                        JOIN KodyPocztowe_Miejscowosci km ON u.MiejscowoscKodID = km.ID
+                        WHERE u.CzyZablokowany = 0 AND u.CzyZapomniany = 0
+                          AND (u.Nazwisko LIKE @Filtr OR u.Imie LIKE @Filtr)
+                        ORDER BY u.Nazwisko, u.Imie";
 
                     DataTable dt = new DataTable();
                     using (SqlCommand cmd = new SqlCommand(sql, conn))
@@ -237,7 +256,6 @@ namespace Biblioteka
 
                 if (dgvCzytelnicy.Columns.Contains("ID")) dgvCzytelnicy.Columns["ID"].Visible = false;
 
-                // Zdejmujemy ukryte domyślne zaznaczenie po każdym wyszukiwaniu
                 if (dgvCzytelnicy.Rows.Count > 0)
                     dgvCzytelnicy.ClearSelection();
             }

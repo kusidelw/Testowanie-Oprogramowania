@@ -13,15 +13,13 @@ namespace Biblioteka
 
         public int? CurrentUserId { get; set; }
         private int currentPage = 1;
-        private int totalPages = 1; // <--- Dodane dla paginacji
-        private const int pageSize = 20;
+        private int totalPages = 1; 
+        private const int pageSize = 15;
 
         public UCBorrowedBooksList()
         {
             InitializeComponent();
 
-            // Konfiguracja kontrolek zgodnie z analizą
-            // Włączamy checkboxy w kalendarzach - domyślnie ignorujemy datę
             dtp_date_from.ShowCheckBox = true;
             dtp_date_from.Checked = false;
 
@@ -113,7 +111,15 @@ namespace Biblioteka
                         SELECT 
                             w.ID,
                             c.Imie + ' ' + c.Nazwisko AS Czytelnik,
-                            c.Ulica + ' ' + c.NumerPosesji + ISNULL('/' + c.NumerLokalu, '') AS Adres,
+                            
+                            km.Miejscowosc + 
+                            CASE 
+                                WHEN c.Ulica IS NOT NULL AND c.Ulica <> '' THEN ', ' + c.Ulica + ' ' 
+                                ELSE ' ' 
+                            END + 
+                            c.NumerPosesji + 
+                            ISNULL('/' + c.NumerLokalu, '') AS Adres,
+                            
                             c.Telefon AS [Nr Telefonu],
                     
                             (
@@ -137,6 +143,7 @@ namespace Biblioteka
                             w.Status
                         FROM Wypozyczenia w
                         JOIN Uzytkownicy c ON w.CzytelnikID = c.ID
+                        JOIN KodyPocztowe_Miejscowosci km ON c.MiejscowoscKodID = km.ID
                         JOIN Uzytkownicy b ON w.BibliotekarzID = b.ID "
                         + whereClause +
                         @" ORDER BY w.DataWypozyczenia DESC
@@ -153,18 +160,51 @@ namespace Biblioteka
                     dgv_rentals.DataSource = dt;
 
                     // Poprawa wyglądu DataGridView i paginacja
-                    if (dgv_rentals.Columns.Contains("ID")) dgv_rentals.Columns["ID"].Visible = false;
+                    if (dgv_rentals.Columns.Contains("ID"))
+                        dgv_rentals.Columns["ID"].Visible = false;
+
                     dgv_rentals.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
+                    // OLUMNY KRÓTKIE - dopasowujemy idealnie do zawartości 
+                    if (dgv_rentals.Columns.Contains("Nr Telefonu"))
+                        dgv_rentals.Columns["Nr Telefonu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
                     if (dgv_rentals.Columns.Contains("Data Wypożyczenia"))
+                    {
+                        dgv_rentals.Columns["Data Wypożyczenia"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                         dgv_rentals.Columns["Data Wypożyczenia"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                    }
+
                     if (dgv_rentals.Columns.Contains("Termin Zwrotu"))
+                    {
+                        dgv_rentals.Columns["Termin Zwrotu"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                         dgv_rentals.Columns["Termin Zwrotu"].DefaultCellStyle.Format = "dd.MM.yyyy";
+                    }
 
                     if (dgv_rentals.Columns.Contains("Okres"))
+                    {
+                        dgv_rentals.Columns["Okres"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                         dgv_rentals.Columns["Okres"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    }
+
                     if (dgv_rentals.Columns.Contains("Status"))
+                    {
+                        dgv_rentals.Columns["Status"].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
                         dgv_rentals.Columns["Status"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                    }
+
+                    // KOLUMNY DŁUGIE
+                    if (dgv_rentals.Columns.Contains("Książka"))
+                        dgv_rentals.Columns["Książka"].FillWeight = 250; 
+
+                    if (dgv_rentals.Columns.Contains("Adres"))
+                        dgv_rentals.Columns["Adres"].FillWeight = 180; 
+
+                    if (dgv_rentals.Columns.Contains("Czytelnik"))
+                        dgv_rentals.Columns["Czytelnik"].FillWeight = 100; 
+
+                    if (dgv_rentals.Columns.Contains("Bibliotekarz"))
+                        dgv_rentals.Columns["Bibliotekarz"].FillWeight = 100;
 
                     if (this.Controls.Find("lbl_page_info", true).Length > 0)
                         this.Controls.Find("lbl_page_info", true)[0].Text = $"Strona: {currentPage} / {totalPages}";
@@ -235,6 +275,11 @@ namespace Biblioteka
         private void btn_next_page_Click(object sender, EventArgs e)
         {
             if (currentPage < totalPages) WczytajDane(currentPage + 1);
+        }
+
+        private void cb_status_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
