@@ -217,16 +217,14 @@ namespace Biblioteka
         }
 
         // ─── WYSZUKIWANIE CZYTELNIKÓW I KSIĄŻEK ──────────────
-
         private void WczytajCzytelnikow(string filtr)
         {
             try
             {
-                string wzorzec = "%" + filtr + "%";
                 using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
                     conn.Open();
-                    const string sql = @"
+                    string sql = @"
                         SELECT 
                             u.ID, 
                             u.Imie, 
@@ -241,16 +239,28 @@ namespace Biblioteka
                             u.Telefon AS [Nr Telefonu]
                         FROM Uzytkownicy u
                         JOIN KodyPocztowe_Miejscowosci km ON u.MiejscowoscKodID = km.ID
-                        WHERE u.CzyZablokowany = 0 AND u.CzyZapomniany = 0
-                          AND (u.Nazwisko LIKE @Filtr OR u.Imie LIKE @Filtr)
-                        ORDER BY u.Nazwisko, u.Imie";
+                        WHERE u.CzyZablokowany = 0 AND u.CzyZapomniany = 0 ";
+
+                    SqlCommand cmd = new SqlCommand();
+
+                    // dzielimy wpisany tekst na słowa
+                    if (!string.IsNullOrWhiteSpace(filtr))
+                    {
+                        string[] slowa = filtr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        for (int i = 0; i < slowa.Length; i++)
+                        {
+                            sql += $" AND (u.Imie LIKE @w{i} OR u.Nazwisko LIKE @w{i}) ";
+                            cmd.Parameters.AddWithValue($"@w{i}", "%" + slowa[i] + "%");
+                        }
+                    }
+
+                    sql += " ORDER BY u.Nazwisko, u.Imie";
+
+                    cmd.CommandText = sql;
+                    cmd.Connection = conn;
 
                     DataTable dt = new DataTable();
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.Add("@Filtr", SqlDbType.NVarChar).Value = wzorzec;
-                        new SqlDataAdapter(cmd).Fill(dt);
-                    }
+                    new SqlDataAdapter(cmd).Fill(dt);
                     dgvCzytelnicy.DataSource = dt;
                 }
 
@@ -266,13 +276,12 @@ namespace Biblioteka
         {
             try
             {
-                string wzorzec = "%" + filtr + "%";
                 var lista = new List<EgzemplarzItem>();
 
                 using (SqlConnection conn = new SqlConnection(ConnStr))
                 {
                     conn.Open();
-                    const string sql = @"
+                    string sql = @"
                         SELECT e.ID, ISNULL(aut.AutorN, '') + k.Tytul AS TytulWyswietlany
                         FROM Egzemplarze e
                         JOIN KatalogKsiazek k ON e.KsiazkaID = k.ID
@@ -282,18 +291,31 @@ namespace Biblioteka
                             JOIN Autorzy a ON kka.AutorID = a.ID
                             WHERE kka.KsiazkaID = k.ID
                         ) aut
-                        WHERE e.Status = 'Dostepna' AND (k.Tytul LIKE @Filtr)
-                        ORDER BY k.Tytul, e.ID";
+                        WHERE e.Status = 'Dostepna' ";
 
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    SqlCommand cmd = new SqlCommand();
+
+                    if (!string.IsNullOrWhiteSpace(filtr))
                     {
-                        cmd.Parameters.Add("@Filtr", SqlDbType.NVarChar).Value = wzorzec;
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        string[] slowa = filtr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        for (int i = 0; i < slowa.Length; i++)
                         {
-                            while (reader.Read())
-                            {
-                                lista.Add(new EgzemplarzItem { ID = reader.GetInt32(0), Opis = $"{reader.GetString(1)} (Egz. #{reader.GetInt32(0)})" });
-                            }
+                            // Każde słowo musi znaleźć się w tytule lub u autora
+                            sql += $" AND (k.Tytul LIKE @w{i} OR aut.AutorN LIKE @w{i}) ";
+                            cmd.Parameters.AddWithValue($"@w{i}", "%" + slowa[i] + "%");
+                        }
+                    }
+
+                    sql += " ORDER BY k.Tytul, e.ID";
+
+                    cmd.CommandText = sql;
+                    cmd.Connection = conn;
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            lista.Add(new EgzemplarzItem { ID = reader.GetInt32(0), Opis = $"{reader.GetString(1)} (Egz. #{reader.GetInt32(0)})" });
                         }
                     }
                 }
