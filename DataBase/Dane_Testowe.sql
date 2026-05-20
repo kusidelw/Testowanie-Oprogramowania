@@ -29,7 +29,7 @@ VALUES
     ('maly_marek', 'Marek2005!', 'Marek', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='80-001' AND Miejscowosc='Gdańsk'), '120', '05251555550', '2005-05-15', 'M', 'm.nowak@szkola.pl', '600100200'),
     ('ksiazkowa_ola', 'Ola12345!', 'Aleksandra', 'Wisniewska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='60-001' AND Miejscowosc='Poznań'), '3/4', '10322444446', '2010-12-24', 'K', 'ola.w@domena.com', '700800900'),
     ('babcia_stasia', 'Stasia55!', 'Stanislawa', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='50-001' AND Miejscowosc='Wrocław'), '15', '55081011100', '1955-08-10', 'K', 's.wojcik@poczta.pl', '500400300'),
-    ('biblio_adam', 'AdamBiblio!', 'Adam', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Kraków'), '44', '85112099999', '1985-11-20', 'M', 'a.kowalski@biblioteka.pl', '666555444'),
+    ('biblio_ania', 'AdamBiblio!', 'Ania', 'Kowalska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Kraków'), '44', '85112099999', '1985-11-20', 'M', 'a.kowalska@biblioteka.pl', '666555444'),
 	('login123', 'TestoweHaslo123!', 'Marek', 'Testowy', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), '25/2', '99010108970', '1999-01-01', 'M', 'marek123@poczta.pl', '522728351');
 GO
 
@@ -52,6 +52,7 @@ VALUES
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'maly_marek'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 -- Managerowie
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'ksiazkowa_ola'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'babcia_stasia'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager'));
 GO
 
@@ -80,10 +81,14 @@ VALUES
         (SELECT ID FROM Gatunki WHERE Nazwa='Klasyka'),    
         (SELECT ID FROM Wydawnictwa WHERE Nazwa='PWN'),       
         450, 1834, 25.00, 'Epopeja narodowa.'),
-	('Harry Potter i kamień filozoficzny',
+	('Harry Potter i kamień filozoficzny. Tom 1',
 		(SELECT ID FROM Gatunki WHERE Nazwa='Fantastyka'), 
 		(SELECT ID FROM Wydawnictwa WHERE Nazwa='Media Rodzina'), 
-		328, 1997, 29.99, 'Pierwszy tom z serii o Harrym Potterze.');
+		328, 2016, 31.99, 'Harry Potter i kamień filozoficzny. Tom 1');
+	('Harry Potter i kamień filozoficzny. Tom 2',
+		(SELECT ID FROM Gatunki WHERE Nazwa='Fantastyka'), 
+		(SELECT ID FROM Wydawnictwa WHERE Nazwa='Media Rodzina'), 
+		328, 2018, 31.99, 'Harry Potter i kamień filozoficzny. Tom 2');
 GO
 
 -- powiazanie autorow z ksiazkami 
@@ -91,7 +96,8 @@ INSERT INTO KsiazkaKatalog_Autorzy (KsiazkaID, AutorID)
 VALUES 
 ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Wiedźmin: Ostatnie Życzenie'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Sapkowski')),
 ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Pan Tadeusz'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Mickiewicz')),
-((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Rowling')
+((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 1'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Rowling')),
+((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 2'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Rowling')
 );
 GO
 
@@ -100,6 +106,7 @@ INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
 VALUES
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Wiedźmin: Ostatnie Życzenie'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Pan Tadeusz'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')),
-	((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'admin')
+	((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 1'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')),
+	((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 2'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')
 );
 GO
