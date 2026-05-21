@@ -58,7 +58,7 @@ Aplikacja desktopowa napisana w języku C#, służąca do kompleksowego zarządz
     * Zaktualizuj pole `ConnectionString`, wpisując dane dostępowe do Twojej lokalnej bazy danych.
 4.  **Skompiluj i uruchom:**
     * Przywróć pakiety NuGet (prawy przycisk myszy na 'Solution Biblioteka' -> *Restore NuGet Packages*).
-    * Wwybierz *Start*, aby uruchomić aplikację.
+    * Wybierz *Start*, aby uruchomić aplikację.
 
 ## 🧪 Uruchamianie testów
 
