@@ -10,36 +10,36 @@ GO
 INSERT INTO KodyPocztowe_Miejscowosci (KodPocztowy, Miejscowosc) 
 VALUES
     ('00-001', 'Warszawa'),
-    ('30-001', 'KrakÛw'),
-    ('80-001', 'GdaÒsk'),
-    ('60-001', 'PoznaÒ'),
-    ('50-001', 'Wroc≥aw'),
-    ('30-100', 'KrakÛw'),
-    ('90-290', '£Ûdü');
+    ('30-001', 'Krak√≥w'),
+    ('80-001', 'Gda≈Ñsk'),
+    ('60-001', 'Pozna≈Ñ'),
+    ('50-001', 'Wroc≈Çaw'),
+    ('30-100', 'Krak√≥w'),
+    ('90-290', '≈Å√≥d≈∫');
 GO
 
 -- dodanie uzytkownikow
 INSERT INTO Uzytkownicy 
     (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, NumerPosesji, PESEL, DataUrodzenia, Plec, Email, Telefon)
 VALUES
-    ('admin','Admin123!', 'Admin', 'Admin', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='£Ûdü'), '12', '03251753619', '2003-05-17', 'M', 'admin@mail.pl', '123456789'),
+    ('admin','Admin123!', 'Admin', 'Admin', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='≈Å√≥d≈∫'), '12', '03251753619', '2003-05-17', 'M', 'admin@mail.pl', '123456789'),
     ('admin_kacper', 'Haslo123!', 'Kacper', 'Bednarek', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='00-001' AND Miejscowosc='Warszawa'), '10', '95010111114', '1995-01-01', 'M', 'k.bednarek@biblioteka.pl', '123456789'),
-    ('biblio_natalia', 'Biblio123!', 'Natalia', 'Flaszka', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-001' AND Miejscowosc='KrakÛw'), '5A', '98020222223', '1998-02-02', 'K', 'n.flaszka@biblioteka.pl', '987654321'),
-    ('user_krystian', 'User123!', 'Krystian', 'Krynicki', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='£Ûdü'), '12', '90030333335', '1990-03-03', 'M', 'k.krynicki@poczta.pl', '555666777'),
-    ('maly_marek', 'Marek2005!', 'Marek', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='80-001' AND Miejscowosc='GdaÒsk'), '120', '05251555550', '2005-05-15', 'M', 'm.nowak@szkola.pl', '600100200'),
-    ('ksiazkowa_ola', 'Ola12345!', 'Aleksandra', 'Wisniewska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='60-001' AND Miejscowosc='PoznaÒ'), '3/4', '10322444446', '2010-12-24', 'K', 'ola.w@domena.com', '700800900'),
-    ('babcia_stasia', 'Stasia55!', 'Stanislawa', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='50-001' AND Miejscowosc='Wroc≥aw'), '15', '55081011100', '1955-08-10', 'K', 's.wojcik@poczta.pl', '500400300'),
-    ('biblio_ania', 'AdamBiblio!', 'Ania', 'Kowalska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='KrakÛw'), '54', '84112064226', '1984-11-20', 'K', 'a.kowalska@biblioteka.pl', '666555444'),
-	('biblio_adam', 'AdamBiblio!', 'Adam', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='KrakÛw'), '44', '85112099999', '1985-11-20', 'M', 'a.kowalski@biblioteka.pl', '666555444'),
-	('login123', 'TestoweHaslo123!', 'Marek', 'Testowy', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='£Ûdü'), '25/2', '99010108970', '1999-01-01', 'M', 'marek123@poczta.pl', '522728351');
+    ('biblio_natalia', 'Biblio123!', 'Natalia', 'Flaszka', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-001' AND Miejscowosc='Krak√≥w'), '5A', '98020222223', '1998-02-02', 'K', 'n.flaszka@biblioteka.pl', '987654321'),
+    ('user_krystian', 'User123!', 'Krystian', 'Krynicki', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='≈Å√≥d≈∫'), '12', '90030333335', '1990-03-03', 'M', 'k.krynicki@poczta.pl', '555666777'),
+    ('maly_marek', 'Marek2005!', 'Marek', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='80-001' AND Miejscowosc='Gda≈Ñsk'), '120', '05251555550', '2005-05-15', 'M', 'm.nowak@szkola.pl', '600100200'),
+    ('ksiazkowa_ola', 'Ola12345!', 'Aleksandra', 'Wisniewska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='60-001' AND Miejscowosc='Pozna≈Ñ'), '3/4', '10322444446', '2010-12-24', 'K', 'ola.w@domena.com', '700800900'),
+    ('babcia_stasia', 'Stasia55!', 'Stanislawa', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='50-001' AND Miejscowosc='Wroc≈Çaw'), '15', '55081011100', '1955-08-10', 'K', 's.wojcik@poczta.pl', '500400300'),
+    ('biblio_ania', 'AdamBiblio!', 'Ania', 'Kowalska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Krak√≥w'), '54', '84112064226', '1984-11-20', 'K', 'a.kowalska@biblioteka.pl', '666555444'),
+	('biblio_adam', 'AdamBiblio!', 'Adam', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Krak√≥w'), '44', '85112099999', '1985-11-20', 'M', 'a.kowalski@biblioteka.pl', '666555444'),
+	('login123', 'TestoweHaslo123!', 'Marek', 'Testowy', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='≈Å√≥d≈∫'), '25/2', '99010108970', '1999-01-01', 'M', 'marek123@poczta.pl', '522728351');
 GO
 
--- Zapisanie hase≥ w tabeli historii
+-- Zapisanie hase≈Ç w tabeli historii
 INSERT INTO HistoriaHasel (UzytkownikID, HasloHash)
 SELECT ID, HasloHash FROM Uzytkownicy;
 GO
 
--- przypisanie uprawnien (skorygowana, nowoczesna sk≥adnia)
+-- przypisanie uprawnien
 INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID)
 VALUES 
 -- Administratorzy
@@ -59,7 +59,7 @@ GO
 
 -- gatunki i autorzy
 INSERT INTO Gatunki (Nazwa) 
-VALUES ('Fantastyka'), ('Krymina≥'), ('Literatura faktu'), ('Klasyka');
+VALUES ('Fantastyka'), ('Krymina≈Ç'), ('Literatura faktu'), ('Klasyka');
 GO
 
 INSERT INTO Autorzy (Imie, Nazwisko) 
@@ -74,18 +74,18 @@ GO
 -- katalog ksiazek
 INSERT INTO KatalogKsiazek (Tytul, GatunekID, WydawnictwoID, LiczbaStron, RokWydania, Cena, Opis)
 VALUES
-    ('Wiedümin: Ostatnie Øyczenie', 
+    ('Wied≈∫min: Ostatnie ≈ªyczenie', 
         (SELECT ID FROM Gatunki WHERE Nazwa='Fantastyka'), 
         (SELECT ID FROM Wydawnictwa WHERE Nazwa='SuperNova'), 
-        320, 1993, 39.99, 'ZbiÛr opowiadaÒ o wiedzminie Geralcie.'),
+        320, 1993, 39.99, 'Zbi√≥r opowiada≈Ñ o wiedzminie Geralcie.'),
     ('Pan Tadeusz',                  
         (SELECT ID FROM Gatunki WHERE Nazwa='Klasyka'),    
         (SELECT ID FROM Wydawnictwa WHERE Nazwa='PWN'),       
         450, 1834, 25.00, 'Epopeja narodowa.'),
-    ('Harry Potter i kamieÒ filozoficzny. Tom 1',
+    ('Harry Potter i kamie≈Ñ filozoficzny. Tom 1',
         (SELECT ID FROM Gatunki WHERE Nazwa='Fantastyka'), 
         (SELECT ID FROM Wydawnictwa WHERE Nazwa='Media Rodzina'), 
-        328, 2016, 31.99, 'Harry Potter i kamieÒ filozoficzny. Tom 1'), 
+        328, 2016, 31.99, 'Harry Potter i kamie≈Ñ filozoficzny. Tom 1'), 
     ('Harry Potter i Komnata Tajemnic. Tom 2',
         (SELECT ID FROM Gatunki WHERE Nazwa='Fantastyka'), 
         (SELECT ID FROM Wydawnictwa WHERE Nazwa='Media Rodzina'), 
@@ -95,9 +95,9 @@ GO
 -- powiazanie autorow z ksiazkami 
 INSERT INTO KsiazkaKatalog_Autorzy (KsiazkaID, AutorID)
 VALUES 
-((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Wiedümin: Ostatnie Øyczenie'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Sapkowski')),
+((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Wied≈∫min: Ostatnie ≈ªyczenie'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Sapkowski')),
 ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Pan Tadeusz'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Mickiewicz')),
-((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamieÒ filozoficzny. Tom 1'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Rowling')),
+((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamie≈Ñ filozoficzny. Tom 1'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Rowling')),
 ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i Komnata Tajemnic. Tom 2'), (SELECT ID FROM Autorzy WHERE Nazwisko = 'Rowling')
 );
 GO
@@ -105,9 +105,23 @@ GO
 -- fizyczne egzemplarze
 INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
 VALUES
-    ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Wiedümin: Ostatnie Øyczenie'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')),
+    ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Wied≈∫min: Ostatnie ≈ªyczenie'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul='Pan Tadeusz'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')),
-	((SELECT ID FROM KatalogKsiazek WHERE Tytul ='Harry Potter i kamieÒ filozoficzny. Tom 1'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')),
+	((SELECT ID FROM KatalogKsiazek WHERE Tytul ='Harry Potter i kamie≈Ñ filozoficzny. Tom 1'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')),
 	((SELECT ID FROM KatalogKsiazek WHERE Tytul ='Harry Potter i Komnata Tajemnic. Tom 2'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')
 );
+GO
+
+-- konta zapomniane (zanonimizowane)
+DECLARE @TargetID INT = (SELECT ID FROM Uzytkownicy WHERE Login = 'ksiazkowa_ola');
+DECLARE @AdminID INT = (SELECT ID FROM Uzytkownicy WHERE Login = 'admin');
+
+EXEC sp_ZanonimizujUzytkownika
+    @TargetUzytkownikID = @TargetID,
+    @AdminID = @AdminID,
+    @LosoweImie = 'Anonim',
+    @LosoweNazwisko = 'Anonimowy',
+    @LosowyPESEL = '80051512345',  -- 10. cyfra to '4' (parzysta = K), data 80-05-15
+    @LosowaDataUr = '1980-05-15',
+    @LosowaPlec = 'K';
 GO
