@@ -35,12 +35,12 @@
             this.btn_find_forgotten_users = new System.Windows.Forms.Button();
             this.btn_forget_users = new System.Windows.Forms.Button();
             this.btn_show_users = new System.Windows.Forms.Button();
+            this.btn_return_book = new System.Windows.Forms.Button();
             this.btn_borrow_book = new System.Windows.Forms.Button();
             this.btn_show_books = new System.Windows.Forms.Button();
             this.btn_add_book = new System.Windows.Forms.Button();
             this.btn_add_user = new System.Windows.Forms.Button();
             this.MainPanel = new System.Windows.Forms.Panel();
-            this.btn_return_book = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,7 +111,7 @@
             this.btn_find_forgotten_users.Name = "btn_find_forgotten_users";
             this.btn_find_forgotten_users.Size = new System.Drawing.Size(300, 71);
             this.btn_find_forgotten_users.TabIndex = 7;
-            this.btn_find_forgotten_users.Text = "Wyszukaj zapomnianego użytkownika";
+            this.btn_find_forgotten_users.Text = "Lista zapomnianych użytkowników\r\n\r\n";
             this.btn_find_forgotten_users.UseVisualStyleBackColor = true;
             this.btn_find_forgotten_users.Click += new System.EventHandler(this.btn_find_forgotten_users_Click);
             // 
@@ -138,6 +138,18 @@
             this.btn_show_users.Text = "Wyświetl listę użytkowników";
             this.btn_show_users.UseVisualStyleBackColor = true;
             this.btn_show_users.Click += new System.EventHandler(this.btn_show_users_Click);
+            // 
+            // btn_return_book
+            // 
+            this.btn_return_book.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btn_return_book.Location = new System.Drawing.Point(0, 284);
+            this.btn_return_book.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_return_book.Name = "btn_return_book";
+            this.btn_return_book.Size = new System.Drawing.Size(300, 70);
+            this.btn_return_book.TabIndex = 14;
+            this.btn_return_book.Text = "Zwroty";
+            this.btn_return_book.UseVisualStyleBackColor = true;
+            this.btn_return_book.Click += new System.EventHandler(this.btn_return_book_Click);
             // 
             // btn_borrow_book
             // 
@@ -196,18 +208,6 @@
             this.MainPanel.Name = "MainPanel";
             this.MainPanel.Size = new System.Drawing.Size(1159, 784);
             this.MainPanel.TabIndex = 1;
-            // 
-            // btn_return_book
-            // 
-            this.btn_return_book.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_return_book.Location = new System.Drawing.Point(0, 284);
-            this.btn_return_book.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_return_book.Name = "btn_return_book";
-            this.btn_return_book.Size = new System.Drawing.Size(300, 70);
-            this.btn_return_book.TabIndex = 14;
-            this.btn_return_book.Text = "Zwroty";
-            this.btn_return_book.UseVisualStyleBackColor = true;
-            this.btn_return_book.Click += new System.EventHandler(this.btn_return_book_Click);
             // 
             // Biblioteka
             // 

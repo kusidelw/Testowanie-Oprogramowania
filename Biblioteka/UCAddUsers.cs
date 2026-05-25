@@ -161,13 +161,33 @@ namespace Biblioteka
                 if (string.IsNullOrWhiteSpace(tb.Text)) { OznaczBlad(tb, "Pole wymagane"); isValid = false; }
             }
 
+            // 2. Walidacja znaków w Imieniu, Nazwisku i Miejscowości
+            if (!string.IsNullOrWhiteSpace(txt_name.Text) && !Walidator.SprawdzTekstTylkoLitery(txt_name.Text))
+            {
+                OznaczBlad(txt_name, "Niedozwolone znaki (tylko litery i pojedyncze myślniki).");
+                isValid = false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(txt_surname.Text) && !Walidator.SprawdzTekstTylkoLitery(txt_surname.Text))
+            {
+                OznaczBlad(txt_surname, "Niedozwolone znaki (tylko litery i pojedyncze myślniki).");
+                isValid = false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(txt_town.Text) && !Walidator.SprawdzTekstTylkoLitery(txt_town.Text))
+            {
+                OznaczBlad(txt_town, "Niedozwolone znaki (tylko litery i pojedyncze myślniki).");
+                isValid = false;
+            }
+
+            // 3. Sprawdzenie płci
             if (cb_gender.SelectedIndex == -1)
             {
                 error_add_user_form.SetError(cb_gender, "Wybierz płeć");
                 isValid = false;
             }
 
-            // 2. Data Urodzenia i PESEL (Najpierw data, potem PESEL w oparciu o datę)
+            // 4. Data Urodzenia i PESEL (Najpierw data, potem PESEL w oparciu o datę)
             DateTime dataUr;
             if (!Walidator.SprawdzDateUrodzenia(txt_birth_date.Text, out dataUr))
             {
@@ -183,22 +203,37 @@ namespace Biblioteka
                 }
             }
 
-            // 3. Dane kontaktowe i adresowe
+            // 5. Dane kontaktowe i adresowe
             if (!Walidator.SprawdzEmail(txt_mail.Text))
-            { OznaczBlad(txt_mail, "Błędny format e-mail"); isValid = false; }
+            {
+                OznaczBlad(txt_mail, "Błędny format e-mail");
+                isValid = false;
+            }
 
             if (!Walidator.SprawdzTelefon(txt_phone_number.Text))
-            { OznaczBlad(txt_phone_number, "Telefon musi mieć dokładnie 9 cyfr"); isValid = false; }
+            {
+                OznaczBlad(txt_phone_number, "Telefon musi mieć dokładnie 9 cyfr");
+                isValid = false;
+            }
 
             if (!Walidator.SprawdzKodPocztowy(txt_zip_code.Text))
-            { OznaczBlad(txt_zip_code, "Format XX-XXX"); isValid = false; }
+            {
+                OznaczBlad(txt_zip_code, "Format XX-XXX");
+                isValid = false;
+            }
 
-            // 4. Numery domów (Posesja = wymagana (false), Lokal = opcjonalny (true))
+            // 6. Numery domów (Posesja = wymagana (false), Lokal = opcjonalny (true))
             if (!Walidator.SprawdzNumer(txt_property_number.Text, false))
-            { OznaczBlad(txt_property_number, "Błędny numer posesji (max 10 znaków)"); isValid = false; }
+            {
+                OznaczBlad(txt_property_number, "Błędny format numeru posesji");
+                isValid = false;
+            }
 
             if (!Walidator.SprawdzNumer(txtlbl_apartment_number.Text, true))
-            { OznaczBlad(txtlbl_apartment_number, "Błędny format numeru lokalu"); isValid = false; }
+            {
+                OznaczBlad(txtlbl_apartment_number, "Błędny format numeru lokalu");
+                isValid = false;
+            }
 
             return isValid;
         }
