@@ -231,13 +231,13 @@ namespace Biblioteka
             // 6. Numery domów (Posesja = wymagana (false), Lokal = opcjonalny (true))
             if (!Walidator.SprawdzNumer(txt_property_number.Text, false))
             {
-                OznaczBlad(txt_property_number, "Błędny format numeru posesji");
+                OznaczBlad(txt_property_number, "Nieprawidłowy format numeru posesji");
                 isValid = false;
             }
 
             if (!Walidator.SprawdzNumer(txtlbl_apartment_number.Text, true))
             {
-                OznaczBlad(txtlbl_apartment_number, "Błędny format numeru lokalu");
+                OznaczBlad(txtlbl_apartment_number, "Nieprawidłowy format numeru lokalu");
                 isValid = false;
             }
 
