@@ -206,14 +206,15 @@ namespace Biblioteka
             bool hasDigit = false;
             bool hasSpecial = false;
 
-            string specialChars = "-_!*#$&";
+            const string allowedSpecial = "-_!*#$&";
 
             foreach (char c in password)
             {
                 if (char.IsUpper(c)) hasUpper = true;
-                if (char.IsLower(c)) hasLower = true;
-                if (char.IsDigit(c)) hasDigit = true;
-                if (specialChars.Contains(c)) hasSpecial = true;
+                else if (char.IsLower(c)) hasLower = true;
+                else if (char.IsDigit(c)) hasDigit = true;
+                else if (allowedSpecial.Contains(c)) hasSpecial = true;
+                else return false; // niedozwolony znak → blokuj
             }
 
             return hasUpper && hasLower && hasDigit && hasSpecial;
