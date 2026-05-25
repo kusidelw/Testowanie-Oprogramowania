@@ -123,16 +123,23 @@ namespace Biblioteka
         {
             if (string.IsNullOrEmpty(pass)) return false;
 
-            // Kryteria: 8-15 znaków
             if (pass.Length < 8 || pass.Length > 15) return false;
 
-            // Wielka litera, mała litera, cyfra
-            bool hasUpper = pass.Any(char.IsUpper);
-            bool hasLower = pass.Any(char.IsLower);
-            bool hasDigit = pass.Any(char.IsDigit);
+            bool hasUpper = false;
+            bool hasLower = false;
+            bool hasDigit = false;
+            bool hasSpecial = false;
 
-            // Znaki specjalne zgodnie z wymogami: -, _, !, *, #, $, &
-            bool hasSpecial = Regex.IsMatch(pass, @"[-_!*#$&]");
+            const string allowedSpecial = "-_!*#$&";
+
+            foreach (char c in pass)
+            {
+                if (char.IsUpper(c)) hasUpper = true;
+                else if (char.IsLower(c)) hasLower = true;
+                else if (char.IsDigit(c)) hasDigit = true;
+                else if (allowedSpecial.Contains(c)) hasSpecial = true;
+                else return false; // niedozwolony znak → od razu false
+            }
 
             return hasUpper && hasLower && hasDigit && hasSpecial;
         }
