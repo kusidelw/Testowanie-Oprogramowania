@@ -144,12 +144,12 @@ VALUES
 	((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Lalka'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Quo Vadis'), 'Wypozyczona', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Solaris'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_adam')),
-    ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Kasacja'), 'Zniszczona', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia')),
+    ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Kasacja'), 'Wypozyczona', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Bieguni'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Gra o tron'), 'Wypozyczona', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_adam')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Hobbit'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Morderstwo w Orient Expressie'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania')),
-    ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Zmierzch'), 'Zagubiona', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_adam')),
+    ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Zmierzch'), 'Wypozyczona', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_adam')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Kod da Vinci'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia')),
     ((SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Kolor magii'), 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania'));
 GO
