@@ -47,6 +47,11 @@ VALUES
     ('login123', 'TestoweHaslo123!', 'Marek', 'Testowy', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), '25/2', '99010108970', '1999-01-01', 'M', 'marek123@poczta.pl', '522728351');
 GO
 
+-- Symulacja starego hasla dla usera
+INSERT INTO HistoriaHasel (UzytkownikID, HasloHash)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login = 'user_krystian'), 'StareHasloKrystiana1!');
+GO
+	
 -- Zapisanie haseł w tabeli historii
 INSERT INTO HistoriaHasel (UzytkownikID, HasloHash)
 SELECT ID, HasloHash FROM Uzytkownicy;
@@ -68,6 +73,7 @@ VALUES
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'user_ewa'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'wisnia1982'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'anna_woj'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'login123'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'kamyk_krzysztof'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 -- Managerowie
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'ksiazkowa_ola'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager')),
