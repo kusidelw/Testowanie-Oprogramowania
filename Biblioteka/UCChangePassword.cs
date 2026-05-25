@@ -47,7 +47,7 @@ namespace Biblioteka
             //walidacja polityki (8-15 znaków, W/M/C/S)
             if (!ValidatePasswordPolicy(newPass))
             {
-                ShowError("Hasło musi mieć 8-15 znaków, zawierać dużą literę, małą literę, cyfrę i znak specjalny.");
+                ShowError("Hasło musi mieć 8-15 znaków, zawierać dużą literę, małą literę, cyfrę i znak specjalny (- _ ! * # $ &).");
                 return;
             }
 

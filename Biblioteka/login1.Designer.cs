@@ -75,7 +75,7 @@
             this.btn_login.Name = "btn_login";
             this.btn_login.Size = new System.Drawing.Size(231, 49);
             this.btn_login.TabIndex = 105;
-            this.btn_login.Text = "ZALOGUJ";
+            this.btn_login.Text = "ZALOGUJ SIĘ";
             this.btn_login.UseVisualStyleBackColor = false;
             this.btn_login.Click += new System.EventHandler(this.btn_login_Click);
             // 

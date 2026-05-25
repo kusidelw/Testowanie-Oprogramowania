@@ -27,6 +27,7 @@ namespace Biblioteka
             dgv_users.MultiSelect = false;
             dgv_users.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgv_users.SelectionChanged += dgv_users_SelectionChanged;
+            dgv_users.ClearSelection();
 
             SetPasswordFieldsEnabled(false);
 
@@ -117,6 +118,8 @@ namespace Biblioteka
 
                         // Przywróć event
                         dgv_users.SelectionChanged += dgv_users_SelectionChanged;
+
+                        dgv_users.ClearSelection();
 
                         if (dt.Rows.Count == 0 && !string.IsNullOrEmpty(fraza))
                             ShowError("Nie znaleziono użytkowników spełniających kryteria.");
