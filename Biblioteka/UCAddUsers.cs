@@ -222,6 +222,12 @@ namespace Biblioteka
                 isValid = false;
             }
 
+            if (!Walidator.SprawdzUlice(txt_street.Text))
+            {
+                OznaczBlad(txt_street, "Niedozwolone znaki. Użyj tylko liter, cyfr, spacji, kropek i myślników.");
+                isValid = false;
+            }
+
             // 6. Numery domów (Posesja = wymagana (false), Lokal = opcjonalny (true))
             if (!Walidator.SprawdzNumer(txt_property_number.Text, false))
             {

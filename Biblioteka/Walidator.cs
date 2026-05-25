@@ -27,6 +27,24 @@ namespace Biblioteka
             // 3. Właściwa walidacja: Tylko litery, spacje i myślniki
             return Regex.IsMatch(tekst, @"^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-]+$");
         }
+
+        public static bool SprawdzUlice(string ulica)
+        {
+            if (string.IsNullOrWhiteSpace(ulica))
+                return true;
+
+            ulica = ulica.Trim();
+
+            // Podstawowe zabezpieczenia przed ciągami znaków typu "--" czy ".."
+            if (ulica.StartsWith("-") || ulica.EndsWith("-") || ulica.StartsWith("."))
+                return false;
+
+            if (ulica.Contains("--") || ulica.Contains("..") || ulica.Contains("  ")) 
+                return false;
+
+            // Dozwolone: litery (z polskimi znakami), cyfry, spacje, myślniki i kropki
+            return Regex.IsMatch(ulica, @"^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-\.]+$");
+        }
         public static bool SprawdzEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email)) return false;
