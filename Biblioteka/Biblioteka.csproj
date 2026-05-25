@@ -55,40 +55,68 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormLiblarian.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormLiblarian.Designer.cs">
-      <DependentUpon>FormLiblarian.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormMenager.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMenager.Designer.cs">
-      <DependentUpon>FormMenager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormReader.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormReader.Designer.cs">
-      <DependentUpon>FormReader.cs</DependentUpon>
-    </Compile>
     <Compile Include="login1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="login1.Designer.cs">
       <DependentUpon>login1.cs</DependentUpon>
     </Compile>
+    <Compile Include="KsiazkaRepository.cs" />
+    <Compile Include="Models\Autor.cs" />
+    <Compile Include="Models\DaneKsiazki.cs" />
+    <Compile Include="Models\Gatunek.cs" />
     <Compile Include="Models\Uprawnienie.cs" />
     <Compile Include="Models\UzytkownikListItem.cs" />
     <Compile Include="PermissionValidator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PrzedluzWypozyczenie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrzedluzWypozyczenie.Designer.cs">
+      <DependentUpon>PrzedluzWypozyczenie.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCAddUsers.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UCAddUsers.Designer.cs">
       <DependentUpon>UCAddUsers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCAddBook.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCAddBook.Designer.cs">
+      <DependentUpon>UCAddBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCBorrowBook.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCBorrowBook.Designer.cs">
+      <DependentUpon>UCBorrowBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCBorrowedBooksList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCBorrowedBooksList.Designer.cs">
+      <DependentUpon>UCBorrowedBooksList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCReturnBook.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCReturnBook.Designer.cs">
+      <DependentUpon>UCReturnBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCCzytelnik.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCCzytelnik.Designer.cs">
+      <DependentUpon>UCCzytelnik.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCManager.Designer.cs">
+      <DependentUpon>UCManager.cs</DependentUpon>
     </Compile>
     <Compile Include="UCChangePassword.cs">
       <SubType>UserControl</SubType>
@@ -132,6 +160,18 @@
     <Compile Include="UCPasswordRecovery.Designer.cs">
       <DependentUpon>UCPasswordRecovery.cs</DependentUpon>
     </Compile>
+    <Compile Include="UCShowBooks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCShowBooks.Designer.cs">
+      <DependentUpon>UCShowBooks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UCBookDetails.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCBookDetails.Designer.cs">
+      <DependentUpon>UCBookDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="UCShowUsers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -151,17 +191,14 @@
       <DependentUpon>UCUsersWithPermission.cs</DependentUpon>
     </Compile>
     <Compile Include="Walidator.cs" />
+    <Compile Include="ZwrotWypozyczenia.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ZwrotWypozyczenia.Designer.cs">
+      <DependentUpon>ZwrotWypozyczenia.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormLiblarian.resx">
-      <DependentUpon>FormLiblarian.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormMenager.resx">
-      <DependentUpon>FormMenager.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormReader.resx">
-      <DependentUpon>FormReader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="login1.resx">
       <DependentUpon>login1.cs</DependentUpon>
@@ -175,8 +212,26 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="PrzedluzWypozyczenie.resx">
+      <DependentUpon>PrzedluzWypozyczenie.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UCAddUsers.resx">
       <DependentUpon>UCAddUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCAddBook.resx">
+      <DependentUpon>UCAddBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCBorrowBook.resx">
+      <DependentUpon>UCBorrowBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCBorrowedBooksList.resx">
+      <DependentUpon>UCBorrowedBooksList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCManager.resx">
+      <DependentUpon>UCManager.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCReturnBook.resx">
+      <DependentUpon>UCReturnBook.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UCChangePassword.resx">
       <DependentUpon>UCChangePassword.cs</DependentUpon>
@@ -199,6 +254,12 @@
     <EmbeddedResource Include="UCPasswordRecovery.resx">
       <DependentUpon>UCPasswordRecovery.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UCShowBooks.resx">
+      <DependentUpon>UCShowBooks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UCBookDetails.resx">
+      <DependentUpon>UCBookDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UCShowUsers.resx">
       <DependentUpon>UCShowUsers.cs</DependentUpon>
     </EmbeddedResource>
@@ -207,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UCUsersWithPermission.resx">
       <DependentUpon>UCUsersWithPermission.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZwrotWypozyczenia.resx">
+      <DependentUpon>ZwrotWypozyczenia.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

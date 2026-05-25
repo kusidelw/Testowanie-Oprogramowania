@@ -179,7 +179,7 @@ GO
 CREATE TABLE Egzemplarze (
     ID INT PRIMARY KEY IDENTITY(1,1),
     KsiazkaID INT NOT NULL,
-    Status NVARCHAR(50) NOT NULL DEFAULT 'Dostepna' CHECK (Status IN ('Dostepna', 'Wypozyczona', 'Zniszczona', 'Zagubiona')),
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Dostepna' CHECK (Status IN ('Dostepna', 'Wypozyczona', 'Zniszczona')),
     DataRejestracji DATETIME NOT NULL DEFAULT GETDATE(),
     ZarejestrowanePrzezID INT NOT NULL,
     CONSTRAINT FK_Egzemplarze_Katalog FOREIGN KEY (KsiazkaID) REFERENCES KatalogKsiazek(ID),

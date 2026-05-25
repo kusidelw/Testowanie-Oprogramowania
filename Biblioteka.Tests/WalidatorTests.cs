@@ -11,6 +11,8 @@ namespace Biblioteka.Tests
         //Testy dla SprawdzEmail
         [TestCase("test@test.pl", ExpectedResult = true)]
         [TestCase("jan.kowalski@domena.com.pl", ExpectedResult = true)]
+        [TestCase("micha³@test.pl", ExpectedResult = false)] 
+        [TestCase("test@¿ó³w.pl", ExpectedResult = false)]
         [TestCase("test", ExpectedResult = false)]
         [TestCase("test@.pl", ExpectedResult = false)]
         [TestCase("@test.pl", ExpectedResult = false)]
@@ -87,15 +89,55 @@ namespace Biblioteka.Tests
 
         //Testy dla SprawdzNumer
         [TestCase("12A", false, ExpectedResult = true)]
+        [TestCase("12A", false, ExpectedResult = true)]
+        [TestCase("12c", false, ExpectedResult = true)]
+        [TestCase("C12", false, ExpectedResult = false)] 
+        [TestCase("14c342", false, ExpectedResult = false)] 
+        [TestCase("12-C", false, ExpectedResult = false)] 
+        [TestCase("dcs123", false, ExpectedResult = false)] 
         [TestCase("1234567890", false, ExpectedResult = true)]
         [TestCase("12345678901", false, ExpectedResult = false)] 
-        [TestCase("12@#", false, ExpectedResult = false)] 
+        [TestCase("12@#", false, ExpectedResult = false)]
         [TestCase("", true, ExpectedResult = true)] 
-        [TestCase("", false, ExpectedResult = false)]
+        [TestCase("", false, ExpectedResult = false)] 
         [TestCase(null, true, ExpectedResult = true)]
         public bool SprawdzNumer_TestWariantu(string numer, bool opcjonalny)
         {
             return Walidator.SprawdzNumer(numer, opcjonalny);
+        }
+
+        // Testy dla SprawdzTekstTylkoLitery 
+        [TestCase("Marek", ExpectedResult = true)]
+        [TestCase("Bielsko-Bia³a", ExpectedResult = true)] 
+        [TestCase("Anna Maria", ExpectedResult = true)] 
+        [TestCase("£ukasz", ExpectedResult = true)] 
+        [TestCase("Marek123", ExpectedResult = false)] 
+        [TestCase("Jan@", ExpectedResult = false)] 
+        [TestCase("-Jan", ExpectedResult = false)] 
+        [TestCase("Jan-", ExpectedResult = false)] 
+        [TestCase("Anna--Maria", ExpectedResult = false)] 
+        [TestCase("Anna  Maria", ExpectedResult = false)] 
+        [TestCase("-----", ExpectedResult = false)] 
+        public bool SprawdzTekstTylkoLitery_TestWariantu(string tekst)
+        {
+            return Walidator.SprawdzTekstTylkoLitery(tekst);
+        }
+
+        // --- Testy dla SprawdzUlice (Nowa metoda) ---
+        [TestCase("1 Maja", ExpectedResult = true)] 
+        [TestCase("œw. Anny", ExpectedResult = true)]
+        [TestCase("gen. W. Sikorskiego", ExpectedResult = true)]
+        [TestCase("11-go Listopada", ExpectedResult = true)] 
+        [TestCase("ulica @#$", ExpectedResult = false)] 
+        [TestCase("-Maja", ExpectedResult = false)] 
+        [TestCase(".Anny", ExpectedResult = false)]
+        [TestCase("œw.. Anny", ExpectedResult = false)] 
+        [TestCase("11--go", ExpectedResult = false)] 
+        [TestCase("", ExpectedResult = true)] 
+        [TestCase(null, ExpectedResult = true)]
+        public bool SprawdzUlice_TestWariantu(string ulica)
+        {
+            return Walidator.SprawdzUlice(ulica);
         }
 
         //Testy dla WalidujScislyPESEL

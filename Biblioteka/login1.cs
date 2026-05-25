@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -12,7 +13,8 @@ namespace Biblioteka
             ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
 
       
-        public string ZalogowanaRola { get; private set; }
+        public List<string> ZalogowaneRole { get; private set; } = new List<string>();
+        public int ZalogowanyUserId { get; private set; }
 
         public login1()
         {
@@ -87,10 +89,10 @@ namespace Biblioteka
                         return;
                     }
 
-                    //  Pobierz rolę
-                    string rola = GetUserRole(conn, user.Id);
+                    //  Pobierz role
+                    List<string> role = GetUserRoles(conn, user.Id);
 
-                    if (string.IsNullOrEmpty(rola))
+                    if (role.Count == 0)
                     {
                         ShowError("Użytkownik nie posiada przypisanej roli.");
                         return;
@@ -102,8 +104,9 @@ namespace Biblioteka
                     //  wymuszenie zmiany hasła przy pierwszym logowaniu
                     if (user.CzyPierwszeLogowanie)
                     {
-                        // Zapamiętaj rolę — po zmianie hasła ProceedAfterPasswordChange() ją użyje
-                        ZalogowanaRola = rola;
+                        // Zapamiętaj role — po zmianie hasła ProceedAfterPasswordChange() ją użyje
+                        ZalogowaneRole = role;
+                        ZalogowanyUserId = user.Id;
 
                         // Wyświetl UCChangePassword na tym samym oknie
                         UCChangePassword ucChange = new UCChangePassword();
@@ -117,8 +120,10 @@ namespace Biblioteka
                         return; // NIE zamykamy login1 — czekamy na zmianę hasła
                     }
 
-                    // Normalne logowanie — przekaż rolę i zamknij
-                    ZalogowanaRola = rola;
+                    // Normalne logowanie — przekaż role i ID użytkownika, a następnie zamknij
+                    ZalogowaneRole = role;
+                    ZalogowanyUserId = user.Id;
+
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
@@ -176,19 +181,30 @@ namespace Biblioteka
             return null;
         }
 
-        private string GetUserRole(SqlConnection conn, int userId)
+        private List<string> GetUserRoles(SqlConnection conn, int userId)
         {
             string query = @"
-                SELECT TOP 1 up.Nazwa
+                SELECT up.Nazwa
                 FROM Uprawnienia up
                 JOIN Uzytkownicy_Uprawnienia uu ON up.ID = uu.UprawnienieID
                 WHERE uu.UzytkownikID = @UserID";
 
+            var result = new List<string>();
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 cmd.Parameters.AddWithValue("@UserID", userId);
-                return cmd.ExecuteScalar()?.ToString();
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                        result.Add(reader.GetString(0));
+                }
             }
+            return result;
+        }
+
+        public int GetLoggedUserId()
+        {
+            return ZalogowanyUserId;
         }
 
         private void HandleFailedLogin(SqlConnection conn, int userId, int currentFailed = 0)

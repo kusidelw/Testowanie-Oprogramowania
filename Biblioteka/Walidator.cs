@@ -9,10 +9,46 @@ namespace Biblioteka
 {
     public static class Walidator
     {
+        public static bool SprawdzTekstTylkoLitery(string tekst)
+        {
+            if (string.IsNullOrWhiteSpace(tekst)) return false;
+
+            // Usuwamy białe znaki na początku i końcu
+            tekst = tekst.Trim();
+
+            // 1. Zabezpieczenie: Nie może zaczynać się ani kończyć myślnikiem
+            if (tekst.StartsWith("-") || tekst.EndsWith("-"))
+                return false;
+
+            // 2. Zabezpieczenie: Nie może zawierać wielokrotnych myślników lub spacji obok siebie
+            if (tekst.Contains("--") || tekst.Contains("  "))
+                return false;
+
+            // 3. Właściwa walidacja: Tylko litery, spacje i myślniki
+            return Regex.IsMatch(tekst, @"^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-]+$");
+        }
+
+        public static bool SprawdzUlice(string ulica)
+        {
+            if (string.IsNullOrWhiteSpace(ulica))
+                return true;
+
+            ulica = ulica.Trim();
+
+            // Podstawowe zabezpieczenia przed ciągami znaków typu "--" czy ".."
+            if (ulica.StartsWith("-") || ulica.EndsWith("-") || ulica.StartsWith("."))
+                return false;
+
+            if (ulica.Contains("--") || ulica.Contains("..") || ulica.Contains("  ")) 
+                return false;
+
+            // Dozwolone: litery (z polskimi znakami), cyfry, spacje, myślniki i kropki
+            return Regex.IsMatch(ulica, @"^[a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-\.]+$");
+        }
         public static bool SprawdzEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email)) return false;
-            return email.Length <= 255 && Regex.IsMatch(email.Trim(), @"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            return email.Length <= 255 && Regex.IsMatch(email.Trim(), @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
         }
 
         public static bool SprawdzTelefon(string telefon)
@@ -46,8 +82,8 @@ namespace Biblioteka
             if (string.IsNullOrWhiteSpace(numer))
                 return czyOpcjonalny;
 
-            // Zabezpieczenie przed przepełnieniem bazy i dziwnymi znakami specjalnymi
-            return numer.Length <= 10 && Regex.IsMatch(numer.Trim(), @"^[a-zA-Z0-9\s/-]+$");
+            // Reguła: dowolna liczba cyfr, po których może wystąpić dokładnie jedna litera na samym końcu
+            return numer.Length <= 10 && Regex.IsMatch(numer.Trim(), @"^\d+[a-zA-Z]?$");
         }
 
         // WALIDACJA ŚCISŁA PESEL 

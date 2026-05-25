@@ -103,7 +103,7 @@ namespace Biblioteka
                 string permissionName = dgv_permissions.Rows[e.RowIndex].Cells["Nazwa uprawnienia"].Value.ToString();
 
                 Form parentForm = this.FindForm();
-                if (parentForm is Form1 mainForm)
+                if (parentForm is Biblioteka mainForm)
                 {
                     mainForm.PokazUzytkownikowZUprawnieniem(permissionId, permissionName);
                 }

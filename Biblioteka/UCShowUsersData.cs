@@ -110,7 +110,7 @@ namespace Biblioteka
         // Przycisk "Wróć do listy"
         private void btn_back_to_list_Click(object sender, EventArgs e)
         {
-            Form1 mainForm = (Form1)this.FindForm();
+            Biblioteka mainForm = (Biblioteka)this.FindForm();
             if (mainForm != null)
             {
                 mainForm.WrocDoWyszukiwarki(); 
@@ -120,7 +120,7 @@ namespace Biblioteka
         // Przycisk "Edytuj dane"
         private void btn_edit_data_Click(object sender, EventArgs e)
         {
-            Form1 mainForm = (Form1)this.FindForm();
+            Biblioteka mainForm = (Biblioteka)this.FindForm();
             if (mainForm != null)
             {
                 mainForm.PrzejdzDoEdycji(currentUserId); 

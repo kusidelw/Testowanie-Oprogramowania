@@ -245,7 +245,7 @@ namespace Biblioteka
         {
             // A1: zamknięcie bez zapisywania
             Form parentForm = this.FindForm();
-            if (parentForm is Form1 mainForm)
+            if (parentForm is Biblioteka mainForm)
                 mainForm.PowrotDoMenuGlownego();
         }
 

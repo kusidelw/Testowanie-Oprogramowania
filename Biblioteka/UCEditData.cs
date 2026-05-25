@@ -146,15 +146,62 @@ namespace Biblioteka
                 if (string.IsNullOrWhiteSpace(tb.Text)) { OznaczBlad(tb); isValid = false; }
             }
 
-            // 2. Dane kontaktowe
-            if (!Walidator.SprawdzEmail(txt_mail.Text)) { OznaczBlad(txt_mail); isValid = false; }
-            if (!Walidator.SprawdzTelefon(txt_phone_number.Text)) { OznaczBlad(txt_phone_number); isValid = false; }
-            if (!Walidator.SprawdzKodPocztowy(txt_zip_code.Text)) { OznaczBlad(txt_zip_code); isValid = false; }
+            // 2. Walidacja znaków w Imieniu, Nazwisku i Miejscowości z Ulicą
+            if (!string.IsNullOrWhiteSpace(txt_name.Text) && !Walidator.SprawdzTekstTylkoLitery(txt_name.Text))
+            {
+                OznaczBlad(txt_name);
+                isValid = false;
+            }
 
-            // 3. Posesja (wymagana - false) i Lokal (opcjonalny - true)
-            if (!Walidator.SprawdzNumer(txt_property_number.Text, false)) { OznaczBlad(txt_property_number); isValid = false; }
-            if (!Walidator.SprawdzNumer(txtlbl_apartment_number.Text, true)) { OznaczBlad(txtlbl_apartment_number); isValid = false; }
+            if (!string.IsNullOrWhiteSpace(txt_surname.Text) && !Walidator.SprawdzTekstTylkoLitery(txt_surname.Text))
+            {
+                OznaczBlad(txt_surname);
+                isValid = false;
+            }
 
+            if (!string.IsNullOrWhiteSpace(txt_town.Text) && !Walidator.SprawdzTekstTylkoLitery(txt_town.Text))
+            {
+                OznaczBlad(txt_town);
+                isValid = false;
+            }
+
+            // 3. Dane kontaktowe
+            if (!Walidator.SprawdzEmail(txt_mail.Text))
+            {
+                OznaczBlad(txt_mail);
+                isValid = false;
+            }
+
+            if (!Walidator.SprawdzTelefon(txt_phone_number.Text))
+            {
+                OznaczBlad(txt_phone_number);
+                isValid = false;
+            }
+
+            if (!Walidator.SprawdzKodPocztowy(txt_zip_code.Text))
+            {
+                OznaczBlad(txt_zip_code);
+                isValid = false;
+            }
+
+            if (!Walidator.SprawdzUlice(txt_street.Text))
+            {
+                OznaczBlad(txt_street);
+                isValid = false;
+            }
+
+            // 4. Numery domów (Posesja = wymagana (false), Lokal = opcjonalny (true))
+            if (!Walidator.SprawdzNumer(txt_property_number.Text, false))
+            {
+                OznaczBlad(txt_property_number);
+                isValid = false;
+            }
+
+            if (!Walidator.SprawdzNumer(txtlbl_apartment_number.Text, true))
+            {
+                OznaczBlad(txtlbl_apartment_number);
+                isValid = false;
+            }
             return isValid;
         }
 
@@ -190,7 +237,7 @@ namespace Biblioteka
 
         private void WrocDoWidokuShowUsers()
         {
-            var form1 = this.ParentForm as Form1;
+            var form1 = this.ParentForm as Biblioteka;
             if (form1 != null)
             {
                 //wracamy do użytkownika, którego właśnie edytowaliśmy

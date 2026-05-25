@@ -1,0 +1,372 @@
+namespace Biblioteka
+{
+    partial class UCBookDetails
+    {
+        /// <summary> 
+        /// Wymagana zmienna projektanta.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Wyczyść wszystkie używane zasoby.
+        /// </summary>
+        /// <param name="disposing">prawda, jeżeli zarządzane zasoby powinny zostać zlikwidowane; Fałsz w przeciwnym wypadku.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Kod wygenerowany przez Projektanta składników
+
+        /// <summary> 
+        /// Metoda wymagana do obsługi projektanta — nie należy modyfikować 
+        /// jej zawartości w edytorze kodu.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.btn_wroc = new System.Windows.Forms.Button();
+            this.btn_zapisz = new System.Windows.Forms.Button();
+            this.error_add_book_form = new System.Windows.Forms.ErrorProvider(this.components);
+            this.txt_opis = new System.Windows.Forms.RichTextBox();
+            this.lbl_opis = new System.Windows.Forms.Label();
+            this.lbl_liczba_sztuk = new System.Windows.Forms.Label();
+            this.lbl_cena = new System.Windows.Forms.Label();
+            this.lbl_rok_wydania = new System.Windows.Forms.Label();
+            this.lbl_liczba_stron = new System.Windows.Forms.Label();
+            this.lbl_autorzy = new System.Windows.Forms.Label();
+            this.lbl_wydawnictwo = new System.Windows.Forms.Label();
+            this.lbl_gatunek = new System.Windows.Forms.Label();
+            this.lbl_tytul = new System.Windows.Forms.Label();
+            this.lbl_szczegoly_ksiazki = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lbl_id = new System.Windows.Forms.Label();
+            this.lbl_id_ksiazki = new System.Windows.Forms.Label();
+            this.txt_rok_wydania = new System.Windows.Forms.TextBox();
+            this.txt_liczba_stron = new System.Windows.Forms.TextBox();
+            this.txt_wydawnictwo = new System.Windows.Forms.TextBox();
+            this.txt_tytul = new System.Windows.Forms.TextBox();
+            this.lbl_liczba_sztuk_ksiazki = new System.Windows.Forms.Label();
+            this.txt_cena = new System.Windows.Forms.TextBox();
+            this.cb_gatunek = new System.Windows.Forms.ComboBox();
+            this.dgv_autorzy = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.error_add_book_form)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_autorzy)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // btn_wroc
+            // 
+            this.btn_wroc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btn_wroc.BackColor = System.Drawing.Color.LightBlue;
+            this.btn_wroc.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_wroc.Location = new System.Drawing.Point(30, 600);
+            this.btn_wroc.Name = "btn_wroc";
+            this.btn_wroc.Size = new System.Drawing.Size(160, 34);
+            this.btn_wroc.TabIndex = 1;
+            this.btn_wroc.Text = "Powrót";
+            this.btn_wroc.UseVisualStyleBackColor = false;
+            this.btn_wroc.Click += new System.EventHandler(this.btn_wroc_Click);
+            // 
+            // btn_zapisz
+            // 
+            this.btn_zapisz.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btn_zapisz.BackColor = System.Drawing.Color.LightGreen;
+            this.btn_zapisz.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.btn_zapisz.Location = new System.Drawing.Point(204, 600);
+            this.btn_zapisz.Name = "btn_zapisz";
+            this.btn_zapisz.Size = new System.Drawing.Size(160, 34);
+            this.btn_zapisz.TabIndex = 2;
+            this.btn_zapisz.Text = "Zapisz";
+            this.btn_zapisz.UseVisualStyleBackColor = false;
+            this.btn_zapisz.Visible = false;
+            this.btn_zapisz.Click += new System.EventHandler(this.btn_zapisz_Click);
+            // 
+            // error_add_book_form
+            // 
+            this.error_add_book_form.ContainerControl = this;
+            // 
+            // txt_opis
+            // 
+            this.txt_opis.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txt_opis.Location = new System.Drawing.Point(30, 270);
+            this.txt_opis.Name = "txt_opis";
+            this.txt_opis.Size = new System.Drawing.Size(521, 209);
+            this.txt_opis.TabIndex = 52;
+            this.txt_opis.Text = "";
+            // 
+            // lbl_opis
+            // 
+            this.lbl_opis.AutoSize = true;
+            this.lbl_opis.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_opis.Location = new System.Drawing.Point(25, 242);
+            this.lbl_opis.Name = "lbl_opis";
+            this.lbl_opis.Size = new System.Drawing.Size(59, 25);
+            this.lbl_opis.TabIndex = 51;
+            this.lbl_opis.Text = "Opis:";
+            // 
+            // lbl_liczba_sztuk
+            // 
+            this.lbl_liczba_sztuk.AutoSize = true;
+            this.lbl_liczba_sztuk.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_liczba_sztuk.Location = new System.Drawing.Point(589, 110);
+            this.lbl_liczba_sztuk.Name = "lbl_liczba_sztuk";
+            this.lbl_liczba_sztuk.Size = new System.Drawing.Size(126, 25);
+            this.lbl_liczba_sztuk.TabIndex = 49;
+            this.lbl_liczba_sztuk.Text = "Liczba sztuk:";
+            // 
+            // lbl_cena
+            // 
+            this.lbl_cena.AutoSize = true;
+            this.lbl_cena.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_cena.Location = new System.Drawing.Point(589, 71);
+            this.lbl_cena.Name = "lbl_cena";
+            this.lbl_cena.Size = new System.Drawing.Size(66, 25);
+            this.lbl_cena.TabIndex = 47;
+            this.lbl_cena.Text = "Cena:";
+            // 
+            // lbl_rok_wydania
+            // 
+            this.lbl_rok_wydania.AutoSize = true;
+            this.lbl_rok_wydania.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_rok_wydania.Location = new System.Drawing.Point(22, 197);
+            this.lbl_rok_wydania.Name = "lbl_rok_wydania";
+            this.lbl_rok_wydania.Size = new System.Drawing.Size(129, 25);
+            this.lbl_rok_wydania.TabIndex = 45;
+            this.lbl_rok_wydania.Text = "Rok wydania:";
+            // 
+            // lbl_liczba_stron
+            // 
+            this.lbl_liczba_stron.AutoSize = true;
+            this.lbl_liczba_stron.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_liczba_stron.Location = new System.Drawing.Point(22, 156);
+            this.lbl_liczba_stron.Name = "lbl_liczba_stron";
+            this.lbl_liczba_stron.Size = new System.Drawing.Size(123, 25);
+            this.lbl_liczba_stron.TabIndex = 43;
+            this.lbl_liczba_stron.Text = "Liczba stron:";
+            // 
+            // lbl_autorzy
+            // 
+            this.lbl_autorzy.AutoSize = true;
+            this.lbl_autorzy.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_autorzy.Location = new System.Drawing.Point(589, 242);
+            this.lbl_autorzy.Name = "lbl_autorzy";
+            this.lbl_autorzy.Size = new System.Drawing.Size(79, 25);
+            this.lbl_autorzy.TabIndex = 39;
+            this.lbl_autorzy.Text = "Autorzy";
+            // 
+            // lbl_wydawnictwo
+            // 
+            this.lbl_wydawnictwo.AutoSize = true;
+            this.lbl_wydawnictwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_wydawnictwo.Location = new System.Drawing.Point(22, 113);
+            this.lbl_wydawnictwo.Name = "lbl_wydawnictwo";
+            this.lbl_wydawnictwo.Size = new System.Drawing.Size(139, 25);
+            this.lbl_wydawnictwo.TabIndex = 37;
+            this.lbl_wydawnictwo.Text = "Wydawnictwo:";
+            // 
+            // lbl_gatunek
+            // 
+            this.lbl_gatunek.AutoSize = true;
+            this.lbl_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_gatunek.Location = new System.Drawing.Point(589, 153);
+            this.lbl_gatunek.Name = "lbl_gatunek";
+            this.lbl_gatunek.Size = new System.Drawing.Size(92, 25);
+            this.lbl_gatunek.TabIndex = 35;
+            this.lbl_gatunek.Text = "Gatunek:";
+            // 
+            // lbl_tytul
+            // 
+            this.lbl_tytul.AutoSize = true;
+            this.lbl_tytul.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_tytul.Location = new System.Drawing.Point(22, 71);
+            this.lbl_tytul.Name = "lbl_tytul";
+            this.lbl_tytul.Size = new System.Drawing.Size(61, 25);
+            this.lbl_tytul.TabIndex = 33;
+            this.lbl_tytul.Text = "Tytuł:";
+            // 
+            // lbl_szczegoly_ksiazki
+            // 
+            this.lbl_szczegoly_ksiazki.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.lbl_szczegoly_ksiazki.Location = new System.Drawing.Point(3, 9);
+            this.lbl_szczegoly_ksiazki.Name = "lbl_szczegoly_ksiazki";
+            this.lbl_szczegoly_ksiazki.Size = new System.Drawing.Size(1178, 34);
+            this.lbl_szczegoly_ksiazki.TabIndex = 0;
+            this.lbl_szczegoly_ksiazki.Text = "SZCZEGÓŁY KSIĄŻKI: ";
+            this.lbl_szczegoly_ksiazki.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.panel1.Controls.Add(this.lbl_szczegoly_ksiazki);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1287, 58);
+            this.panel1.TabIndex = 32;
+            // 
+            // txt_rok_wydania
+            // 
+            this.txt_rok_wydania.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txt_rok_wydania.Location = new System.Drawing.Point(167, 194);
+            this.txt_rok_wydania.Name = "txt_rok_wydania";
+            this.txt_rok_wydania.Size = new System.Drawing.Size(120, 30);
+            this.txt_rok_wydania.TabIndex = 66;
+            this.txt_rok_wydania.ReadOnly = true;
+            // 
+            // txt_liczba_stron
+            // 
+            this.txt_liczba_stron.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txt_liczba_stron.Location = new System.Drawing.Point(167, 153);
+            this.txt_liczba_stron.Name = "txt_liczba_stron";
+            this.txt_liczba_stron.Size = new System.Drawing.Size(120, 30);
+            this.txt_liczba_stron.TabIndex = 65;
+            this.txt_liczba_stron.ReadOnly = true;
+            // 
+            // txt_wydawnictwo
+            // 
+            this.txt_wydawnictwo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txt_wydawnictwo.Location = new System.Drawing.Point(167, 110);
+            this.txt_wydawnictwo.Name = "txt_wydawnictwo";
+            this.txt_wydawnictwo.Size = new System.Drawing.Size(350, 30);
+            this.txt_wydawnictwo.TabIndex = 64;
+            this.txt_wydawnictwo.ReadOnly = true;
+            // 
+            // txt_tytul
+            // 
+            this.txt_tytul.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txt_tytul.Location = new System.Drawing.Point(167, 68);
+            this.txt_tytul.Name = "txt_tytul";
+            this.txt_tytul.Size = new System.Drawing.Size(350, 30);
+            this.txt_tytul.TabIndex = 63;
+            this.txt_tytul.ReadOnly = true;
+            // 
+            // lbl_liczba_sztuk_ksiazki
+            // 
+            this.lbl_liczba_sztuk_ksiazki.AutoSize = true;
+            this.lbl_liczba_sztuk_ksiazki.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_liczba_sztuk_ksiazki.Location = new System.Drawing.Point(718, 110);
+            this.lbl_liczba_sztuk_ksiazki.Name = "lbl_liczba_sztuk_ksiazki";
+            this.lbl_liczba_sztuk_ksiazki.Size = new System.Drawing.Size(69, 25);
+            this.lbl_liczba_sztuk_ksiazki.TabIndex = 69;
+            this.lbl_liczba_sztuk_ksiazki.Text = "99 szt.";
+            // 
+            // txt_cena
+            // 
+            this.txt_cena.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.txt_cena.Location = new System.Drawing.Point(718, 68);
+            this.txt_cena.Name = "txt_cena";
+            this.txt_cena.Size = new System.Drawing.Size(150, 30);
+            this.txt_cena.TabIndex = 68;
+            this.txt_cena.ReadOnly = true;
+            // 
+            // cb_gatunek
+            // 
+            this.cb_gatunek.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cb_gatunek.Enabled = false;
+            this.cb_gatunek.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.cb_gatunek.FormattingEnabled = true;
+            this.cb_gatunek.Location = new System.Drawing.Point(718, 150);
+            this.cb_gatunek.Name = "cb_gatunek";
+            this.cb_gatunek.Size = new System.Drawing.Size(250, 31);
+            this.cb_gatunek.TabIndex = 67;
+            // 
+            // lbl_id
+            // 
+            this.lbl_id.AutoSize = true;
+            this.lbl_id.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_id.Location = new System.Drawing.Point(589, 197);
+            this.lbl_id.Name = "lbl_id";
+            this.lbl_id.TabIndex = 71;
+            this.lbl_id.Text = "ID Systemowe:";
+            // 
+            // lbl_id_ksiazki
+            // 
+            this.lbl_id_ksiazki.AutoSize = true;
+            this.lbl_id_ksiazki.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.lbl_id_ksiazki.Location = new System.Drawing.Point(718, 197);
+            this.lbl_id_ksiazki.Name = "lbl_id_ksiazki";
+            this.lbl_id_ksiazki.TabIndex = 72;
+            this.lbl_id_ksiazki.Text = "";
+            // 
+            // dgv_autorzy
+            // 
+            this.dgv_autorzy.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_autorzy.Location = new System.Drawing.Point(594, 270);
+            this.dgv_autorzy.Name = "dgv_autorzy";
+            this.dgv_autorzy.RowHeadersWidth = 51;
+            this.dgv_autorzy.RowTemplate.Height = 24;
+            this.dgv_autorzy.Size = new System.Drawing.Size(518, 209);
+            this.dgv_autorzy.TabIndex = 70;
+            // 
+            // UCBookDetails
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Controls.Add(this.btn_zapisz);
+            this.Controls.Add(this.dgv_autorzy);
+            this.Controls.Add(this.lbl_id_ksiazki);
+            this.Controls.Add(this.lbl_id);
+            this.Controls.Add(this.lbl_liczba_sztuk_ksiazki);
+            this.Controls.Add(this.txt_cena);
+            this.Controls.Add(this.cb_gatunek);
+            this.Controls.Add(this.txt_rok_wydania);
+            this.Controls.Add(this.txt_liczba_stron);
+            this.Controls.Add(this.txt_wydawnictwo);
+            this.Controls.Add(this.txt_tytul);
+            this.Controls.Add(this.txt_opis);
+            this.Controls.Add(this.lbl_opis);
+            this.Controls.Add(this.lbl_liczba_sztuk);
+            this.Controls.Add(this.lbl_cena);
+            this.Controls.Add(this.lbl_rok_wydania);
+            this.Controls.Add(this.lbl_liczba_stron);
+            this.Controls.Add(this.lbl_autorzy);
+            this.Controls.Add(this.lbl_wydawnictwo);
+            this.Controls.Add(this.lbl_gatunek);
+            this.Controls.Add(this.lbl_tytul);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.btn_wroc);
+            this.Name = "UCBookDetails";
+            this.Size = new System.Drawing.Size(1287, 656);
+            ((System.ComponentModel.ISupportInitialize)(this.error_add_book_form)).EndInit();
+            this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_autorzy)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+        private System.Windows.Forms.Button btn_wroc;
+        private System.Windows.Forms.Button btn_zapisz;
+        private System.Windows.Forms.ErrorProvider error_add_book_form;
+        private System.Windows.Forms.RichTextBox txt_opis;
+        private System.Windows.Forms.Label lbl_opis;
+        private System.Windows.Forms.Label lbl_liczba_sztuk;
+        private System.Windows.Forms.Label lbl_cena;
+        private System.Windows.Forms.Label lbl_rok_wydania;
+        private System.Windows.Forms.Label lbl_liczba_stron;
+        private System.Windows.Forms.Label lbl_autorzy;
+        private System.Windows.Forms.Label lbl_wydawnictwo;
+        private System.Windows.Forms.Label lbl_gatunek;
+        private System.Windows.Forms.Label lbl_tytul;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lbl_szczegoly_ksiazki;
+        private System.Windows.Forms.TextBox txt_rok_wydania;
+        private System.Windows.Forms.TextBox txt_liczba_stron;
+        private System.Windows.Forms.TextBox txt_wydawnictwo;
+        private System.Windows.Forms.TextBox txt_tytul;
+        private System.Windows.Forms.Label lbl_liczba_sztuk_ksiazki;
+        private System.Windows.Forms.TextBox txt_cena;
+        private System.Windows.Forms.ComboBox cb_gatunek;
+        private System.Windows.Forms.DataGridView dgv_autorzy;
+        private System.Windows.Forms.Label lbl_id;
+        private System.Windows.Forms.Label lbl_id_ksiazki;
+    }
+}
