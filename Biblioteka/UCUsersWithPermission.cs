@@ -53,6 +53,7 @@ namespace Biblioteka
                         FROM Uzytkownicy u
                         INNER JOIN Uzytkownicy_Uprawnienia uu ON u.ID = uu.UzytkownikID
                         WHERE uu.UprawnienieID = @permId
+                          AND u.CzyZapomniany = 0
                         ORDER BY u.Nazwisko, u.Imie";
 
                     using (SqlCommand cmd = new SqlCommand(sqlData, conn))
@@ -110,6 +111,7 @@ namespace Biblioteka
                             FROM Uzytkownicy_Uprawnienia 
                             WHERE UprawnienieID = @permId
                         )
+                          AND u.CzyZapomniany = 0
                         ORDER BY u.Nazwisko, u.Imie";
 
                     using (SqlCommand cmd = new SqlCommand(sqlData, conn))

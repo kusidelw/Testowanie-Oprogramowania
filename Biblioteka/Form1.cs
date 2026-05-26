@@ -350,6 +350,7 @@ namespace Biblioteka
         public void PrzejdzDoEdycji(int userId)
         {
             PokazWidokZeStanem(ucEditData);
+            ucEditData.LoggedInUserId = currentUserId ?? 0;
             ucEditData.ZaladujDaneDoEdycji(userId);
         }
 

@@ -61,6 +61,8 @@
             this.txt_gender = new System.Windows.Forms.TextBox();
             this.txt_zip_code = new System.Windows.Forms.MaskedTextBox();
             this.txt_birth_date = new System.Windows.Forms.MaskedTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.clb_permissions = new System.Windows.Forms.CheckedListBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -463,11 +465,35 @@
             this.txt_birth_date.Size = new System.Drawing.Size(291, 30);
             this.txt_birth_date.TabIndex = 99;
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.label1.Location = new System.Drawing.Point(656, 368);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(77, 32);
+            this.label1.TabIndex = 101;
+            this.label1.Text = "Role";
+            // 
+            // clb_permissions
+            // 
+            this.clb_permissions.CheckOnClick = true;
+            this.clb_permissions.FormattingEnabled = true;
+            this.clb_permissions.Location = new System.Drawing.Point(662, 404);
+            this.clb_permissions.Margin = new System.Windows.Forms.Padding(4);
+            this.clb_permissions.Name = "clb_permissions";
+            this.clb_permissions.Size = new System.Drawing.Size(624, 157);
+            this.clb_permissions.TabIndex = 100;
+            // 
             // UCEditData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.clb_permissions);
             this.Controls.Add(this.txt_birth_date);
             this.Controls.Add(this.txt_zip_code);
             this.Controls.Add(this.txt_gender);
@@ -544,5 +570,7 @@
         private System.Windows.Forms.TextBox txt_gender;
         private System.Windows.Forms.MaskedTextBox txt_zip_code;
         private System.Windows.Forms.MaskedTextBox txt_birth_date;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckedListBox clb_permissions;
     }
 }

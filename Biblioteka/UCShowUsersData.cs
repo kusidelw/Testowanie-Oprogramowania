@@ -19,7 +19,6 @@ namespace Biblioteka
 
         private int currentUserId;
         private bool czyUzytkownikZapomniany = false;
-        private List<int> originalPermissionIds = new List<int>(); // Oryginalne uprawnienia do porównania
 
         public UCShowUsersData()
         {
@@ -171,8 +170,6 @@ namespace Biblioteka
                         }
                     }
 
-                    originalPermissionIds = new List<int>(currentPermissionIds);
-
                     clb_permissions.Items.Clear();
                     foreach (var perm in allPermissions)
                     {
@@ -180,14 +177,7 @@ namespace Biblioteka
                         clb_permissions.SetItemChecked(index, currentPermissionIds.Contains(perm.ID));
                     }
 
-                    if (czyUzytkownikZapomniany)
-                    {
-                        clb_permissions.Enabled = false;
-                    }
-                    else
-                    {
-                        clb_permissions.Enabled = true;
-                    }
+                    clb_permissions.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -197,92 +187,5 @@ namespace Biblioteka
             }
         }
 
-        private void btn_save_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                List<int> selectedPermissionIds = new List<int>();
-                foreach (Uprawnienie item in clb_permissions.CheckedItems)
-                {
-                    selectedPermissionIds.Add(item.ID);
-                }
-
-                if (!PermissionValidator.CzyMinimalnaLiczbaUprawnien(selectedPermissionIds))
-                {
-                    MessageBox.Show(
-                        "Użytkownik musi posiadać co najmniej jedną rolę.",
-                        "Błąd walidacji",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
-                }
-
-                bool czyBylyZmiany = PermissionValidator.CzyBylyZmianyWUprawnieniach(originalPermissionIds, selectedPermissionIds);
-
-                if (!czyBylyZmiany)
-                {
-                    ZaladujUprawnienia();
-                    return;
-                }
-
-                using (SqlConnection conn = new SqlConnection(connectionString))
-                {
-                    conn.Open();
-                    using (SqlTransaction transaction = conn.BeginTransaction())
-                    {
-                        try
-                        {
-                            string deleteQuery = "DELETE FROM Uzytkownicy_Uprawnienia WHERE UzytkownikID = @uid";
-                            using (SqlCommand deleteCmd = new SqlCommand(deleteQuery, conn, transaction))
-                            {
-                                deleteCmd.Parameters.AddWithValue("@uid", currentUserId);
-                                deleteCmd.ExecuteNonQuery();
-                            }
-
-                            foreach (int permId in selectedPermissionIds)
-                            {
-                                string insertQuery = @"
-                                    INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID) 
-                                    VALUES (@uid, @permId)";
-                                using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn, transaction))
-                                {
-                                    insertCmd.Parameters.AddWithValue("@uid", currentUserId);
-                                    insertCmd.Parameters.AddWithValue("@permId", permId);
-                                    insertCmd.ExecuteNonQuery();
-                                }
-                            }
-
-                            transaction.Commit();
-
-                            MessageBox.Show(
-                                "Role zostały zaktualizowane pomyślnie!",
-                                "Sukces",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-
-                            ZaladujUprawnienia();
-                        }
-                        catch
-                        {
-                            transaction.Rollback();
-                            throw;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(
-                    "Błąd zapisu ról: " + ex.Message,
-                    "Błąd",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-        }
-
-        private void btn_cancel_Click(object sender, EventArgs e)
-        {
-            ZaladujUprawnienia();
-        }
     }
 }

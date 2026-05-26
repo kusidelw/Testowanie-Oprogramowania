@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.Text.RegularExpressions;
+using Biblioteka.Models;
 
 namespace Biblioteka
 {
@@ -17,6 +18,8 @@ namespace Biblioteka
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["BibliotekaConn"].ConnectionString;
         private int currentUserId;
+        private List<int> originalPermissionIds = new List<int>();
+        public int LoggedInUserId { get; set; }
 
         public UCEditData()
         {
@@ -71,6 +74,8 @@ namespace Biblioteka
                         }
                     }
                 }
+
+                ZaladujUprawnienia();
             }
             catch (Exception ex)
             {
@@ -84,6 +89,21 @@ namespace Biblioteka
             {
                 MessageBox.Show("Formularz zawiera błędy. Popraw podświetlone pola.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
+
+            List<int> selectedPermissionIds = new List<int>();
+            bool edycjaWlasnegoKonta = (currentUserId == LoggedInUserId);
+
+            if (!edycjaWlasnegoKonta)
+            {
+                foreach (Uprawnienie item in clb_permissions.CheckedItems)
+                    selectedPermissionIds.Add(item.ID);
+
+                if (!PermissionValidator.CzyMinimalnaLiczbaUprawnien(selectedPermissionIds))
+                {
+                    MessageBox.Show("Użytkownik musi posiadać co najmniej jedną rolę.", "Błąd walidacji", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
             }
 
             try
@@ -100,36 +120,126 @@ namespace Biblioteka
 
                     int miejscowoscKodId = PobierzLubDodajKodIMiejscowosc(conn, txt_zip_code.Text.Trim(), txt_town.Text.Trim());
 
-                    string sql = @"UPDATE Uzytkownicy SET 
-                                    Imie = @Imie, Nazwisko = @Nazwisko, 
-                                    Email = @Email, Telefon = @Telefon, MiejscowoscKodID = @MiejscowoscKodID, 
-                                    Ulica = @Ulica, NumerPosesji = @NumerPosesji, NumerLokalu = @NumerLokalu
-                                   WHERE ID = @Id";
-
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    using (SqlTransaction transaction = conn.BeginTransaction())
                     {
-                        cmd.Parameters.AddWithValue("@Imie", txt_name.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Email", txt_mail.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Telefon", txt_phone_number.Text.Trim());
-                        cmd.Parameters.AddWithValue("@MiejscowoscKodID", miejscowoscKodId);
-                        cmd.Parameters.AddWithValue("@Ulica", string.IsNullOrWhiteSpace(txt_street.Text) ? (object)DBNull.Value : txt_street.Text.Trim());
-                        cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text.Trim());
-                        cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text.Trim());
-                        cmd.Parameters.AddWithValue("@Id", currentUserId);
+                        try
+                        {
+                            string sqlUser = @"UPDATE Uzytkownicy SET 
+                                                Imie = @Imie, Nazwisko = @Nazwisko, 
+                                                Email = @Email, Telefon = @Telefon, MiejscowoscKodID = @MiejscowoscKodID, 
+                                                Ulica = @Ulica, NumerPosesji = @NumerPosesji, NumerLokalu = @NumerLokalu
+                                               WHERE ID = @Id";
 
-                        cmd.ExecuteNonQuery();
+                            using (SqlCommand cmd = new SqlCommand(sqlUser, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@Imie", txt_name.Text.Trim());
+                                cmd.Parameters.AddWithValue("@Nazwisko", txt_surname.Text.Trim());
+                                cmd.Parameters.AddWithValue("@Email", txt_mail.Text.Trim());
+                                cmd.Parameters.AddWithValue("@Telefon", txt_phone_number.Text.Trim());
+                                cmd.Parameters.AddWithValue("@MiejscowoscKodID", miejscowoscKodId);
+                                cmd.Parameters.AddWithValue("@Ulica", string.IsNullOrWhiteSpace(txt_street.Text) ? (object)DBNull.Value : txt_street.Text.Trim());
+                                cmd.Parameters.AddWithValue("@NumerPosesji", txt_property_number.Text.Trim());
+                                cmd.Parameters.AddWithValue("@NumerLokalu", string.IsNullOrWhiteSpace(txtlbl_apartment_number.Text) ? (object)DBNull.Value : txtlbl_apartment_number.Text.Trim());
+                                cmd.Parameters.AddWithValue("@Id", currentUserId);
+                                cmd.ExecuteNonQuery();
+                            }
 
-                        MessageBox.Show("Dane zostały zaktualizowane pomyślnie!", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            if (!edycjaWlasnegoKonta && PermissionValidator.CzyBylyZmianyWUprawnieniach(originalPermissionIds, selectedPermissionIds))
+                            {
+                                string deleteQuery = "DELETE FROM Uzytkownicy_Uprawnienia WHERE UzytkownikID = @uid";
+                                using (SqlCommand deleteCmd = new SqlCommand(deleteQuery, conn, transaction))
+                                {
+                                    deleteCmd.Parameters.AddWithValue("@uid", currentUserId);
+                                    deleteCmd.ExecuteNonQuery();
+                                }
 
-                        
-                        WrocDoWidokuShowUsers();
+                                foreach (int permId in selectedPermissionIds)
+                                {
+                                    string insertQuery = "INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID) VALUES (@uid, @permId)";
+                                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn, transaction))
+                                    {
+                                        insertCmd.Parameters.AddWithValue("@uid", currentUserId);
+                                        insertCmd.Parameters.AddWithValue("@permId", permId);
+                                        insertCmd.ExecuteNonQuery();
+                                    }
+                                }
+                            }
+
+                            transaction.Commit();
+
+                            MessageBox.Show("Dane zostały zaktualizowane pomyślnie!", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            WrocDoWidokuShowUsers();
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Błąd podczas zapisywania: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ZaladujUprawnienia()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    string sqlAllPermissions = "SELECT ID, Nazwa FROM Uprawnienia ORDER BY Nazwa";
+                    List<Uprawnienie> allPermissions = new List<Uprawnienie>();
+
+                    using (SqlCommand cmd = new SqlCommand(sqlAllPermissions, conn))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                allPermissions.Add(new Uprawnienie
+                                {
+                                    ID = (int)reader["ID"],
+                                    Nazwa = reader["Nazwa"].ToString()
+                                });
+                            }
+                        }
+                    }
+
+                    string sqlUserPermissions = "SELECT UprawnienieID FROM Uzytkownicy_Uprawnienia WHERE UzytkownikID = @uid";
+                    List<int> currentPermissionIds = new List<int>();
+
+                    using (SqlCommand cmd = new SqlCommand(sqlUserPermissions, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@uid", currentUserId);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                                currentPermissionIds.Add((int)reader["UprawnienieID"]);
+                        }
+                    }
+
+                    originalPermissionIds = new List<int>(currentPermissionIds);
+
+                    clb_permissions.Items.Clear();
+                    foreach (var perm in allPermissions)
+                    {
+                        int index = clb_permissions.Items.Add(perm);
+                        clb_permissions.SetItemChecked(index, currentPermissionIds.Contains(perm.ID));
+                    }
+
+                    // Zablokuj edycję własnych ról
+                    clb_permissions.Enabled = (currentUserId != LoggedInUserId);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Błąd ładowania ról: " + ex.Message, "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
