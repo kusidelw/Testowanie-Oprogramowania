@@ -25,7 +25,12 @@ namespace Biblioteka
         private void UCShowUsers_VisibleChanged(object sender, EventArgs e)
         {
             if (this.Visible)
-                WczytajUzytkownikow();
+            {
+                txt_search_user.Clear(); 
+                searchQuery = "";        
+                currentPage = 1;         
+                WczytajUzytkownikow();  
+            }
         }
 
         private void KonfigurujDGV()
@@ -72,6 +77,9 @@ namespace Biblioteka
                             "Brak wyników",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
+
+                        txt_search_user.Clear();
+                        searchQuery = "";
 
                         if (dgv_users_list.DataSource is DataTable dt)
                             dt.Clear();

@@ -69,7 +69,7 @@
             this.lbl_edit_data.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.lbl_edit_data.Location = new System.Drawing.Point(0, 11);
             this.lbl_edit_data.Name = "lbl_edit_data";
-            this.lbl_edit_data.Size = new System.Drawing.Size(1184, 29);
+            this.lbl_edit_data.Size = new System.Drawing.Size(1396, 29);
             this.lbl_edit_data.TabIndex = 0;
             this.lbl_edit_data.Text = "EDYTUJ DANE UŻYTKOWNIKA\r\n";
             this.lbl_edit_data.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -82,7 +82,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1345, 85);
+            this.panel1.Size = new System.Drawing.Size(1396, 85);
             this.panel1.TabIndex = 2;
             // 
             // txtlbl_apartment_number
@@ -411,7 +411,7 @@
             this.btn_save_changes.AutoSize = true;
             this.btn_save_changes.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.btn_save_changes.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_save_changes.Location = new System.Drawing.Point(977, 720);
+            this.btn_save_changes.Location = new System.Drawing.Point(1028, 695);
             this.btn_save_changes.Name = "btn_save_changes";
             this.btn_save_changes.Size = new System.Drawing.Size(353, 71);
             this.btn_save_changes.TabIndex = 65;
@@ -425,7 +425,7 @@
             this.btn_cancel_changing.AutoSize = true;
             this.btn_cancel_changing.BackColor = System.Drawing.Color.LightCoral;
             this.btn_cancel_changing.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.btn_cancel_changing.Location = new System.Drawing.Point(34, 720);
+            this.btn_cancel_changing.Location = new System.Drawing.Point(34, 695);
             this.btn_cancel_changing.Name = "btn_cancel_changing";
             this.btn_cancel_changing.Size = new System.Drawing.Size(332, 71);
             this.btn_cancel_changing.TabIndex = 64;
@@ -502,7 +502,7 @@
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "UCEditData";
-            this.Size = new System.Drawing.Size(1345, 816);
+            this.Size = new System.Drawing.Size(1396, 791);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
