@@ -1,5 +1,12 @@
 # System Zarządzania Biblioteką 📚
 
+![C#](https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=csharp&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
+![Windows Forms](https://img.shields.io/badge/Windows%20Forms-0078D6?style=for-the-badge&logo=windows&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white)
+![SSMS](https://img.shields.io/badge/SSMS-D22E2E?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)
+![NUnit](https://img.shields.io/badge/NUnit-25CA2A?style=for-the-badge&logo=nunit&logoColor=white)
+
 Aplikacja desktopowa napisana w języku C#, służąca do kompleksowego zarządzania zasobami biblioteki, czytelnikami oraz procesem wypożyczania książek.
 
 ## 🌟 Główne funkcjonalności
