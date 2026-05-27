@@ -194,3 +194,131 @@ UPDATE Uzytkownicy
 SET CzyPierwszeLogowanie = 0
 WHERE Login IN ('user_krystian', 'admin', 'biblio_natalia');
 GO
+
+-- Dodanie paczki egzemplarzy do popularnych tytułów (żeby testerzy mieli co wypożyczać)
+INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
+SELECT ID, 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')
+FROM KatalogKsiazek 
+WHERE Tytul IN (
+    'Wiedźmin: Ostatnie Życzenie', 
+    'Harry Potter i kamień filozoficzny. Tom 1', 
+    'Hobbit', 
+    'Pan Tadeusz',
+    'Lalka'
+);
+GO
+
+INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
+SELECT ID, 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_adam')
+FROM KatalogKsiazek 
+WHERE Tytul IN (
+    'Wiedźmin: Ostatnie Życzenie', 
+    'Harry Potter i kamień filozoficzny. Tom 1', 
+    'Harry Potter i Komnata Tajemnic. Tom 2',
+    'Hobbit', 
+    'Solaris'
+);
+GO
+
+-- Dodanie kilku sztuk kryminałów/thrillerów
+INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
+SELECT ID, 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania')
+FROM KatalogKsiazek 
+WHERE Tytul IN (
+    'Morderstwo w Orient Expressie', 
+    'Kod da Vinci', 
+    'Bieguni'
+);
+GO
+
+-- inserty z  przykładowymi wypożyczeniami
+DECLARE @WypozyczenieID INT;
+DECLARE @EgzemplarzID INT;
+
+-- 1. Zwykłe  - termin w przyszłości
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Pan Tadeusz');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -5, GETDATE()), 14, DATEADD(day, 9, GETDATE()), 'Nowe');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 2. Na dzisiaj - termin wypada dziś
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Hobbit');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='user_ewa'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia'), DATEADD(day, -14, GETDATE()), 14, GETDATE(), 'Nowe');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 3. Przeterminowane - brak zwrotu
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Solaris');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='user_krystian'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_adam'), DATEADD(day, -20, GETDATE()), 14, DATEADD(day, -6, GETDATE()), 'Nowe');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 4. Przedłużone - w terminie
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Lalka');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='maly_marek'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -15, GETDATE()), 30, DATEADD(day, 15, GETDATE()), 'Przedluzone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 5. Przedłużone, przeterminowane - brak zwrotu
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Kod da Vinci');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='user_jan'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia'), DATEADD(day, -40, GETDATE()), 30, DATEADD(day, -10, GETDATE()), 'Przedluzone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 6. Zakończone w terminie (Zakonczone)
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Wiedźmin: Ostatnie Życzenie');
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, DataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='wisnia1982'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_adam'), DATEADD(day, -30, GETDATE()), 14, DATEADD(day, -16, GETDATE()), DATEADD(day, -18, GETDATE()), 'Zakonczone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 7. Zakończone po terminie (Zakonczone)
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Bieguni');
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, DataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='anna_woj'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -30, GETDATE()), 14, DATEADD(day, -16, GETDATE()), DATEADD(day, -10, GETDATE()), 'Zakonczone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 8. Nowe - wypożyczone dzisiaj
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 1');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='kamyk_krzysztof'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia'), GETDATE(), 14, DATEADD(day, 14, GETDATE()), 'Nowe');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 9. Przedłużone na dzisiaj (Przedluzone)
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Morderstwo w Orient Expressie');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_adam'), DATEADD(day, -28, GETDATE()), 28, GETDATE(), 'Przedluzone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+-- 10. Zakończone dzisiaj 
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i Komnata Tajemnic. Tom 2');
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, DataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='maly_marek'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -20, GETDATE()), 14, DATEADD(day, -6, GETDATE()), GETDATE(), 'Zakonczone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+GO
