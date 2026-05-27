@@ -173,3 +173,24 @@ EXEC sp_ZanonimizujUzytkownika
     @LosowaDataUr = '1980-05-15',
     @LosowaPlec = 'K';
 GO
+
+-- dodanie roli czytelnik użytkownikowi 'login123'
+IF NOT EXISTS (
+    SELECT 1 FROM Uzytkownicy_Uprawnienia 
+    WHERE UzytkownikID = (SELECT ID FROM Uzytkownicy WHERE Login = 'login123')
+      AND UprawnienieID = (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')
+)
+BEGIN
+    INSERT INTO Uzytkownicy_Uprawnienia (UzytkownikID, UprawnienieID)
+    VALUES (
+        (SELECT ID FROM Uzytkownicy WHERE Login = 'login123'),
+        (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')
+    );
+END
+GO
+
+-- zmiana hasła na 'juz zmienione'
+UPDATE Uzytkownicy
+SET CzyPierwszeLogowanie = 0
+WHERE Login IN ('user_krystian', 'admin', 'biblio_natalia');
+GO
