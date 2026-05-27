@@ -49,7 +49,7 @@ namespace Biblioteka
                     string sqlData = @"
                         SELECT 
                             u.ID AS [ID],
-                            u.Nazwa AS [Nazwa uprawnienia],
+                            u.Nazwa AS [Nazwa roli],
                             COUNT(uu.UzytkownikID) AS [Liczba użytkowników]
                         FROM Uprawnienia u
                         LEFT JOIN Uzytkownicy_Uprawnienia uu ON u.ID = uu.UprawnienieID
@@ -100,7 +100,7 @@ namespace Biblioteka
             if (e.RowIndex >= 0)
             {
                 int permissionId = (int)dgv_permissions.Rows[e.RowIndex].Cells["ID"].Value;
-                string permissionName = dgv_permissions.Rows[e.RowIndex].Cells["Nazwa uprawnienia"].Value.ToString();
+                string permissionName = dgv_permissions.Rows[e.RowIndex].Cells["Nazwa roli"].Value.ToString();
 
                 Form parentForm = this.FindForm();
                 if (parentForm is Biblioteka mainForm)
