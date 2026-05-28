@@ -167,10 +167,10 @@ DECLARE @AdminID INT = (SELECT ID FROM Uzytkownicy WHERE Login = 'admin');
 EXEC sp_ZanonimizujUzytkownika
     @TargetUzytkownikID = @TargetID,
     @AdminID = @AdminID,
-    @LosoweImie = 'Anonim',
-    @LosoweNazwisko = 'Anonimowy',
-    @LosowyPESEL = '80051512345', 
-    @LosowaDataUr = '1980-05-15',
+    @LosoweImie = 'qqmeswrm',
+    @LosoweNazwisko = 'qqmeswrmtx',
+    @LosowyPESEL = '64120929364', 
+    @LosowaDataUr = '09.12.1964',
     @LosowaPlec = 'K';
 GO
 
@@ -317,7 +317,7 @@ SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND K
 UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
 
 INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
-VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_adam'), DATEADD(day, -28, GETDATE()), 28, GETDATE(), 'Przedluzone');
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_adam'), DATEADD(day, -28, GETDATE()), 28, DATEADD(day, -1, GETDATE()), 'Nowe');
 SET @WypozyczenieID = SCOPE_IDENTITY();
 INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
 
