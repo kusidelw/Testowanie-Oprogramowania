@@ -296,6 +296,13 @@ VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='anna_woj'), (SELECT ID FROM Uzy
 SET @WypozyczenieID = SCOPE_IDENTITY();
 INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
 
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Lalka');
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, DataZwrotu, Status)
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia'), DATEADD(day, -30, GETDATE()), 14, DATEADD(day, -16, GETDATE()), DATEADD(day, -10, GETDATE()), 'Zakonczone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
 -- 8. Nowe - wypożyczone dzisiaj
 SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 1');
 UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
