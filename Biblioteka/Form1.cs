@@ -347,6 +347,12 @@ namespace Biblioteka
 
         // ── METODY PUBLICZNE (wywoływane przez UserControls) ──────────────────────
 
+        public void PokazListeZapomnianych()
+        {
+            ucFindForgottenUsers = new UCFindForgottenUsers();
+            PokazWidokZeStanem(ucFindForgottenUsers);
+        }
+
         public void PrzejdzDoEdycji(int userId)
         {
             PokazWidokZeStanem(ucEditData);

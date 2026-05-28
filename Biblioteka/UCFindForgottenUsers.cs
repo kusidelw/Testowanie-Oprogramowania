@@ -52,6 +52,9 @@ namespace Biblioteka
                             u.ID                           AS [ID],
                             u.Login                        AS [Login],
                             (u.Imie + ' ' + u.Nazwisko)    AS [Imię i nazwisko],
+                            u.PESEL                        AS [PESEL],
+                            u.DataUrodzenia                AS [Data urodzenia],
+                            u.Plec                         AS [Płeć],
                             l.DataAnonimizacji             AS [Data zapomnienia],
                             l.WykonalAdministratorID       AS [ID administratora]
                         FROM Uzytkownicy u

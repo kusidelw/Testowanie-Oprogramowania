@@ -102,6 +102,7 @@ namespace Biblioteka
                             ID                          AS [ID],
                             Login                       AS [Login],
                             (Imie + ' ' + Nazwisko)     AS [Imię i nazwisko],
+                            PESEL                       AS [PESEL],
                             Email                       AS [Adres e-mail]
                         FROM Uzytkownicy
                         WHERE CzyZapomniany = 0

@@ -51,19 +51,21 @@ namespace Biblioteka
 
                             if (czyUzytkownikZapomniany)
                             {
-                                //WIDOK RODO DLA ZAPOMNIANEGO UŻYTKOWNIKA
+                                // WIDOK RODO DLA ZAPOMNIANEGO UŻYTKOWNIKA
                                 lbl_anonymization_message.Visible = true;
                                 btn_edit_data.Enabled = false;
                                 btn_edit_data.BackColor = Color.Gray;
 
-                                string rodoMsg = "*** ZANONIMIZOWANE ***";
+                                // 1. ZACIĄGAMY LOSOWE DANE Z BAZY (Wdrażamy uwagę wykładowcy)
+                                txt_login.Text = reader["Login"].ToString();
+                                txt_name.Text = reader["Imie"].ToString();
+                                txt_surname.Text = reader["Nazwisko"].ToString();
+                                txt_PESEL.Text = reader["PESEL"].ToString();
+                                txt_birth_date.Text = Convert.ToDateTime(reader["DataUrodzenia"]).ToShortDateString();
+                                txt_gender.Text = reader["Plec"].ToString() == "K" ? "Kobieta" : "Mężczyzna";
 
-                                txt_login.Text = reader["Login"].ToString(); 
-                                txt_name.Text = rodoMsg;
-                                txt_surname.Text = rodoMsg;
-                                txt_PESEL.Text = rodoMsg;
-                                txt_birth_date.Text = rodoMsg;
-                                txt_gender.Text = rodoMsg;
+                                // 2. DANE NIEBĘDĄCE LOSOWYMI (jeśli nie czyścisz ich w SQL, zostawiamy nakładkę wizualną)
+                                string rodoMsg = "*** ZANONIMIZOWANE ***";
                                 txt_mail.Text = rodoMsg;
                                 txt_phone_number.Text = rodoMsg;
                                 txt_street.Text = rodoMsg;
@@ -112,7 +114,14 @@ namespace Biblioteka
             Biblioteka mainForm = (Biblioteka)this.FindForm();
             if (mainForm != null)
             {
-                mainForm.WrocDoWyszukiwarki(); 
+                if (czyUzytkownikZapomniany)
+                {
+                    mainForm.PokazListeZapomnianych();
+                }
+                else
+                {
+                    mainForm.WrocDoWyszukiwarki();
+                }
             }
         }
 
