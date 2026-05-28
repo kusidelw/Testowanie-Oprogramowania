@@ -56,7 +56,7 @@ namespace Biblioteka
                                 btn_edit_data.Enabled = false;
                                 btn_edit_data.BackColor = Color.Gray;
 
-                                // 1. ZACIĄGAMY LOSOWE DANE Z BAZY (Wdrażamy uwagę wykładowcy)
+                                // 1. ZACIĄGAMY LOSOWE DANE Z BAZY 
                                 txt_login.Text = reader["Login"].ToString();
                                 txt_name.Text = reader["Imie"].ToString();
                                 txt_surname.Text = reader["Nazwisko"].ToString();
@@ -64,7 +64,7 @@ namespace Biblioteka
                                 txt_birth_date.Text = Convert.ToDateTime(reader["DataUrodzenia"]).ToShortDateString();
                                 txt_gender.Text = reader["Plec"].ToString() == "K" ? "Kobieta" : "Mężczyzna";
 
-                                // 2. DANE NIEBĘDĄCE LOSOWYMI (jeśli nie czyścisz ich w SQL, zostawiamy nakładkę wizualną)
+                                // 2. DANE NIEBĘDĄCE LOSOWYMI 
                                 string rodoMsg = "*** ZANONIMIZOWANE ***";
                                 txt_mail.Text = rodoMsg;
                                 txt_phone_number.Text = rodoMsg;
