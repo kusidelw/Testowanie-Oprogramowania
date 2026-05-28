@@ -26,25 +26,36 @@ VALUES
     ('90-290', 'Łódź');
 GO
 
+
 -- dodanie uzytkownikow
 INSERT INTO Uzytkownicy 
-    (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, NumerPosesji, PESEL, DataUrodzenia, Plec, Email, Telefon)
+    (Login, HasloHash, Imie, Nazwisko, MiejscowoscKodID, Ulica, NumerPosesji, NumerLokalu, PESEL, DataUrodzenia, Plec, Email, Telefon)
 VALUES
-    ('admin','Admin123!', 'Admin', 'Admin', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), '12', '03251753619', '2003-05-17', 'M', 'admin@mail.pl', '123456789'),
-    ('admin_kacper', 'Haslo123!', 'Kacper', 'Bednarek', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='00-001' AND Miejscowosc='Warszawa'), '10', '95010111114', '1995-01-01', 'M', 'k.bednarek@biblioteka.pl', '123456789'),
-    ('biblio_natalia', 'Biblio123!', 'Natalia', 'Flaszka', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-001' AND Miejscowosc='Kraków'), '5A', '98020222223', '1998-02-02', 'K', 'n.flaszka@biblioteka.pl', '987654321'),
-    ('user_krystian', 'User123!', 'Krystian', 'Krynicki', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), '12', '90030333335', '1990-03-03', 'M', 'k.krynicki@poczta.pl', '555666777'),
-    ('maly_marek', 'Marek2005!', 'Marek', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='80-001' AND Miejscowosc='Gdańsk'), '120', '05251555550', '2005-05-15', 'M', 'm.nowak@szkola.pl', '600100200'),
-    ('ksiazkowa_ola', 'Ola12345!', 'Aleksandra', 'Wisniewska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='60-001' AND Miejscowosc='Poznań'), '3/4', '10322444446', '2010-12-24', 'K', 'ola.w@domena.com', '700800900'),
-    ('user_jan', 'Haslo123!', 'Jan', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='20-001' AND Miejscowosc='Lublin'), '10', '80010112319', '1980-01-01', 'M', 'jan@poczta.pl', '111222333'),
-    ('user_ewa', 'Mucha1981!', 'Ewa', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='70-001' AND Miejscowosc='Szczecin'), '20', '81020212321', '1981-02-02', 'K', 'ewa@poczta.pl', '222333444'),
-    ('wisnia1982', 'HasloHash23!', 'Piotr', 'Wisniewski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='85-001' AND Miejscowosc='Bydgoszcz'), '30', '82030312333', '1982-03-03', 'M', 'piotr@poczta.pl', '333444555'),
-    ('anna_woj', 'Haslo4!', 'Anna', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='15-001' AND Miejscowosc='Białystok'), '40', '83040412345', '1983-04-04', 'K', 'anna@poczta.pl', '444555666'),
-    ('kamyk_krzysztof', 'Kamyczek25!', 'Krzysztof', 'Kamyk', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='40-001' AND Miejscowosc='Katowice'), '50', '84050512357', '1984-05-05', 'M', 'krzysztof@poczta.pl', '555666777'),
-    ('babcia_stasia', 'Stasia55!', 'Stanislawa', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='50-001' AND Miejscowosc='Wrocław'), '15', '55081011100', '1955-08-10', 'K', 's.wojcik@poczta.pl', '500400300'),
-    ('biblio_ania', 'AdamBiblio!', 'Ania', 'Kowalska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Kraków'), '54', '84112064226', '1984-11-20', 'K', 'a.kowalska@biblioteka.pl', '666555444'),
-    ('biblio_adam', 'AdamBiblio!', 'Adam', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Kraków'), '44', '85112099999', '1985-11-20', 'M', 'a.kowalski@biblioteka.pl', '666555444'),
-    ('login123', 'TestoweHaslo123!', 'Marek', 'Testowy', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), '25/2', '99010108970', '1999-01-01', 'M', 'marek123@poczta.pl', '522728351');
+    ('admin','Admin123!', 'Admin', 'Admin', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), 'Piotrkowska', '12', NULL, '03251753619', '2003-05-17', 'M', 'admin@mail.pl', '123456789'),
+    ('admin_kacper', 'Haslo123!', 'Kacper', 'Bednarek', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='00-001' AND Miejscowosc='Warszawa'), 'Marszałkowska', '10', NULL, '95010111114', '1995-01-01', 'M', 'k.bednarek@biblioteka.pl', '123456789'),
+    ('biblio_natalia', 'Biblio123!', 'Natalia', 'Flaszka', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-001' AND Miejscowosc='Kraków'), 'Floriańska', '5A', NULL, '98020222223', '1998-02-02', 'K', 'n.flaszka@biblioteka.pl', '987654321'),
+    ('user_krystian', 'User123!', 'Krystian', 'Krynicki', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), 'Zachodnia', '12', NULL, '90030333335', '1990-03-03', 'M', 'k.krynicki@poczta.pl', '555666777'),
+    ('maly_marek', 'Marek2005!', 'Marek', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='80-001' AND Miejscowosc='Gdańsk'), 'Długa', '120', NULL, '05251555550', '2005-05-15', 'M', 'm.nowak@szkola.pl', '600100200'),
+    ('ksiazkowa_ola', 'Ola12345!', 'Aleksandra', 'Wisniewska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='60-001' AND Miejscowosc='Poznań'), 'Półwiejska', '3', '4', '10322444446', '2010-12-24', 'K', 'ola.w@domena.com', '700800900'),
+    ('user_jan', 'Haslo123!', 'Jan', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='20-001' AND Miejscowosc='Lublin'), 'Krakowskie Przedmieście', '10', NULL, '80010112319', '1980-01-01', 'M', 'jan@poczta.pl', '111222333'),
+    ('user_ewa', 'Mucha1981!', 'Ewa', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='70-001' AND Miejscowosc='Szczecin'), 'Wojska Polskiego', '20', NULL, '81020212321', '1981-02-02', 'K', 'ewa@poczta.pl', '222333444'),
+    ('wisnia1982', 'HasloHash23!', 'Piotr', 'Wisniewski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='85-001' AND Miejscowosc='Bydgoszcz'), 'Gdańska', '30', NULL, '82030312333', '1982-03-03', 'M', 'piotr@poczta.pl', '333444555'),
+    ('anna_woj', 'Haslo4!', 'Anna', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='15-001' AND Miejscowosc='Białystok'), 'Lipowa', '40', NULL, '83040412345', '1983-04-04', 'K', 'anna@poczta.pl', '444555666'),
+    ('kamyk_krzysztof', 'Kamyczek25!', 'Krzysztof', 'Kamyk', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='40-001' AND Miejscowosc='Katowice'), 'Stawowa', '50', NULL, '84050512357', '1984-05-05', 'M', 'krzysztof@poczta.pl', '555666777'),
+    ('babcia_stasia', 'Stasia55!', 'Stanislawa', 'Wojcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='50-001' AND Miejscowosc='Wrocław'), 'Świdnicka', '15', NULL, '55081011100', '1955-08-10', 'K', 's.wojcik@poczta.pl', '500400300'),
+    ('biblio_ania', 'AdamBiblio!', 'Ania', 'Kowalska', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Kraków'), 'Grodzka', '54', NULL, '84112064226', '1984-11-20', 'K', 'a.kowalska@biblioteka.pl', '666555444'),
+    ('biblio_adam', 'AdamBiblio!', 'Adam', 'Kowalski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-100' AND Miejscowosc='Kraków'), 'Sukiennicza', '44', NULL, '85112099999', '1985-11-20', 'M', 'a.kowalski@biblioteka.pl', '666555444'),
+	('t.kowal', 'Haslo123!', 'Tomasz', 'Kowal', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='00-001' AND Miejscowosc='Warszawa'), 'Emilii Plater', '15', NULL, '92051299951', '1992-05-12', 'M', 't.kowal2@biblioteka.pl', '501202303'),
+    ('nowak_m', 'Haslo123!', 'Monika', 'Nowak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='30-001' AND Miejscowosc='Kraków'), 'Basztowa', '4', '12', '94082211149', '1994-08-22', 'K', 'nowak.m@biblioteka.pl', '502303404'),
+    ('karolw', 'Haslo123!', 'Karol', 'Wiśniewski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), 'Zachodnia', '88', NULL, '88110522273', '1988-11-05', 'M', 'karol.w@biblioteka.pl', '503404505'),
+    ('wojcik.marta', 'Haslo123!', 'Marta', 'Wójcik', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='60-001' AND Miejscowosc='Poznań'), 'Fredry', '12', NULL, '01221433327', '2001-02-14', 'K', 'marta.w@biblioteka.pl', '504504606'),
+    ('pkaminski', 'Haslo123!', 'Piotr', 'Kamiński', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='50-001' AND Miejscowosc='Wrocław'), 'Oławska', '23', '5', '90073088835', '1990-07-30', 'M', 'p.kaminski2@biblioteka.pl', '505606707'),
+	('zielen85', 'User123!', 'Marcin', 'Zieliński', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='80-001' AND Miejscowosc='Gdańsk'), 'Grunwaldzka', '45', NULL, '85032544417', '1985-03-25', 'M', 'zielen85@poczta.pl', '601111222'),
+    ('agacia_w', 'User123!', 'Agata', 'Woźniak', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='70-001' AND Miejscowosc='Szczecin'), 'Krzywoustego', '3', '9', '99101066688', '1999-10-10', 'K', 'agacia.w@poczta.pl', '602222333'),
+    ('kodziu02', 'User123!', 'Łukasz', 'Kozłowski', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='20-001' AND Miejscowosc='Lublin'), 'Lipowa', '12', NULL, '02261877739', '2002-06-18', 'M', 'kodziu02@poczta.pl', '603333444'),
+    ('mazurkasia93', 'User123!', 'Katarzyna', 'Mazur', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='40-001' AND Miejscowosc='Katowice'), 'Korfantego', '50', NULL, '93120155544', '1993-12-01', 'K', 'k.mazur93@poczta.pl', '604444555'),
+    ('bartekkaczmarek', 'User123!', 'Bartosz', 'Kaczmarek', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='15-001' AND Miejscowosc='Białystok'), 'Sienkiewicza', '7', '2', '05290966657', '2005-09-09', 'M', 'bartek.kaczmarek@poczta.pl', '605555666'),
+    ('login123', 'TestoweHaslo123!', 'Marek', 'Testowy', (SELECT ID FROM KodyPocztowe_Miejscowosci WHERE KodPocztowy='90-290' AND Miejscowosc='Łódź'), NULL, '25', '2', '99010108970', '1999-01-01', 'M', 'marek123@poczta.pl', '522728351');
 GO
 
 -- Symulacja starego hasla dla usera
@@ -66,6 +77,11 @@ VALUES
 -- Bibliotekarze
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_natalia'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_adam'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 't.kowal'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'nowak_m'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'karolw'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'wojcik.marta'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'pkaminski'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Bibliotekarz')),
 -- Czytelnicy
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'user_krystian'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'maly_marek'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
@@ -75,6 +91,11 @@ VALUES
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'anna_woj'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'login123'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'kamyk_krzysztof'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'zielen85'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'agacia_w'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'kodziu02'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'mazurkasia93'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
+((SELECT ID FROM Uzytkownicy WHERE Login = 'bartekkaczmarek'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Czytelnik')),
 -- Managerowie
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'ksiazkowa_ola'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager')),
 ((SELECT ID FROM Uzytkownicy WHERE Login = 'biblio_ania'), (SELECT ID FROM Uprawnienia WHERE Nazwa = 'Manager')),
@@ -170,7 +191,7 @@ EXEC sp_ZanonimizujUzytkownika
     @LosoweImie = 'qqmeswrm',
     @LosoweNazwisko = 'qqmeswrmtx',
     @LosowyPESEL = '64120929364', 
-    @LosowaDataUr = '09.12.1964',
+    @LosowaDataUr = '1964-12-09',
     @LosowaPlec = 'K';
 GO
 
@@ -195,7 +216,7 @@ SET CzyPierwszeLogowanie = 0
 WHERE Login IN ('user_krystian', 'admin', 'biblio_natalia');
 GO
 
--- Dodanie paczki egzemplarzy do popularnych tytułów (żeby testerzy mieli co wypożyczać)
+-- Dodanie egzemplarzy 
 INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
 SELECT ID, 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_natalia')
 FROM KatalogKsiazek 
@@ -220,7 +241,6 @@ WHERE Tytul IN (
 );
 GO
 
--- Dodanie kilku sztuk kryminałów/thrillerów
 INSERT INTO Egzemplarze (KsiazkaID, Status, ZarejestrowanePrzezID)
 SELECT ID, 'Dostepna', (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania')
 FROM KatalogKsiazek 
@@ -241,6 +261,14 @@ UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
 
 INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status)
 VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -5, GETDATE()), 14, DATEADD(day, 9, GETDATE()), 'Nowe');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Pan Tadeusz');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status) 
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='zielen85'), (SELECT ID FROM Uzytkownicy WHERE Login='t.kowal'), DATEADD(day, -3, GETDATE()), 14, DATEADD(day, 11, GETDATE()), 'Nowe');
 SET @WypozyczenieID = SCOPE_IDENTITY();
 INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
 
@@ -270,6 +298,15 @@ INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWy
 VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='maly_marek'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -15, GETDATE()), 30, DATEADD(day, 15, GETDATE()), 'Przedluzone');
 SET @WypozyczenieID = SCOPE_IDENTITY();
 INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Hobbit');
+UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, Status) 
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='kodziu02'), (SELECT ID FROM Uzytkownicy WHERE Login='karolw'), DATEADD(day, -20, GETDATE()), 30, DATEADD(day, 10, GETDATE()), 'Przedluzone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
 
 -- 5. Przedłużone, przeterminowane - brak zwrotu
 SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Kod da Vinci');
@@ -303,6 +340,13 @@ VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='login123'), (SELECT ID FROM Uzy
 SET @WypozyczenieID = SCOPE_IDENTITY();
 INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
 
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Wiedźmin: Ostatnie Życzenie');
+
+INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, DataZwrotu, Status) 
+VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='agacia_w'), (SELECT ID FROM Uzytkownicy WHERE Login='nowak_m'), DATEADD(day, -20, GETDATE()), 14, DATEADD(day, -6, GETDATE()), DATEADD(day, -11, GETDATE()), 'Zakonczone');
+SET @WypozyczenieID = SCOPE_IDENTITY();
+INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
+
 -- 8. Nowe - wypożyczone dzisiaj
 SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i kamień filozoficzny. Tom 1');
 UPDATE Egzemplarze SET Status = 'Wypozyczona' WHERE ID = @EgzemplarzID;
@@ -322,7 +366,8 @@ SET @WypozyczenieID = SCOPE_IDENTITY();
 INSERT INTO PozycjeWypozyczenia (WypozyczenieID, EgzemplarzID) VALUES (@WypozyczenieID, @EgzemplarzID);
 
 -- 10. Zakończone dzisiaj 
-SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i Komnata Tajemnic. Tom 2');
+SELECT TOP 1 @EgzemplarzID = ID FROM Egzemplarze 
+WHERE Status = 'Dostepna' AND KsiazkaID = (SELECT ID FROM KatalogKsiazek WHERE Tytul = 'Harry Potter i Komnata Tajemnic. Tom 2');
 
 INSERT INTO Wypozyczenia (CzytelnikID, BibliotekarzID, DataWypozyczenia, OkresWypozyczeniaDni, OczekiwanaDataZwrotu, DataZwrotu, Status)
 VALUES ((SELECT ID FROM Uzytkownicy WHERE Login='maly_marek'), (SELECT ID FROM Uzytkownicy WHERE Login='biblio_ania'), DATEADD(day, -20, GETDATE()), 14, DATEADD(day, -6, GETDATE()), GETDATE(), 'Zakonczone');
